@@ -1,0 +1,1 @@
+{"name":"nabdh","private":true,"scripts":{"test":"node --test tests/calc.test.js tests/api.test.js"}}
