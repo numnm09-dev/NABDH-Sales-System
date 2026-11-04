@@ -1,0 +1,18 @@
+{
+  "_notice": "بيانات افتراضية للتجربة فقط — لا تمثل موردين أو أسعارًا حقيقية",
+  "settings": { "student": "عبدالله محمد", "supervisor": "د. آية الشافعي", "institute": "المعهد العالي للإدارة بالمحلة الكبرى", "apiUrl": "", "safety": 3 },
+  "suppliers": [
+    { "id": "s1", "name": "مورد تجريبي (أ) — الحالي", "itemCodes": "JUC-01,WAT-02", "price": 10, "lead": 7, "quality": 4, "moq": 100, "contact": "بيانات اتصال افتراضية", "verified": "تجريبي" },
+    { "id": "s2", "name": "مورد تجريبي (ب)", "itemCodes": "JUC-01", "price": 11.5, "lead": 3, "quality": 4, "moq": 200, "contact": "بيانات اتصال افتراضية", "verified": "مرشح يحتاج إلى تأكيد" },
+    { "id": "s3", "name": "مورد تجريبي (ج)", "itemCodes": "JUC-01,WAT-02", "price": 9.5, "lead": 12, "quality": 3, "moq": 500, "contact": "بيانات اتصال افتراضية", "verified": "مرشح يحتاج إلى تأكيد" },
+    { "id": "s4", "name": "مورد تجريبي (د)", "itemCodes": "BOX-03", "price": 2.2, "lead": 5, "quality": 5, "moq": 300, "contact": "بيانات اتصال افتراضية", "verified": "تجريبي" }
+  ],
+  "items": [
+    { "id": "i1", "code": "JUC-01", "name": "علب عصير", "qty": 600, "min": 300, "daily": 100, "price": 10, "lead": 7, "supplierId": "s1", "inbound": 2, "delay": 10 },
+    { "id": "i2", "code": "WAT-02", "name": "عبوات مياه", "qty": 2400, "min": 800, "daily": 150, "price": 3, "lead": 6, "supplierId": "s1", "inbound": 4, "delay": 0 },
+    { "id": "i3", "code": "BOX-03", "name": "كراتين تغليف", "qty": 220, "min": 250, "daily": 40, "price": 2.2, "lead": 5, "supplierId": "s4", "inbound": 3, "delay": 0 }
+  ],
+  "orders": [
+    { "id": "o1", "itemId": "i3", "supplierId": "s4", "qty": 400, "price": 2.2, "status": "قيد الشحن", "date": "2026-10-20" }
+  ]
+}
