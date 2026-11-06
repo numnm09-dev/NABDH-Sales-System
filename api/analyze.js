@@ -129,55 +129,73 @@ async function callModel(system, content) {
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
 
-  const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), 25000);
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), 10000);
 
-  try {
-    const r = await fetch(url, {
-      method: 'POST',
-      signal: ac.signal,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: system }] },
-        contents: [{ role: 'user', parts: [{ text: content }] }],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 800,
-          responseMimeType: 'application/json'
-        }
-      })
-    });
+    try {
+      const r = await fetch(url, {
+        method: 'POST',
+        signal: ac.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: system }] },
+          contents: [{ role: 'user', parts: [{ text: content }] }],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 800,
+            responseMimeType: 'application/json'
+          }
+        })
+      });
 
-    const j = await r.json().catch(() => ({}));
+      const j = await r.json().catch(() => ({}));
 
-    if (r.status === 400 || r.status === 404) {
-      throw err(502, j.error?.message || 'اسم نموذج Gemini غير صحيح أو الطلب غير صالح.', 'provider_model');
+      if (r.status === 400 || r.status === 404) {
+        throw err(502, j.error?.message || 'اسم نموذج Gemini غير صحيح أو الطلب غير صالح.', 'provider_model');
+      }
+
+      if (r.status === 401 || r.status === 403) {
+        throw err(502, 'مفتاح Gemini مرفوض. تحقق من GEMINI_API_KEY.', 'provider_auth');
+      }
+
+      if (r.status === 429) {
+        throw err(429, 'تم تجاوز حد استخدام Gemini. حاول لاحقًا.', 'rate_limited');
+      }
+
+      if (r.status === 503 && attempt === 1) {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        continue;
+      }
+
+      if (!r.ok) {
+        throw err(502, j.error?.message || 'فشل الاتصال بـ Gemini.', 'provider_error');
+      }
+
+      const result = (j.candidates?.[0]?.content?.parts || [])
+        .map(p => p.text || '').join('');
+
+      if (!result) {
+        throw err(502, 'لم يُرجع Gemini نصًا. حاول لاحقًا.', 'empty_response');
+      }
+
+      return result;
+
+    } catch (e) {
+      if (e.status) throw e;
+
+      if (e.name === 'AbortError') {
+        throw err(504, 'انتهت مهلة الاتصال بـ Gemini. حاول مرة أخرى.', 'timeout');
+      }
+
+      throw err(502, 'تعذّر الوصول إلى Gemini.', 'network');
+
+    } finally {
+      clearTimeout(timer);
     }
-    if (r.status === 401 || r.status === 403) {
-      throw err(502, 'مفتاح Gemini مرفوض. تحقق من GEMINI_API_KEY.', 'provider_auth');
-    }
-    if (r.status === 429) {
-      throw err(429, 'تم تجاوز حد استخدام Gemini. حاول لاحقًا.', 'rate_limited');
-    }
-    if (!r.ok) {
-      throw err(502, j.error?.message || 'فشل الاتصال بـ Gemini.', 'provider_error');
-    }
-
-    const result = (j.candidates?.[0]?.content?.parts || [])
-      .map(p => p.text || '').join('');
-
-    if (!result) {
-      throw err(502, 'لم يُرجع Gemini نصًا. قد يكون الطلب محظورًا أو انتهت الحصة.', 'empty_response');
-    }
-
-    return result;
-  } catch (e) {
-    if (e.status) throw e;
-    if (e.name === 'AbortError') throw err(504, 'انتهت مهلة الاتصال بـ Gemini.', 'timeout');
-    throw err(502, 'تعذّر الوصول إلى Gemini.', 'network');
-  } finally {
-    clearTimeout(timer);
   }
+
+  throw err(503, 'Gemini مشغول حاليًا. حاول بعد قليل.', 'provider_busy');
 }
 
 async function handler(req, res) {
