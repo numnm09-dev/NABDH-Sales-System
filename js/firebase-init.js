@@ -11,7 +11,8 @@ import {
   ref,
   get,
   set,
-  update
+  update,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 window.NabdhFirebase = {
@@ -24,7 +25,8 @@ window.NabdhFirebase = {
   ref,
   get,
   set,
-  update
+  update,
+  runTransaction
 };
 
 window.dispatchEvent(new Event("nabdh-firebase-ready"));
