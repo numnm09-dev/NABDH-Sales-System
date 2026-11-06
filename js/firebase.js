@@ -3,14 +3,14 @@ import { getDatabase } from "https://www.gstatic.com/firebasejs/10.14.1/firebase
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCWUio5wXovdiQws2vo69vde3GTz_tsnGY",
-  authDomain: "nabdh-7fded.firebaseapp.com",
-  databaseURL: "https://nabdh-7fded-default-rtdb.firebaseio.com",
-  projectId: "nabdh-7fded",
-  storageBucket: "nabdh-7fded.firebasestorage.app",
-  messagingSenderId: "5367933860",
-  appId: "1:5367933860:web:49df23cf011b82ac4bef31",
-  measurementId: "G-9JCV7YTG0H"
+  apiKey: "AIzaSyDbwhuqoHUVIuSfxpY8DQMCgwdnLYoFvM8",
+  authDomain: "nabdh-erp.firebaseapp.com",
+  databaseURL: "https://nabdh-erp-default-rtdb.firebaseio.com",
+  projectId: "nabdh-erp",
+  storageBucket: "nabdh-erp.firebasestorage.app",
+  messagingSenderId: "724767321442",
+  appId: "1:724767321442:web:cb59d9fc3ef3e2a16d903b",
+  measurementId: "G-KSMZX57WG5"
 };
 
 const app = initializeApp(firebaseConfig);
