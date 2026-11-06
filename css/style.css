@@ -120,3 +120,41 @@ input[type=range]{width:100%;padding:0}
 .sale-form input,.sale-form select{display:block;width:100%;max-width:100%;margin-top:.2rem}
 .sale-form .sale-fields{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
 .sale-form .note{font-weight:400}
+
+/* ===== نبض ERP: تبويبات، نماذج المستندات، الجداول، الطباعة، الاستجابة ===== */
+.tabs{display:flex;gap:.3rem;flex-wrap:wrap;margin:.4rem 0 .8rem;border-bottom:2px solid var(--line)}
+.tabs a{padding:.4rem .9rem;border-radius:6px 6px 0 0;color:var(--ink);text-decoration:none;background:#eaf0ee;white-space:nowrap}
+.tabs a[aria-current=page]{background:var(--ink);color:#fff}
+.muted{color:var(--mut);font-size:.9rem}
+.hint{display:block;color:var(--mut);font-weight:400;font-size:.8rem}
+.tot td{background:#f1f6f4;border-top:2px solid var(--line)}
+dialog.wide{max-width:min(980px,96vw)}
+dialog::backdrop{background:rgba(15,42,51,.55)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 .9rem}
+.chk{display:flex;align-items:center;gap:.5rem;font-weight:400}.chk input{width:auto}
+table.lines{min-width:560px}table.lines td{padding:.25rem .3rem}table.lines input,table.lines select{width:100%;min-width:5.5rem}
+.info{color:var(--mut);font-size:.85rem}
+button:disabled{opacity:.55;cursor:not-allowed}
+td button{margin-inline-end:.25rem}
+main{overflow-x:hidden}
+@media(max-width:700px){
+  main{padding:.6rem}
+  .top{gap:.5rem;padding:.3rem .5rem}
+  nav a{padding:.3rem .55rem;font-size:.9rem}
+  .kpi b{font-size:1.4rem}
+  .bar span:first-child{width:6rem}
+  .tabs a{padding:.35rem .6rem;font-size:.9rem}
+  dialog{width:98%;max-width:98vw;padding:.7rem}
+  .fgrid{grid-template-columns:1fr}
+}
+/* الطباعة: تُطبع المنطقة المحددة فقط (تقرير أو مستند) بلا شريط التنقل والأزرار */
+@media print{
+  body{background:#fff}
+  .noprint,.tabs,.top,#toast{display:none!important}
+  body.print-area main>*:not(#repbox):not(#reportArea){display:none!important}
+  body.print-area #repbox,body.print-area #reportArea{border:0;margin:0;padding:0}
+  body.print-dlg main,body.print-dlg .top,body.print-dlg #welcomeScreen{display:none!important}
+  body.print-dlg dialog{position:static;max-width:none;width:100%;border:0;box-shadow:none}
+  .tw{overflow:visible}table{min-width:0;font-size:11px}th,td{white-space:normal;padding:.2rem .3rem}
+  a{color:inherit;text-decoration:none}
+}
