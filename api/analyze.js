@@ -130,7 +130,7 @@ async function callModel(system, content) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
 
   const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), 55000);
+  const timer = setTimeout(() => ac.abort(), 25000);
 
   try {
     const r = await fetch(url, {
