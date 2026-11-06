@@ -1,0 +1,27 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "stock": {
+          "$itemId": {
+            "$whId": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
+          }
+        }
+      }
+    },
+    "backups": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "pre_v2": {
+          ".write": "auth != null && auth.uid === $uid && !data.exists()"
+        }
+      }
+    }
+  }
+}
