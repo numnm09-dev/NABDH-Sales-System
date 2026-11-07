@@ -1,3 +1,4 @@
+
 import { auth, db } from "./firebase.js";
 
 import {
@@ -7,7 +8,10 @@ import {
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
-  reload
+  reload,
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 import {
@@ -28,6 +32,9 @@ window.NabdhFirebase = {
   sendEmailVerification,
   sendPasswordResetEmail,
   reload,
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   ref,
   get,
   set,
