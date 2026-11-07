@@ -416,24 +416,59 @@ async function handleAuth(user) {
   rawLegacy = null;
 
   UI.reset();
-
-  // إعادة الفترة الافتراضية عند تغيير الحساب
   homePeriod = 'week';
 
   const view = $('#view');
   const nav = $('#nav');
 
   if (!user) {
-    const dlg = $('#dlg');
-
-    try {
-      if (dlg && dlg.open && !$('#authError')) dlg.close();
-    } catch { }
-
     if (nav) nav.innerHTML = '';
     if (view) view.innerHTML = '';
 
     setShell('guest');
+    return;
+  }
+
+  if (!user.emailVerified) {
+    if (nav) nav.innerHTML = '';
+    if (view) {
+      view.innerHTML = `
+        <div class="pad">
+          <h2>تأكيد البريد الإلكتروني مطلوب</h2>
+          <p>افتح رسالة التأكيد التي أرسلناها إلى بريدك الإلكتروني واضغط على رابط التأكيد.</p>
+          <button id="checkVerification">تحققت من البريد</button>
+          <button id="resendVerification" class="sec">إعادة إرسال رسالة التأكيد</button>
+          <button id="unverifiedLogout" class="sec">تسجيل الخروج</button>
+          <p id="verificationMessage" class="err"></p>
+        </div>
+      `;
+
+      $('#checkVerification').onclick = async () => {
+        try {
+          await window.NabdhFirebase.reload(user);
+          if (window.NabdhFirebase.auth.currentUser.emailVerified) {
+            await handleAuth(window.NabdhFirebase.auth.currentUser);
+          } else {
+            $('#verificationMessage').textContent = 'البريد لم يتم تأكيده حتى الآن.';
+          }
+        } catch (e) {
+          $('#verificationMessage').textContent = fbErrorMsg(e);
+        }
+      };
+
+      $('#resendVerification').onclick = async () => {
+        try {
+          await window.NabdhFirebase.sendEmailVerification(user);
+          $('#verificationMessage').textContent = 'تم إرسال رسالة تأكيد جديدة.';
+        } catch (e) {
+          $('#verificationMessage').textContent = fbErrorMsg(e);
+        }
+      };
+
+      $('#unverifiedLogout').onclick = logout;
+    }
+
+    setShell('app');
     return;
   }
 
