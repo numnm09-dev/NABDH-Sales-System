@@ -6,6 +6,47 @@ const itemName = id => nm('items', id);
 const pickItems = (type, extra) => activeItems(type).map(i => [i.id, itemLabel(i), extra ? extra(i) : '']);
 
 /* ========== لوحة التحكم ========== */
+/* ---------- فترات تحليلات لوحة التحكم ---------- */
+
+function homeDateRange(period, today = localToday()) {
+  const parts = String(today).split('-').map(Number);
+
+  if (parts.length !== 3 || parts.some(n => !Number.isFinite(n))) {
+    throw new Error('تاريخ اليوم غير صالح');
+  }
+
+  const [year, month, day] = parts;
+
+  // إنشاء تاريخ محلي بدون مشاكل اختلاف التوقيت
+  const date = new Date(year, month - 1, day);
+
+  let from;
+  let to = new Date(year, month - 1, day);
+
+  if (period === 'day') {
+    from = new Date(year, month - 1, day);
+  } else if (period === 'week') {
+    const weekday = date.getDay();
+    const daysSinceSaturday = (weekday + 1) % 7;
+
+    from = new Date(year, month - 1, day - daysSinceSaturday);
+  } else if (period === 'month') {
+    from = new Date(year, month - 1, 1);
+  } else if (period === 'year') {
+    from = new Date(year, 0, 1);
+  } else {
+    from = new Date(year, month - 1, day - 6);
+  }
+
+  const toISO = d =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  return {
+    from: toISO(from),
+    to: toISO(to),
+    period
+  };
+}
 function pageHome() {
   const S = DB.settings, k = Reports.dashboard(DB, localToday());
   const low = E_.lowStock(DB), short = Reports.openDemand(DB).filter(x => x.shortage > 0);
