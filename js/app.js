@@ -496,18 +496,20 @@ async function handleAuth(user) {
         </div>
       `;
 
-      $('#checkVerification').onclick = async () => {
-        try {
-          await window.NabdhFirebase.reload(user);
-          if (window.NabdhFirebase.auth.currentUser.emailVerified) {
-            await handleAuth(window.NabdhFirebase.auth.currentUser);
-          } else {
-            $('#verificationMessage').textContent = 'البريد لم يتم تأكيده حتى الآن.';
-          }
-        } catch (e) {
-          $('#verificationMessage').textContent = fbErrorMsg(e);
-        }
-      };
+$('#checkVerification').onclick = async () => {
+  try {
+    await window.NabdhFirebase.reload(user);
+
+    const currentUser = window.NabdhFirebase.auth.currentUser;
+
+    $('#verificationMessage').textContent =
+      `البريد: ${currentUser.email}
+حالة التأكيد: ${currentUser.emailVerified}
+UID: ${currentUser.uid}`;
+  } catch (e) {
+    $('#verificationMessage').textContent = fbErrorMsg(e);
+  }
+};
 
       $('#resendVerification').onclick = async () => {
         try {
