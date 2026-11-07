@@ -160,9 +160,9 @@ function homeDelayedOrders(today) {
 
 function pageHome() {
   const today = localToday();
-  const period = ['day', 'week', 'month', 'year'].includes(homePeriod)
-    ? homePeriod
-    : 'week';
+  const period = ['day', 'week', 'month', 'year'].includes(UI.f.homePeriod)
+  ? UI.f.homePeriod
+  : 'week';
 
   const range = homeDateRange(period, today);
   const S = DB.settings;
