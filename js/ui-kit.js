@@ -1,11 +1,11 @@
 /* نبض ERP — أدوات الواجهة المشتركة: جداول، تبويبات، نماذج المستندات (برؤوس وبنود)، طباعة وتصدير.
    تعتمد على متغيرات app.js العامة (DB, esc, fmt, toast, act, safeRoute) وتستخدمها وقت الاستدعاء فقط. */
-const UI = { actions: {}, f: {} };   // actions: أوامر الأزرار (data-act)، f: حالة المرشحات (بحث/حالة) للجلسة الحالية
+const UI = { actions: {}, f: {} };
 
 const money = n => (n == null || n === '' || !isFinite(n)) ? '—' : Number(n).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const qfmt = n => (n == null || n === '' || !isFinite(n)) ? '—' : Number(n).toLocaleString('ar-EG', { maximumFractionDigits: 3 });
 const localToday = () => new Date().toLocaleDateString('sv-SE');
-const newOpId = () => 'op_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);   // بلا . $ # [ ] / (قواعد مفاتيح Firebase)
+const newOpId = () => 'op_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
 const chip = (t, k = '') => `<span class="tag ${k}">${esc(t)}</span>`;
 const nm = (list, id) => { const x = (DB[list] || []).find(r => r.id === id); return x ? x.name : '—'; };
 const itemLabel = i => `${i.code} — ${i.name}`;
@@ -24,7 +24,6 @@ const SEARCH = (key, ph = 'بحث…') => `<input id="f_${key}" data-f="${key}" 
 const FSEL = (key, pairs, ph) => `<select id="f_${key}" data-f="${key}" aria-label="${esc(ph)}">${optionsHtml(pairs, UI.f[key] || '', ph)}</select>`;
 const matches = (key, obj) => { const q = (UI.f[key] || '').trim().toLowerCase(); return !q || JSON.stringify(obj).toLowerCase().includes(q); };
 
-/* ---------- نافذة المستند: رأس + بنود + حفظ عبر act() ---------- */
 function fieldHtml(f) {
   const v = f.val ?? '', id = 'fld_' + f.n, req = f.req ? 'required' : '', dis = f.disabled ? 'disabled' : '';
   let c;
@@ -32,8 +31,9 @@ function fieldHtml(f) {
   else if (f.t === 'textarea') c = `<textarea id="${id}" name="${f.n}" rows="2" maxlength="300" ${dis}>${esc(v)}</textarea>`;
   else if (f.t === 'check') return `<label class="chk"><input id="${id}" type="checkbox" name="${f.n}" ${v ? 'checked' : ''} ${dis}> ${f.l}</label>`;
   else c = `<input id="${id}" name="${f.n}" type="${f.t || 'text'}" value="${esc(v)}" ${f.t === 'number' ? `min="${f.min ?? 0}" step="${f.step ?? 'any'}"` : ''} ${f.max ? `max="${f.max}"` : ''} ${f.ph ? `placeholder="${esc(f.ph)}"` : ''} ${req} ${dis} ${f.dir ? `dir="${f.dir}"` : ''}>`;
-  return `<label>${f.l}${f.req ? ' *' : ''}${c}${f.hint ? `<small class="hint">${f.hint}</small>` : ''}</label>`;
+  return `<label data-field="${f.n}">${f.l}${f.req ? ' *' : ''}${c}${f.hint ? `<small class="hint">${f.hint}</small>` : ''}</label>`;
 }
+
 function lineRowHtml(cols, row = {}) {
   return `<tr class="lr">${cols.map(c => {
     const v = row[c.n] ?? '';
@@ -42,8 +42,7 @@ function lineRowHtml(cols, row = {}) {
     return `<td><input data-c="${c.n}" type="${c.t || 'number'}" ${(c.t || 'number') === 'number' ? `min="${c.min ?? 0}" step="${c.step ?? 'any'}"` : ''} value="${esc(v)}" aria-label="${esc(c.l)}" ${c.ph ? `placeholder="${esc(c.ph)}"` : ''}></td>`;
   }).join('')}<td><button type="button" class="sec rm" aria-label="حذف البند">×</button></td></tr>`;
 }
-/* spec: { title, wide, fields:[{n,l,t,opts,req,val,...}], lines:{cols:[{n,l,t,opts,...}], rows:[{}], addLabel}, submit,
-           onInput(el, api), build(values) -> {op,input} | {error}, ok(result) -> رسالة نجاح, summary(values, api) -> html نصي يتحدث مع الإدخال } */
+
 function openDoc(spec) {
   if (!DB) return;
   const opId = newOpId(), frm = $('#frm'), dlg = $('#dlg');
@@ -60,13 +59,14 @@ function openDoc(spec) {
     rows: () => [...frm.querySelectorAll('#lbody .lr')],
     cell: (tr, c) => tr.querySelector(`[data-c="${c}"]`),
     setInfo: (tr, c, t) => { const e = tr.querySelector(`[data-c="${c}"][data-info]`); if (e) e.textContent = t; },
-    setOptions: (n, pairs, sel, ph) => { const e = frm.elements[n]; if (e) e.innerHTML = optionsHtml(pairs, sel, ph); }
+    setOptions: (n, pairs, sel, ph) => { const e = frm.elements[n]; if (e) e.innerHTML = optionsHtml(pairs, sel, ph); },
+    setVisible: (n, visible) => { const e = frm.querySelector(`[data-field="${n}"]`); if (e) e.style.display = visible ? '' : 'none'; }
   };
   const collect = () => {
     const values = {};
     for (const f of spec.fields || []) values[f.n] = api.val(f.n);
     if (L) values.lines = api.rows().map(tr => { const o = {}; tr.querySelectorAll('[data-c]:not([data-info])').forEach(e => { o[e.dataset.c] = e.value; }); return o; })
-      .filter(o => L.keyCol ? o[L.keyCol] !== '' : Object.values(o).some(v => v !== ''));   // الصف الفارغ يُهمل؛ keyCol = العمود الذي يحدد أن الصف مقصود
+      .filter(o => L.keyCol ? o[L.keyCol] !== '' : Object.values(o).some(v => v !== ''));
     return values;
   };
   const refresh = () => { if (!spec.summary) return; const b = $('#sumbox'); try { const h = spec.summary(collect(), api); b.hidden = !h; b.innerHTML = h || ''; } catch (e) { b.hidden = true; } };
@@ -83,7 +83,7 @@ function openDoc(spec) {
     if (!built || built.error) { err.textContent = (built && built.error) || 'تعذّر تجهيز البيانات.'; return; }
     const btns = frm.querySelectorAll('button'); btns.forEach(b => { b.disabled = true; }); err.textContent = 'جارٍ التنفيذ والحفظ…';
     try {
-      const r = await act(built.op, built.input, opId);   // نفس opId عند إعادة المحاولة من النموذج نفسه ⇒ لا تكرار
+      const r = await act(built.op, built.input, opId);
       if (!DB) return;
       dlg.close(); safeRoute();
       if (r.duplicate) { toast('هذه العملية سُجّلت مسبقًا ولم تتكرر.'); return; }
@@ -100,7 +100,7 @@ function openDoc(spec) {
   dlg.showModal(); refresh();
   return api;
 }
-/* تنفيذ أمر بلا نموذج (تأكيد ثم عملية): إلغاء، إرسال، بدء ... */
+
 async function quickAct(op, input, okMsg, confirmMsg) {
   if (!DB) return;
   if (confirmMsg && !confirm(confirmMsg)) return;
@@ -111,7 +111,7 @@ async function quickAct(op, input, okMsg, confirmMsg) {
     return r.result;
   } catch (x) { toast(x && x.erp ? x.message : 'تعذّر التنفيذ: ' + ((x && x.message) || '')); }
 }
-/* عرض مستند للقراءة والطباعة */
+
 function showDoc(title, html) {
   const dlg = $('#dlg'); dlg.classList.add('wide');
   $('#frm').onsubmit = e => e.preventDefault(); $('#frm').oninput = $('#frm').onchange = $('#frm').onclick = null;
@@ -124,7 +124,6 @@ function printNode(kind) {
   const done = () => { document.body.classList.remove('print-dlg', 'print-area'); removeEventListener('afterprint', done); };
   addEventListener('afterprint', done); setTimeout(done, 60000); print();
 }
-/* ---------- تنزيل ملفات ---------- */
 function downloadBlob(name, data, type) { const a = document.createElement('a'); const url = URL.createObjectURL(new Blob([data], { type })); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000); }
 const csvCell = v => { v = String(v ?? ''); if (/^[=+\-@\t\r]/.test(v) && isNaN(Number(v))) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
 const matrixToCsv = m => m.map(r => r.map(csvCell).join(',')).join('\n');
