@@ -185,6 +185,26 @@ function pageSettings() {
   ${ck('allowOverReceipt', 'السماح باستلام كمية أكبر من المطلوب في أمر الشراء')}${ck('allowNegativeCash', 'السماح برصيد خزينة سالب (غير مستحسن)')}
   <div class="tools"><button type="submit">حفظ الإعدادات</button><button type="button" class="sec" data-act="ai-test">اختبار الاتصال بالذكاء الاصطناعي</button><span id="aitest" aria-live="polite"></span></div></form>
   <div class="box"><h3>نسخة احتياطية</h3><p>تنزيل نسخة كاملة من بياناتك بصيغة JSON (للقراءة والأرشفة).</p><div class="tools"><button type="button" class="sec" data-act="backup-json">تنزيل نسخة كاملة JSON</button></div></div>
+  <div class="box">
+  <h3>تغيير البريد الإلكتروني للمدير</h3>
+  <form id="emailChangeForm">
+    <label>
+      البريد الإلكتروني الجديد
+      <input name="newEmail" type="email" required
+        placeholder="nabdh.erp@gmail.com" dir="ltr">
+    </label>
+
+    <label>
+      كلمة المرور الحالية
+      <input name="password" type="password" required
+        autocomplete="current-password">
+    </label>
+
+    <p id="emailChangeMessage" aria-live="polite"></p>
+
+    <button type="submit">إرسال رابط تأكيد البريد الجديد</button>
+  </form>
+</div>
   <div class="note">تُحفظ بيانات حسابك على Firebase بشكل مستقل عن المستخدمين الآخرين. لا تضع أي مفتاح سري هنا؛ المفاتيح تُضبط في الخادم فقط. إصدار بنية البيانات: ${esc(DB.schemaVersion)}.</div>`;
 }
 
