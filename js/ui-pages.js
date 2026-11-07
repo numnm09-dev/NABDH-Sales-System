@@ -613,7 +613,53 @@ function openCollect(customerId) {
     ok: r => `تم التحصيل ${r.no}`
   });
 }
+/* ========== المبيعات ========== */
 
+const SALES_TABS = {
+  invoices: 'فواتير البيع',
+  customers: 'العملاء',
+  returns: 'المرتجعات',
+  collections: 'التحصيلات'
+};
+
+function salesInvoices() {
+  const rows = [...DB.sales]
+    .filter(s => matches('sale', s))
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+
+  return `<div class="tools">
+    ${SEARCH('sale')}
+    <button data-act="new-invoice">+ فاتورة بيع جديدة</button>
+  </div>
+  ${TBL(
+    ['رقم الفاتورة', 'التاريخ', 'العميل', 'الإجمالي', 'المدفوع', 'المتبقي', 'الحالة', ''],
+    rows.map(s => ROW([
+      esc(s.no || s.id),
+      esc(s.date || '—'),
+      esc(s.customerName || s.customer || 'عميل عابر'),
+      money(s.total),
+      money(s.paid || 0),
+      s.status === 'ملغي' ? '—' : money(E_.saleOutstanding(s)),
+      chip(...salePay(s)),
+      BTN('view-invoice', s.id, 'عرض') +
+      (s.status !== 'ملغي' ? BTN('cancel-invoice', s.id, 'إلغاء', 'del') : '')
+    ])),
+    'لا توجد فواتير بيع.'
+  )}`;
+}
+
+function pageSales(tab) {
+  tab = SALES_TABS[tab] ? tab : 'invoices';
+
+  return `<h2>المبيعات والعملاء</h2>
+    ${TABS('sales', SALES_TABS, tab)}
+  ` + ({
+    invoices: salesInvoices,
+    customers: salesCustomers,
+    returns: salesReturns,
+    collections: salesCollections
+  })[tab]();
+}
 /* ========== المشتريات ========== */
 
 const PUR_TABS = {
