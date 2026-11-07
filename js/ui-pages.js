@@ -157,6 +157,16 @@ function homeDelayedOrders(today) {
 /* ========== لوحة التحكم الرئيسية ========== */
 
 function pageHome() {
+    DB.sales = Array.isArray(DB.sales) ? DB.sales : [];
+  DB.production = Array.isArray(DB.production) ? DB.production : [];
+  DB.items = Array.isArray(DB.items) ? DB.items : [];
+  DB.orders = Array.isArray(DB.orders) ? DB.orders : [];
+  DB.customers = Array.isArray(DB.customers) ? DB.customers : [];
+  DB.suppliers = Array.isArray(DB.suppliers) ? DB.suppliers : [];
+  DB.receipts = Array.isArray(DB.receipts) ? DB.receipts : [];
+  DB.payments = Array.isArray(DB.payments) ? DB.payments : [];
+  DB.collections = Array.isArray(DB.collections) ? DB.collections : [];
+  DB.returns = Array.isArray(DB.returns) ? DB.returns : [];
   const today = localToday();
 
   const period = ['day', 'week', 'month', 'year'].includes(UI.f.homePeriod)
