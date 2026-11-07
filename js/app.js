@@ -438,6 +438,57 @@ function showAuthForm(mode) {
         );
 
         errorBox.textContent = 'تم إرسال رابط استعادة كلمة المرور إلى بريدك.';
+
+function showAuthForm(mode) {
+  const isSignup = mode === 'signup';
+
+  $('#dlg').classList.remove('wide');
+  $('#frm').oninput = $('#frm').onchange = $('#frm').onclick = null;
+
+  $('#frm').innerHTML = `
+    <h2>${isSignup ? 'إنشاء حساب جديد' : 'تسجيل الدخول'}</h2>
+    <label>
+      البريد الإلكتروني
+      <input name="email" type="email" required autocomplete="email">
+    </label>
+    <label>
+      كلمة المرور
+      <input name="password" type="password" required minlength="6"
+        autocomplete="${isSignup ? 'new-password' : 'current-password'}">
+    </label>
+    ${!isSignup ? `
+      <button type="button" class="sec" id="forgotPassword">
+        نسيت كلمة المرور؟
+      </button>
+    ` : ''}
+    <p class="err" id="authError"></p>
+    <div class="tools">
+      <button type="submit">${isSignup ? 'إنشاء الحساب' : 'دخول'}</button>
+      <button type="button" class="sec" id="authCancel">إلغاء</button>
+    </div>
+  `;
+
+  $('#authCancel').onclick = () => $('#dlg').close();
+
+  const forgot = $('#forgotPassword');
+
+  if (forgot) {
+    forgot.onclick = async () => {
+      const email = $('#frm').elements.email.value.trim();
+      const errorBox = $('#authError');
+
+      if (!email) {
+        errorBox.textContent = 'اكتب بريدك الإلكتروني أولاً.';
+        return;
+      }
+
+      forgot.disabled = true;
+
+      try {
+        await window.NabdhFirebase.sendPasswordResetEmail(
+          window.NabdhFirebase.auth, email
+        );
+        errorBox.textContent = 'تم إرسال رابط الاستعادة إلى بريدك.';
       } catch (e) {
         errorBox.textContent = authErrorMsg(e);
       } finally {
@@ -460,9 +511,7 @@ function showAuthForm(mode) {
     try {
       const fb = window.NabdhFirebase;
 
-      if (!fb) {
-        throw new Error('خدمة تسجيل الدخول غير جاهزة.');
-      }
+      if (!fb) throw new Error('خدمة تسجيل الدخول غير جاهزة.');
 
       if (isSignup) {
         const credential = await fb.createUserWithEmailAndPassword(
@@ -839,6 +888,58 @@ function bindEvents() {
       await quickAct('updateSettings', input, 'تم حفظ الإعدادات');
     } finally {
       if (btn.isConnected) btn.disabled = false;
+    }
+  });
+  v.addEventListener('submit', async e => {
+    if (e.target.id !== 'emailChangeForm') return;
+
+    e.preventDefault();
+
+    const f = e.target.elements;
+    const newEmail = f.newEmail.value.trim();
+    const password = f.password.value;
+    const msg = $('#emailChangeMessage');
+    const btn = e.target.querySelector('button[type=submit]');
+    const fb = window.NabdhFirebase;
+    const user = fb?.auth.currentUser;
+
+    if (!user || user.uid !== '5JyYvQ3uy2NftT0OAs0fveeKBx03') {
+      msg.textContent = 'غير مسموح بتغيير بريد هذا الحساب.';
+      return;
+    }
+
+    if (!user.emailVerified) {
+      msg.textContent = 'يجب تأكيد البريد الحالي أولاً.';
+      return;
+    }
+
+    if (!newEmail || !password) {
+      msg.textContent = 'أدخل البريد الجديد وكلمة المرور.';
+      return;
+    }
+
+    btn.disabled = true;
+    msg.textContent = 'جارٍ التحقق من كلمة المرور…';
+
+    try {
+      const credential = fb.EmailAuthProvider.credential(
+        user.email,
+        password
+      );
+
+      await fb.reauthenticateWithCredential(user, credential);
+
+      await fb.verifyBeforeUpdateEmail(user, newEmail);
+
+      msg.textContent =
+        'تم إرسال رابط التأكيد إلى البريد الجديد. افتحه لإتمام التغيير.';
+      f.password.value = '';
+
+    } catch (error) {
+      console.error(error);
+      msg.textContent = authErrorMsg(error);
+    } finally {
+      btn.disabled = false;
     }
   });
 }
