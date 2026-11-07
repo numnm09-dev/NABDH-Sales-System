@@ -178,8 +178,7 @@ function pageHome() {
   const k = Reports.dashboard(DB, today);
 
   const low = E_.lowStock(DB);
-  const short = Reports.openDemand(DB).filter(x => x.shortage > 0);
-
+  const short = E_.toList(Reports.openDemand(DB)).filter(x => x.shortage > 0);
   const st = DB.items
     .filter(i => i.type === 'raw' && i.active !== false)
     .map(i => ({ i, s: statusOf(i) }));
