@@ -47,43 +47,358 @@ function homeDateRange(period, today = localToday()) {
     period
   };
 }
-function pageHome() {
-  const S = DB.settings, k = Reports.dashboard(DB, localToday());
-  const low = E_.lowStock(DB), short = Reports.openDemand(DB).filter(x => x.shortage > 0);
-  const st = DB.items.filter(i => i.type === 'raw' && i.active !== false).map(i => ({ i, s: statusOf(i) }));
-  const crit = st.filter(x => x.s.k === 'crit'), mx = Math.max(1, ...st.map(x => x.s.c || 0));
-  const smax = Math.max(1, ...k.series.map(x => x.v));
-  return `<section class="hero"><div class="cover">${esc(S.institute)}<br>إعداد الطالب: ${esc(S.student)} — تحت إشراف: ${esc(S.supervisor)}</div>
-  <h1>نبض | ${esc(S.company || 'نظام ERP لمصنع العصائر والمشروبات')}</h1><p>NABDH — مبيعات ومشتريات ومخازن وإنتاج ومحاسبة وتقارير، مع تحليل مخاطر سلسلة الإمداد بالذكاء الاصطناعي (التوصية للذكاء، والقرار للإنسان).</p>
-  <svg class="pulse" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20h120l15-17 25 34 20-26 10 9h210" fill="none" stroke="currentColor" stroke-width="2"/></svg></section>
-  <div class="grid">${KPI(money(k.salesToday), 'مبيعات اليوم (ج)')}${KPI(money(k.salesMonth), 'صافي مبيعات الشهر (ج)')}${KPI(money(k.grossProfitMonth), 'مجمل ربح الشهر (ج)')}${KPI(money(k.netProfitMonth), 'صافي ربح الشهر (ج)', k.netProfitMonth < 0 ? 'red' : '')}
-  ${KPI(money(k.cash), 'رصيد الخزينة (ج)', k.cash < 0 ? 'red' : '')}${KPI(money(k.receivables), 'ذمم العملاء (ج)')}${KPI(money(k.payables), 'مستحقات الموردين (ج)')}
-  ${KPI(money(k.inventoryRaw), 'قيمة مخزون المواد الخام (ج)')}${KPI(money(k.inventoryFinished), 'قيمة مخزون المنتجات التامة (ج)')}
-  ${KPI(k.lowStock, 'أصناف تحت الحد الأدنى', k.lowStock ? 'amb' : '')}${KPI(k.shortages, 'مواد ناقصة لأوامر إنتاج', k.shortages ? 'red' : '')}${KPI(k.openPOs, 'أوامر شراء مفتوحة')}${KPI(k.prodInProgress + '/' + k.prodDraft, 'إنتاج قيد التنفيذ / مسودات')}${KPI(k.prodDoneMonth, 'أوامر إنتاج مكتملة هذا الشهر')}</div>
-  <div class="tools"><button data-act="new-invoice">+ فاتورة بيع</button><button data-act="new-po" class="sec">+ أمر شراء</button><button data-act="new-production" class="sec">+ أمر إنتاج</button><button data-act="v-receipt" class="sec">+ سند استلام</button><button data-act="new-expense" class="sec">+ مصروف</button></div>
-  <div class="box"><h2>تنبيهات المخزون والإنتاج</h2>
-    ${low.map(i => `<p>${chip('تحت الحد الأدنى', 'low')} <b>${esc(i.name)}</b>: الرصيد ${qfmt(i.qty)} ${esc(i.unit || '')} (الحد الأدنى ${qfmt(i.min)}). <a href="#inventory/stock">المخزون</a></p>`).join('')}
-    ${short.map(x => `<p>${chip('نقص لإنتاج', 'crit')} <b>${esc(itemName(x.itemId))}</b>: المطلوب لأوامر الإنتاج المفتوحة ${qfmt(x.required)} والمتاح ${qfmt(x.available)} (العجز ${qfmt(x.shortage)}). <a href="#purchasing/orders">أنشئ أمر شراء</a></p>`).join('')}
-    ${crit.map(({ i, s }) => `<p>${tag(s)} <b>${esc(i.name)}</b>: يكفي ${fmt(s.c)} يوم والشحنة بعد ${fmt(K.arr(i))} يوم. <a href="#risk" data-risk="${esc(i.id)}">حلّل البدائل</a></p>`).join('')}
-    ${(low.length + short.length + crit.length) ? '' : '<p>لا توجد تنبيهات حالية.</p>'}</div>
-  <div class="box"><h2>مبيعات آخر 7 أيام (صافي المرتجعات)</h2>${k.series.map(x => `<div class="bar"><span>${esc(x.date.slice(5))}</span><i style="width:${Math.max(1, x.v / smax * 60)}%"></i><span>${money(x.v)}</span></div>`).join('')}</div>
-  <div class="box"><h2>أيام التغطية للمواد الخام</h2>${st.map(({ i, s }) => `<div class="bar"><span>${esc(i.name)}</span><i class="${s.k}" style="width:${Math.max(2, (s.c || 0) / mx * 60)}%"></i><span>${fmt(s.c)} يوم — ${esc(s.t)}</span></div>`).join('') || 'لا توجد مواد خام.'}</div>
-  <div class="note">بياناتك محفوظة في حسابك على Firebase، ولكل مستخدم بيانات مستقلة. كل عملية تُنفَّذ كمعاملة ذرّية وتُسجَّل في سجل المراجعة.</div>`;
+/* ========== تحليلات لوحة التحكم ========== */
+
+function homeMoneyChart(rows, maxValue) {
+  if (!rows.length) return '<p class="note">لا توجد بيانات في الفترة المحددة.</p>';
+
+  return rows.map(x => {
+    const width = Math.max(0, Math.min(100, x.value / maxValue * 100));
+
+    return `
+      <div class="bar">
+        <span>${esc(x.label)}</span>
+        <i style="width:${width}%"></i>
+        <span>${money(x.value)}</span>
+      </div>
+    `;
+  }).join('');
 }
 
-/* ========== المبيعات ========== */
-const SALES_TABS = { invoices: 'الفواتير', customers: 'العملاء', returns: 'المرتجعات', collections: 'التحصيل' };
-function pageSales(tab) {
-  tab = SALES_TABS[tab] ? tab : 'invoices';
-  return `<h2>المبيعات</h2>${TABS('sales', SALES_TABS, tab)}` + ({ invoices: salesInvoices, customers: salesCustomers, returns: salesReturns, collections: salesCollections })[tab]();
+function homePeriodSales(period, today) {
+  const range = homeDateRange(period, today);
+  const sales = DB.sales.filter(s =>
+    s.status !== 'ملغي' &&
+    String(s.date || '') >= range.from &&
+    String(s.date || '') <= range.to
+  );
+
+  const rows = new Map();
+
+  sales.forEach(s => {
+    const date = String(s.date || '');
+    const value = Math.max(0, Number(s.total || 0) - Number(s.returned || 0));
+
+    rows.set(date, (rows.get(date) || 0) + value);
+  });
+
+  let result = [];
+
+  if (period === 'day') {
+    result = [{ label: 'اليوم', value: rows.get(today) || 0 }];
+  } else if (period === 'week') {
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(
+        Number(range.from.slice(0, 4)),
+        Number(range.from.slice(5, 7)) - 1,
+        Number(range.from.slice(8, 10)) + i
+      );
+
+      const key = [
+        d.getFullYear(),
+        String(d.getMonth() + 1).padStart(2, '0'),
+        String(d.getDate()).padStart(2, '0')
+      ].join('-');
+
+      result.push({ label: key.slice(5), value: rows.get(key) || 0 });
+    }
+  } else if (period === 'month') {
+    const days = Number(range.to.slice(8, 10));
+
+    for (let i = 1; i <= days; i++) {
+      const key = range.to.slice(0, 7) + '-' + String(i).padStart(2, '0');
+      result.push({ label: String(i), value: rows.get(key) || 0 });
+    }
+  } else {
+    for (let m = 1; m <= 12; m++) {
+      const prefix = range.to.slice(0, 4) + '-' + String(m).padStart(2, '0');
+      let value = 0;
+
+      rows.forEach((v, date) => {
+        if (date.startsWith(prefix)) value += v;
+      });
+
+      result.push({
+        label: new Date(Number(range.to.slice(0, 4)), m - 1, 1)
+          .toLocaleDateString('ar-EG', { month: 'short' }),
+        value
+      });
+    }
+  }
+
+  return result;
 }
-function salesInvoices() {
-  const live = DB.sales.filter(s => s.status !== 'ملغي'), tot = live.reduce((n, s) => n + (s.total || 0) - (s.returned || 0), 0), due = live.reduce((n, s) => n + E_.saleOutstanding(s), 0);
-  const rows = [...DB.sales].filter(s => matches('inv', s) && (!UI.f.invst || salePay(s)[0] === UI.f.invst)).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.no || '').localeCompare(String(a.no || '')));
-  return `<div class="grid">${KPI(money(tot), 'صافي المبيعات (ج)')}${KPI(live.length, 'فواتير مؤكدة')}${KPI(money(due), 'مستحق على العملاء (ج)', due > 0 ? 'amb' : '')}</div>
-  <div class="tools">${SEARCH('inv')}${FSEL('invst', ['مسددة', 'مسددة جزئيًا', 'غير مسددة', 'ملغاة'].map(x => [x, x]), 'كل الحالات')}<button data-act="new-invoice">+ فاتورة بيع جديدة</button></div>
-  ${TBL(['الرقم', 'التاريخ', 'العميل', 'الإجمالي', 'المرتجع', 'المدفوع', 'المتبقي', 'الحالة', ''], rows.map(s => { const p = salePay(s); return ROW([esc(s.no || s.id) + (s.legacy ? ' ' + chip('قديمة', 'nodata') : ''), esc(dateVal(s.date)), esc(s.customerName || s.customer || 'عميل عابر'), money(s.total), money(s.returned || 0), money(s.paid || 0), s.status === 'ملغي' ? '—' : money(E_.saleOutstanding(s)), chip(p[0], p[1]),
-    BTN('view-invoice', s.id, 'عرض') + (s.status === 'مؤكد' && !s.legacy ? BTN('new-return', s.id, 'مرتجع') : '') + (s.status === 'مؤكد' && !(s.returned > 0) ? BTN('cancel-invoice', s.id, 'إلغاء', 'del') : '')]); }), 'لا توجد فواتير.')}`;
+
+function homePeriodLabel(period) {
+  return ({
+    day: 'اليوم',
+    week: 'هذا الأسبوع',
+    month: 'هذا الشهر',
+    year: 'هذه السنة'
+  })[period] || 'هذا الأسبوع';
+}
+
+function homeDelayedOrders(today) {
+  return DB.orders.filter(o => {
+    if (!o.expectedDate) return false;
+    if (['ملغي', 'مستلم'].includes(o.status)) return false;
+    if (String(o.expectedDate) >= today) return false;
+
+    const remaining = E_.toList(o.lines).reduce(
+      (sum, line) => sum + Math.max(
+        0,
+        Number(line.qty || 0) - Number(line.receivedQty || 0)
+      ),
+      0
+    );
+
+    return remaining > 0;
+  });
+}
+
+/* ========== لوحة التحكم الرئيسية ========== */
+
+function pageHome() {
+  const today = localToday();
+  const period = ['day', 'week', 'month', 'year'].includes(homePeriod)
+    ? homePeriod
+    : 'week';
+
+  const range = homeDateRange(period, today);
+  const S = DB.settings;
+  const k = Reports.dashboard(DB, today);
+
+  const low = E_.lowStock(DB);
+  const short = Reports.openDemand(DB).filter(x => x.shortage > 0);
+
+  const st = DB.items
+    .filter(i => i.type === 'raw' && i.active !== false)
+    .map(i => ({ i, s: statusOf(i) }));
+
+  const crit = st.filter(x => x.s.k === 'crit');
+  const mx = Math.max(1, ...st.map(x => x.s.c || 0));
+
+  const salesRows = homePeriodSales(period, today);
+  const salesMax = Math.max(1, ...salesRows.map(x => x.value));
+
+  const delayed = homeDelayedOrders(today);
+
+  const periodSales = DB.sales
+    .filter(s =>
+      s.status !== 'ملغي' &&
+      String(s.date || '') >= range.from &&
+      String(s.date || '') <= range.to
+    )
+    .reduce(
+      (sum, s) => sum + Number(s.total || 0) - Number(s.returned || 0),
+      0
+    );
+
+  // الربح من التقارير المحاسبية وليس من إجمالي المبيعات.
+  const pnl = Reports.pnl(DB, { from: range.from, to: range.to }) || {};
+
+  const cash = Number(k.cash || 0);
+  const receivables = Number(k.receivables || 0);
+  const payables = Number(k.payables || 0);
+
+  const rawValue = Number(k.inventoryRaw || 0);
+  const finishedValue = Number(k.inventoryFinished || 0);
+
+  const productionInProgress = DB.production.filter(p =>
+    ['قيد التنفيذ', 'جارٍ التنفيذ', 'جاري التنفيذ'].includes(p.status)
+  ).length;
+
+  const productionDraft = DB.production.filter(p =>
+    p.status === 'مسودة'
+  ).length;
+
+  const productionDone = DB.production.filter(p =>
+    p.status === 'مكتمل' &&
+    String(p.date || p.completedAt || '') >= range.from &&
+    String(p.date || p.completedAt || '') <= range.to
+  ).length;
+
+  const periodButtons = [
+    ['day', 'يومي'],
+    ['week', 'أسبوعي'],
+    ['month', 'شهري'],
+    ['year', 'سنوي']
+  ];
+
+  const periodSalesValue = money(periodSales);
+
+  return `
+  <section class="hero">
+    <div class="cover">
+      ${esc(S.institute)}<br>
+      إعداد الطالب: ${esc(S.student)}
+      — تحت إشراف: ${esc(S.supervisor)}
+    </div>
+
+    <h1>نبض | ${esc(S.company || 'نظام ERP لمصنع العصائر والمشروبات')}</h1>
+
+    <p>
+      NABDH — إدارة المبيعات والمشتريات والمخازن والإنتاج والمحاسبة،
+      وتحليل مخاطر سلسلة الإمداد.
+    </p>
+
+    <svg class="pulse" viewBox="0 0 400 40"
+      preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 20h120l15-17 25 34 20-26 10 9h210"
+        fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </section>
+
+  <div class="box">
+    <h2>تحليلات الأداء</h2>
+
+    <p class="note">
+      اختر الفترة لعرض المبيعات ومؤشرات الأداء المرتبطة بها.
+    </p>
+
+    <div class="tools">
+      ${periodButtons.map(([value, label]) => `
+        <button
+          type="button"
+          data-home-period="${value}"
+          class="${period === value ? '' : 'sec'}"
+          aria-pressed="${period === value}">
+          ${label}
+        </button>
+      `).join('')}
+    </div>
+
+    <p class="note">
+      الفترة المحددة: ${homePeriodLabel(period)}
+      — من ${esc(range.from)} إلى ${esc(range.to)}
+    </p>
+  </div>
+
+  <div class="grid">
+    ${KPI(periodSalesValue, 'صافي المبيعات للفترة (ج)')}
+    ${KPI(money(pnl.grossProfit || 0), 'مجمل الربح للفترة (ج)')}
+    ${KPI(money(pnl.netProfit || 0), 'صافي الربح للفترة (ج)',
+      Number(pnl.netProfit || 0) < 0 ? 'red' : '')}
+
+    ${KPI(money(cash), 'رصيد الخزينة (ج)', cash < 0 ? 'red' : '')}
+    ${KPI(money(receivables), 'ذمم العملاء (ج)')}
+    ${KPI(money(payables), 'مستحقات الموردين (ج)')}
+
+    ${KPI(money(rawValue), 'قيمة مخزون المواد الخام (ج)')}
+    ${KPI(money(finishedValue), 'قيمة المنتجات التامة (ج)')}
+
+    ${KPI(low.length, 'أصناف تحت الحد الأدنى', low.length ? 'amb' : '')}
+    ${KPI(short.length, 'مواد ناقصة للإنتاج', short.length ? 'red' : '')}
+    ${KPI(delayed.length, 'أوامر توريد متأخرة', delayed.length ? 'red' : '')}
+    ${KPI(DB.orders.filter(o => E_.PO_OPEN.includes(o.status)).length,
+      'أوامر شراء مفتوحة')}
+
+    ${KPI(productionInProgress, 'إنتاج قيد التنفيذ')}
+    ${KPI(productionDraft, 'مسودات الإنتاج')}
+    ${KPI(productionDone, 'إنتاج مكتمل خلال الفترة')}
+  </div>
+
+  <div class="box">
+    <h2>المبيعات — ${homePeriodLabel(period)}</h2>
+    ${homeMoneyChart(salesRows, salesMax)}
+  </div>
+
+  <div class="box">
+    <h2>تنبيهات المخزون والإنتاج</h2>
+
+    ${low.map(i => `
+      <p>
+        ${chip('تحت الحد الأدنى', 'low')}
+        <b>${esc(i.name)}</b>:
+        الرصيد ${qfmt(i.qty)} ${esc(i.unit || '')}
+        (الحد الأدنى ${qfmt(i.min)}).
+        <a href="#inventory/stock">المخزون</a>
+      </p>
+    `).join('')}
+
+    ${short.map(x => `
+      <p>
+        ${chip('نقص للإنتاج', 'crit')}
+        <b>${esc(itemName(x.itemId))}</b>:
+        المطلوب ${qfmt(x.required)}
+        والمتاح ${qfmt(x.available)}
+        والعجز ${qfmt(x.shortage)}.
+        <a href="#purchasing/orders">إنشاء أمر شراء</a>
+      </p>
+    `).join('')}
+
+    ${crit.map(({ i, s }) => `
+      <p>
+        ${tag(s)}
+        <b>${esc(i.name)}</b>:
+        يكفي ${fmt(s.c)} يوم
+        والشحنة بعد ${fmt(K.arr(i))} يوم.
+        <a href="#risk" data-risk="${esc(i.id)}">تحليل البدائل</a>
+      </p>
+    `).join('')}
+
+    ${!(low.length + short.length + crit.length)
+      ? '<p>لا توجد تنبيهات حالية.</p>'
+      : ''}
+  </div>
+
+  <div class="box">
+    <h2>تأخيرات الموردين</h2>
+
+    ${delayed.length
+      ? delayed.map(o => {
+          const remaining = E_.toList(o.lines).reduce(
+            (sum, line) => sum + Math.max(
+              0,
+              Number(line.qty || 0) - Number(line.receivedQty || 0)
+            ),
+            0
+          );
+
+          return `
+            <p>
+              ${chip('متأخر', 'crit')}
+              <b>${esc(o.no || o.id)}</b>
+              — المورد: ${esc(nm('suppliers', o.supplierId))}
+              — المتوقع: ${esc(o.expectedDate)}
+              — الحالة: ${esc(o.status)}
+              — الكمية المتبقية: ${qfmt(remaining)}
+              <a href="#purchasing/orders">أوامر الشراء</a>
+            </p>
+          `;
+        }).join('')
+      : '<p>لا توجد أوامر توريد متأخرة وفق تواريخ التوريد المسجلة.</p>'
+    }
+  </div>
+
+  <div class="box">
+    <h2>أيام تغطية المواد الخام</h2>
+
+    ${st.map(({ i, s }) => `
+      <div class="bar">
+        <span>${esc(i.name)}</span>
+        <i class="${s.k}"
+          style="width:${Math.max(2, (s.c || 0) / mx * 60)}%">
+        </i>
+        <span>${fmt(s.c)} يوم — ${esc(s.t)}</span>
+      </div>
+    `).join('') || '<p>لا توجد مواد خام.</p>'}
+  </div>
+
+  <div class="tools">
+    <button data-act="new-invoice">+ فاتورة بيع</button>
+    <button data-act="new-po" class="sec">+ أمر شراء</button>
+    <button data-act="new-production" class="sec">+ أمر إنتاج</button>
+    <button data-act="v-receipt" class="sec">+ سند استلام</button>
+    <button data-act="new-expense" class="sec">+ مصروف</button>
+  </div>
+
+  <div class="note">
+    جميع المؤشرات مبنية على البيانات المسجلة في نظام نبض.
+    قيمة المخزون والأرصدة تعكس الوضع الحالي، بينما المبيعات والأرباح
+    مرتبطة بالفترة المختارة. توصيات المخاطر استرشادية والقرار النهائي للإدارة.
+  </div>
+  `;
 }
 function openInvoice() {
   const fg = activeWhs('finished'); if (!fg.length) return toast('أنشئ مخزن منتجات تامة أولًا من صفحة المخازن.');
