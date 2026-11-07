@@ -373,12 +373,21 @@ function showAuthForm(mode) {
       if (!fb)
         throw new Error('خدمة تسجيل الدخول غير جاهزة. أعد تحميل الصفحة.');
 
-      if (isSignup)
-        await fb.createUserWithEmailAndPassword(fb.auth, email, password);
-      else
-        await fb.signInWithEmailAndPassword(fb.auth, email, password);
+if (isSignup) {
+  const credential = await fb.createUserWithEmailAndPassword(
+    fb.auth, email, password
+  );
 
-      $('#dlg').close();
+  await fb.sendEmailVerification(credential.user);
+  await fb.signOut(fb.auth);
+
+  $('#dlg').close();
+  toast('تم إنشاء الحساب. راجع بريدك واضغط على رابط التأكيد.');
+  return;
+}
+
+await fb.signInWithEmailAndPassword(fb.auth, email, password);
+$('#dlg').close();
 
     } catch (error) {
       console.error(error);
