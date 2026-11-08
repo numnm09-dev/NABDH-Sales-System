@@ -88,7 +88,7 @@ test('المرشحات تعمل: بحث الفواتير وتصفية التقا
   const ctx = loadBrowser(), s = richFactory(); setDB(ctx, s.db);
   const all = run(ctx, 'pageSales("invoices")'); const inv = s.db.sales[0].no;
   assert.ok(all.includes(inv));
-  run(ctx, 'UI.f.inv = "لا-يوجد-هذا-النص"'); assert.ok(!run(ctx, 'pageSales("invoices")').includes('>' + inv + '<'));
+  run(ctx, 'UI.f.sale = "لا-يوجد-هذا-النص"'); assert.ok(!run(ctx, 'pageSales("invoices")').includes('>' + inv + '<'));
   run(ctx, 'UI.rf.from = "2030-01-01"'); const rep = run(ctx, 'pageReports("sales")'); assert.ok(!rep.includes(inv));
 });
 test('تصدير التقارير: CSV وExcel يُنتجان ملفين صالحين من بيانات التقرير نفسها', () => {
