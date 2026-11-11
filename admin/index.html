@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مدير النظام العام | نبض</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>نبض <span>إدارة النظام</span></h1>
+      <p>لوحة مدير النظام العام</p>
+    </div>
+    <span class="role">Super Admin</span>
+  </header>
+
+  <p id="adminAuthStatus" role="status">جارٍ التحقق من صلاحية الدخول...</p>
+  <main class="container" hidden>
+    <section class="welcome">
+      <h2>إدارة الشركات</h2>
+      <p>إدارة الشركات ومديريها ومتابعة حسابات النظام.</p>
+    </section>
+
+    <section class="stats">
+      <article class="stat">
+        <span>إجمالي الشركات</span>
+        <strong id="companyCount">0</strong>
+      </article>
+      <article class="stat">
+        <span>الشركات النشطة</span>
+        <strong id="activeCount">0</strong>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>إضافة شركة</h2>
+      </div>
+      <form id="companyForm">
+        <label for="companyName">اسم الشركة</label>
+        <input id="companyName" required maxlength="100" placeholder="اكتب اسم الشركة">
+
+        <label for="managerEmail">بريد مدير الشركة</label>
+        <input id="managerEmail" type="email" required placeholder="manager@example.com">
+
+        <button type="submit">إضافة الشركة</button>
+        <p id="formMessage" role="status"></p>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>الشركات المسجلة</h2>
+      <div id="companyList" class="empty">
+        لا توجد شركات معروضة حتى الآن.
+      </div>
+    </section>
+
+    <p class="notice">
+      تتم إدارة الشركات من خلال واجهات النظام، وتظل الشركة في انتظار دعوة المدير وربط حسابه قبل التفعيل.
+    </p>
+  </main>
+
+  <script type="module" src="../js/firebase-init.js"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

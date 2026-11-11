@@ -1,0 +1,171 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f3f6fa;
+  color: #172b4d;
+  font-family: Arial, sans-serif;
+}
+
+.topbar {
+  background: #102b46;
+  color: white;
+  padding: 22px 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 25px;
+}
+
+.topbar h1 span {
+  color: #42d6bd;
+  font-size: 17px;
+  margin-right: 8px;
+}
+
+.topbar p {
+  margin: 8px 0 0;
+  color: #c3d3e3;
+}
+
+.role {
+  background: #1b496d;
+  border: 1px solid #42d6bd;
+  border-radius: 20px;
+  padding: 9px 15px;
+  font-size: 13px;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 35px auto;
+}
+
+.welcome h2 {
+  margin-bottom: 8px;
+}
+
+.welcome p {
+  color: #718096;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 25px 0;
+}
+
+.stat, .panel {
+  background: white;
+  border: 1px solid #e5ebf2;
+  border-radius: 14px;
+  padding: 23px;
+  box-shadow: 0 5px 18px rgba(20, 45, 70, .04);
+}
+
+.stat span {
+  display: block;
+  color: #718096;
+  margin-bottom: 12px;
+}
+
+.stat strong {
+  font-size: 30px;
+  color: #087e78;
+}
+
+.panel {
+  margin-bottom: 22px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 19px;
+}
+
+form {
+  display: grid;
+  gap: 11px;
+  max-width: 600px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d6dfeb;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #087e78;
+}
+
+button {
+  background: #087e78;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+button:hover {
+  background: #06645f;
+}
+
+.empty {
+  color: #8290a2;
+  background: #f7f9fc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.notice {
+  color: #8a6500;
+  background: #fff8df;
+  border: 1px solid #f1dfa0;
+  border-radius: 9px;
+  padding: 14px;
+  font-size: 13px;
+}
+
+#formMessage {
+  margin: 5px 0 0;
+  color: #087e78;
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    padding: 18px 4%;
+  }
+
+  .topbar h1 {
+    font-size: 20px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    margin-top: 22px;
+  }
+}
