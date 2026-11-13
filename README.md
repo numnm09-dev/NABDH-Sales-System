@@ -20,6 +20,10 @@
 3. انشر `database.rules.json` من لوحة Firebase (Realtime Database ← Rules) أو `firebase deploy --only database`.
 4. للذكاء الاصطناعي: انشر المشروع على Vercel وضع في إعداداته فقط: `GEMINI_API_KEY` و`AI_MODEL` و`ALLOWED_ORIGIN` (انظر `.env.example`)، ثم ضع رابط `/api/analyze` في صفحة الإعدادات. بدونه تعمل الحسابات الرياضية كاملة.
 
+## دعوات مديري الشركات وربطهم
+الدورة: السوبر أدمن ينشئ الشركة (`pending_manager`) ← «إرسال الدعوة» من لوحة `/admin/` (`POST /api/admin-invitations-send`) يُنشئ توكنًا عشوائيًا، **تُخزَّن بصمته (SHA-256) فقط**، ويُرسل الرابط بالبريد ← المدير يفتح `/accept-invitation/` ويسجّل بنفس البريد ويؤكده ← `POST /api/accept-invitation` يتحقق من التوكن والبريد المؤكَّد وصلاحية 48 ساعة، يحجز الدعوة بمعاملة ذرّية، ثم يكتب في تحديث واحد: `companies/{id}` (`managerUid`، `managerStatus: linked`، `status: active`) و`companyMembers/{id}/{uid}` و`userCompanies/{uid}/{id}` وحالة الدعوة `accepted`.
+الدعوة تُستخدم مرة واحدة، وإعادة الإرسال تُبطل الرابط السابق. عقد `invitations/*` و`companyMembers/*` و`userCompanies/*` تكتبها واجهات الخادم فقط (قواعد Firebase ترفض أي وصول مباشر من العميل). المتغيرات المطلوبة في `.env.example` (`APP_BASE_URL` و`RESEND_API_KEY` و`INVITATION_FROM_EMAIL`).
+
 ## الميزات المنفّذة (كلها مغطاة باختبارات المحرك أو الواجهة)
 - **المخازن**: مخزن مواد خام منفصل عن المنتجات التامة؛ سندات استلام/صرف/تحويل/تسوية؛ دفتر حركة؛ تنبيه حد أدنى؛ **لا رصيد سالب**.
 - **الإنتاج**: BOM، فحص توفر المواد، استهلاك وهالك، تكلفة، استلام منتج تام.
