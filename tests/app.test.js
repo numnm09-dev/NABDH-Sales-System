@@ -34,19 +34,19 @@ const legacyData = () => ({
 });
 
 test('حساب جديد: يُنشأ بنية ERP كاملة بمخزنين افتراضيين وإعدادات الشركة', async () => {
-  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   assert.equal(t.run('ready'), true);
   const d = stored(t.fake); assert.equal(d.schemaVersion, E.SCHEMA); assert.equal(d.warehouses.length, 2); assert.ok(d.settings.company); assert.deepEqual(E.verify(d), []);
 });
 test('حساب من الإصدار 1: لا يُعرض النظام قبل مراجعة الترقية، ولا تتغير البيانات قبل الضغط', async () => {
-  const t = boot({ u1: legacyData() }); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot({ u1: legacyData() }); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   assert.equal(t.run('ready'), false); assert.equal(t.run('DB'), null);
   assert.ok(t.shared.innerHTML.includes('ترقية بيانات حسابك') && t.shared.innerHTML.includes('علب عصير'));
   assert.equal(t.fake.getAt('users/u1').schemaVersion, undefined, 'لم تُرقَّ البيانات بعد');
   await assert.rejects(t.run('act("cashEntry", { kind: "capital_in", amount: 5 })'), e => e.code === 'not_ready');
 });
 test('الترقية: نسخة احتياطية، حفظ كل السجلات القديمة، واختيار المستخدم لنوع الصنف', async () => {
-  const t = boot({ u1: legacyData() }); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot({ u1: legacyData() }); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   t.run('UI.mig.types["i2"] = "finished"');
   await t.shared.onclick();                               // زر «ابدأ الترقية» (عناصر الاختبار تشترك في كائن واحد؛ آخر onclick هو زر الترقية)
   assert.equal(t.run('ready'), true, 'جاهز بعد الترقية');
@@ -57,7 +57,7 @@ test('الترقية: نسخة احتياطية، حفظ كل السجلات ا�
   assert.doesNotThrow(() => t.run('pageHome()')); assert.doesNotThrow(() => t.run('pageSales("invoices")'));
 });
 test('act: بيع يخصم المخزون ويحدّث DB المحلي من نتيجة المعاملة المؤكدة فقط', async () => {
-  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   await t.run(`act("upsertItem", { code: "FG1", name: "عصير", type: "finished", unit: "عبوة", salePrice: 5, openingQty: 10, openingWhId: "wh_fg", openingCost: 2 })`);
   const id = t.run('DB.items[0].id');
   await t.run('act("cashEntry", { kind: "capital_in", amount: 1000 })');
@@ -65,20 +65,20 @@ test('act: بيع يخصم المخزون ويحدّث DB المحلي من نت
   assert.equal(r.result.total, 20); assert.equal(t.run('DB.items[0].qty'), 6); assert.equal(stored(t.fake).items[0].qty, 6);
 });
 test('act: بيع أكبر من الرصيد يُرفض ولا يتغير شيء محليًا أو في الخادم', async () => {
-  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   await t.run(`act("upsertItem", { code: "FG1", name: "عصير", type: "finished", unit: "عبوة", salePrice: 5, openingQty: 3, openingWhId: "wh_fg", openingCost: 2 })`);
   const id = t.run('DB.items[0].id'), before = JSON.stringify(t.fake.getAt('users/u1')), revBefore = t.run('DB.rev');
   await assert.rejects(t.run(`act("createInvoice", { whId: "wh_fg", lines: [{ itemId: "${id}", qty: 4, unitPrice: 5 }], paid: 0 })`), e => e.code === 'insufficient_stock' || e.erp);
   assert.equal(JSON.stringify(t.fake.getAt('users/u1')), before); assert.equal(t.run('DB.rev'), revBefore); assert.equal(t.run('DB.items[0].qty'), 3);
 });
 test('act: إعادة إرسال نفس opId لا تكرر العملية', async () => {
-  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   await t.run('act("cashEntry", { kind: "capital_in", amount: 100 }, "op_same_1")');
   const r2 = await t.run('act("cashEntry", { kind: "capital_in", amount: 100 }, "op_same_1")');
   assert.equal(r2.duplicate, true); assert.equal(E.cashBalance(stored(t.fake)), 100); assert.equal(t.run('E_.cashBalance(DB)'), 100);
 });
 test('act: خطأ صلاحيات Firebase يتحول لرسالة واضحة بلا تغيير محلي', async () => {
-  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const t = boot(); await t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   t.ctx.NabdhFirebase.runTransaction = async () => { throw Object.assign(new Error('PERMISSION_DENIED'), { code: 'PERMISSION_DENIED' }); };
   const revBefore = t.run('DB.rev');
   await assert.rejects(t.run('act("cashEntry", { kind: "capital_in", amount: 1 })'), e => e.code === 'permission' && /صلاحية/.test(e.message));
@@ -88,7 +88,7 @@ test('تبديل المستخدم أثناء التحميل: النتيجة ال
   const t = boot({ u1: E.migrate({ items: [{ id: 'x', code: 'A', name: 'سري', qty: 1 }] }, {}).db });
   const realGet = t.ctx.NabdhFirebase.get; let release; const gate = new Promise(r => { release = r; });
   t.ctx.NabdhFirebase.get = async r => { await gate; return realGet(r); };
-  const loading = t.run('handleAuth({ uid: "u1", email: "a@nabdh.test" })');
+  const loading = t.run('handleAuth({ uid: "u1", email: "a@nabdh.test", emailVerified: true })');
   await t.run('handleAuth(null)'); release(); await loading;
   assert.equal(t.run('DB'), null); assert.equal(t.run('ready'), false);
 });
