@@ -421,7 +421,13 @@ function showAuthForm(mode) {
           fb.auth, email, password
         );
 
-        await fb.sendEmailVerification(credential.user);
+       try {
+  await fb.sendEmailVerification(credential.user);
+  console.log('VERIFICATION_EMAIL_SENT');
+} catch (error) {
+  console.error('VERIFICATION_EMAIL_ERROR:', error.code, error.message);
+  throw error;
+}
         await fb.signOut(fb.auth);
 
         $('#dlg').close();
