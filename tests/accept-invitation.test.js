@@ -128,7 +128,7 @@ test('دعوة منتهية: 410، ومسودة/فاشلة/مُلغاة: 409', a
   assert.equal(res.statusCode, 410);
   untouched();
 
-  for (const status of ['draft', 'send_pending', 'send_failed', 'revoked']) {
+  for (const status of ['draft', 'send_failed', 'revoked']) {
     seed({ status });
     res = await call();
     assert.equal(res.statusCode, 409);
@@ -156,6 +156,16 @@ test('النجاح: ربط UID وإنشاء العضوية وتحديث الحا
   assert.equal(member.invitationId, ID);
 
   assert.equal(db.get('userCompanies/mgr-1/company-1').role, 'MANAGER');
+  assert.equal(db.get('userCompanies/mgr-1/company-1').name, 'شركة النور');
+
+  // بيانات ERP الخاصة بالشركة هُيِّئت (بنية محرك كاملة باسم الشركة) ولا حساب شخصي أُنشئ للمدير
+  const data = db.get('companyData/company-1');
+  assert.equal(data.schemaVersion, 2);
+  assert.equal(data.settings.company, 'شركة النور');
+  const Engine = require('../js/erp-ops2.js');
+  assert.deepEqual(Engine.verify(Engine.ensure(data), {}), [], 'بيانات الشركة المهيأة تجتاز فحص سلامة المحرك الكامل');
+  assert.equal(db.get('users'), null);
+  assert.equal(db.get('companyData/company-2'), null);
 
   const invitation = db.get(`invitations/${ID}`);
   assert.equal(invitation.status, 'accepted');
@@ -240,4 +250,171 @@ test('بريد من خارج الدعوة بنفس UID لا يمر حتى لو �
   const res = await call();
   assert.equal(res.data.error, 'invitation_email_mismatch');
   untouched();
+});
+
+/* ---------- التزام ملتبس (commit-then-timeout) والمصالحة ---------- */
+const { describeState, readLinkState } = require('../api/_lib/reconcile');
+
+async function consistent() {
+  const state = await readLinkState(db.database, 'company-1');
+  return describeState(state).issues;
+}
+
+test('دعوة في send_pending يحملها صاحبها بتوكن صحيح تُقبل (تعذّر تسجيل sent بعد الإرسال)', async () => {
+  seed({ status: 'send_pending', sendStartedAt: Date.now() });
+  const res = await call();
+  assert.equal(res.statusCode, 200);
+  assert.deepEqual(await consistent(), []);
+});
+
+test('الكتابة النهائية حُفظت ثم انقطع الإقرار: النتيجة نجاح والحالة متسقة بلا إرجاع للحجز', async () => {
+  db.hooks.update = 'after';
+  const res = await call();
+
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.data.ok, true);
+  assert.equal(db.get(`invitations/${ID}/status`), 'accepted');
+  assert.equal(db.get('companies/company-1/managerUid'), 'mgr-1');
+  assert.equal(db.get('companyMembers/company-1/mgr-1').role, 'MANAGER');
+  assert.deepEqual(await consistent(), []);
+
+  // إعادة الاستخدام ما زالت ممنوعة، لكن صاحب الربط يُخبَر أن ربطه قائم
+  db.hooks.update = null;
+  const again = await call();
+  assert.equal(again.statusCode, 409);
+  assert.equal(again.data.error, 'invitation_already_used');
+  assert.equal(again.data.linkedToYou, true);
+  assert.equal(Object.keys(db.get('companyMembers/company-1')).length, 1);
+});
+
+test('الكتابة النهائية حُفظت ثم انقطع الإقرار وفشلت قراءة التحقق: 500 لكن لا تضارب ولا استخدام ثانٍ', async () => {
+  let armed = false;
+  // القراءة الأولى (فحص الشركة) تنجح؛ بعد الكتابة الملتبسة تفشل قراءة التحقق
+  db.hooks.update = () => { armed = true; return 'after'; };
+  db.hooks.get = path => armed && path.startsWith('companies/');
+
+  const res = await call();
+  assert.equal(res.statusCode, 500);
+  assert.equal(res.data.error, 'invitation_accept_failed');
+  assert.ok(!JSON.stringify(res.data).includes('simulated'));
+
+  db.hooks.get = null;
+  db.hooks.update = null;
+  assert.deepEqual(await consistent(), [], 'الحالة المحفوظة كاملة ومتسقة رغم الخطأ');
+  assert.equal(db.get(`invitations/${ID}/status`), 'accepted');
+
+  const again = await call();
+  assert.equal(again.statusCode, 409);
+  assert.equal(again.data.linkedToYou, true);
+});
+
+test('فشل الكتابة مرة واحدة: المحاولة الداخلية تُكمل الربط بنجاح', async () => {
+  let calls = 0;
+  db.hooks.update = () => (++calls === 1 ? 'before' : null);
+
+  const res = await call();
+  assert.equal(res.statusCode, 200);
+  assert.equal(calls, 2);
+  assert.deepEqual(await consistent(), []);
+  assert.equal(Object.keys(db.get('companyMembers/company-1')).length, 1);
+});
+
+test('فشل الكتابة دائمًا: يُرجَع الحجز، ولا ربط ولا عضوية، وتنجح إعادة المحاولة لاحقًا', async () => {
+  db.hooks.update = 'before';
+  const res = await call();
+
+  assert.equal(res.statusCode, 500);
+  assert.equal(db.get(`invitations/${ID}/status`), 'sent');
+  assert.equal(db.get(`invitations/${ID}/acceptedBy`), null);
+  assert.equal(db.get('companyMembers'), null);
+  assert.equal(db.get('userCompanies'), null);
+  assert.equal(db.get('companies/company-1/managerUid'), null);
+  assert.equal(db.get('companies/company-1/status'), 'pending_manager');
+
+  db.hooks.update = null;
+  assert.equal((await call()).statusCode, 200);
+  assert.deepEqual(await consistent(), []);
+});
+
+test('الحجز نفسه حُفظ ثم انقطع الإقرار: يُحاول إرجاعه وتنجح إعادة المحاولة فورًا', async () => {
+  let n = 0;
+  db.hooks.transaction = path => (path.startsWith('invitations/') && ++n === 1 ? 'after' : null);
+
+  const first = await call();
+  assert.equal(first.statusCode, 500);
+  assert.equal(db.get(`invitations/${ID}/status`), 'sent', 'أُرجع الحجز');
+  assert.equal(db.get('companyMembers'), null);
+
+  const second = await call();
+  assert.equal(second.statusCode, 200);
+  assert.deepEqual(await consistent(), []);
+});
+
+test('الحجز حُفظ وفشل إرجاعه أيضًا: يبقى محجوزًا لصاحبه ويُستأنف بعد المهلة دون مساس بغيره', async () => {
+  let n = 0;
+  db.hooks.transaction = path => {
+    if (!path.startsWith('invitations/')) return null;
+    n += 1;
+    return n === 1 ? 'after' : 'before';
+  };
+
+  assert.equal((await call()).statusCode, 500);
+  assert.equal(db.get(`invitations/${ID}/status`), 'accepting');
+  assert.equal(db.get(`invitations/${ID}/acceptedBy`), 'mgr-1');
+  assert.equal(db.get('companyMembers'), null);
+  db.hooks.transaction = null;
+
+  // خلال المهلة: لا استئناف، ولا لأي مستخدم آخر
+  assert.equal((await call()).data.error, 'invitation_accept_in_progress');
+  assert.equal((await call({ token: 'other-token' })).statusCode, 409);
+
+  // بعد انتهاء المهلة: صاحب الحجز فقط يُكمل
+  db.set(`invitations/${ID}/acceptingAt`, Date.now() - 10 * 60e3);
+  assert.equal((await call({ token: 'other-token' })).statusCode, 409);
+  assert.equal((await call()).statusCode, 200);
+  assert.deepEqual(await consistent(), []);
+});
+
+test('عطل في القراءة بعد فشل الكتابة لا يُرجع الحجز بالتخمين (حالة غير معروفة)', async () => {
+  let armed = false;
+  db.hooks.update = () => { armed = true; return 'before'; };
+  db.hooks.get = path => armed && path.startsWith('invitations/');
+
+  const res = await call();
+  assert.equal(res.statusCode, 500);
+  // لم يُعلَن نجاح ولم تُكتب عضوية، والحجز باقٍ لصاحبه (لا إرجاع بلا دليل)
+  assert.equal(db.get('companyMembers'), null);
+  assert.equal(db.get(`invitations/${ID}/status`), 'accepting');
+});
+
+test('مصالحة عند الدخول: ربط مكتمل لكن الدعوة ما زالت accepting فتُستكمل دون استخدام جديد', async () => {
+  seed({ status: 'accepting', acceptedBy: 'mgr-1', acceptedEmail: 'manager@example.com', acceptingAt: Date.now() });
+  db.set('companies/company-1/managerUid', 'mgr-1');
+  db.set('companies/company-1/managerStatus', 'linked');
+  db.set('companies/company-1/status', 'active');
+  db.set('companyMembers/company-1/mgr-1', { uid: 'mgr-1', email: 'manager@example.com', role: 'MANAGER', status: 'active' });
+  db.set('userCompanies/mgr-1/company-1', { companyId: 'company-1', role: 'MANAGER' });
+
+  const res = await call();
+  assert.equal(res.statusCode, 200);
+  assert.equal(db.get(`invitations/${ID}/status`), 'accepted');
+  assert.ok(db.get('companyData/company-1'), 'اكتملت بيانات الشركة الناقصة');
+  assert.deepEqual(await consistent(), []);
+});
+
+test('لا يُكتب فوق مدير آخر مربوط بالشركة أبدًا', async () => {
+  seed({ status: 'accepting', acceptedBy: 'mgr-1', acceptedEmail: 'manager@example.com', acceptingAt: Date.now() });
+  db.set('companies/company-1/managerUid', 'someone-else');
+  db.set('companies/company-1/status', 'active');
+
+  const res = await call();
+  assert.notEqual(res.statusCode, 200);
+  assert.equal(db.get('companies/company-1/managerUid'), 'someone-else');
+  assert.equal(db.get('companyMembers'), null);
+});
+
+test('بيانات شركة قائمة لا تُستبدل عند القبول', async () => {
+  db.set('companyData/company-1', { schemaVersion: 2, marker: 'keep-me', settings: { company: 'x' } });
+  assert.equal((await call()).statusCode, 200);
+  assert.equal(db.get('companyData/company-1/marker'), 'keep-me');
 });

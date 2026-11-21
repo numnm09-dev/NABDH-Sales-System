@@ -16,7 +16,11 @@ function strip(value) {
 
 function createFakeDb(initial = {}) {
   let root = clone(initial);
-  const hooks = { failUpdate: false };
+  // محاكاة الأعطال: كل خطاف يقبل 'before' (يفشل قبل الكتابة) أو 'after' (تُحفظ الكتابة ثم ينقطع الإقرار).
+  //   hooks.update: 'before' | 'after' | (keys) => mode      hooks.transaction: (path) => mode
+  //   hooks.get: (path) => true لإفشال القراءة                  hooks.failUpdate (قديم) = 'before'
+  const hooks = { failUpdate: false, update: null, transaction: null, get: null };
+  let pushCounter = 0;
   const parts = path => String(path || '').split('/').filter(Boolean);
 
   function getAt(path) {
@@ -52,21 +56,52 @@ function createFakeDb(initial = {}) {
   const database = {
     ref(path = '') {
       return {
-        get: async () => snapshot(getAt(path)),
-        once: async () => snapshot(getAt(path)),
+        get: async () => {
+          if (hooks.get && hooks.get(path)) throw new Error('simulated_read_failure');
+          return snapshot(getAt(path));
+        },
+        once: async () => {
+          if (hooks.get && hooks.get(path)) throw new Error('simulated_read_failure');
+          return snapshot(getAt(path));
+        },
         set: async value => setAt(path, value),
+        // يحاكي ref.push(): مفتاح فريد يرتّب زمنيًا ويُرجع مرجعًا قابلًا للكتابة.
+        push: () => {
+          pushCounter += 1;
+          const key = '-push' + String(pushCounter).padStart(8, '0');
+          const child = database.ref([path, key].filter(Boolean).join('/'));
+          child.key = key;
+          return child;
+        },
+        remove: async () => setAt(path, null),
         update: async values => {
-          if (hooks.failUpdate) throw new Error('simulated_write_failure');
-          // تطبيق متعدد المسارات: يُكتب كله أو لا شيء (الفشل يُحاكى قبل أي كتابة).
+          const mode = hooks.failUpdate
+            ? 'before'
+            : typeof hooks.update === 'function' ? hooks.update(Object.keys(values)) : hooks.update;
+
+          if (mode === 'before') throw new Error('simulated_write_failure');
+
+          // تطبيق متعدد المسارات: يُكتب كله أو لا شيء.
           for (const [key, value] of Object.entries(values)) {
             setAt([path, key].filter(Boolean).join('/'), value === undefined ? null : value);
           }
+
+          if (mode === 'after') throw new Error('simulated_timeout_after_commit');
         },
         transaction: async fn => {
+          const mode = hooks.transaction ? hooks.transaction(path) : null;
+
+          if (mode === 'before') throw new Error('simulated_transaction_failure');
+
           const next = fn(getAt(path));
-          if (next === undefined) return { committed: false };
+
+          if (next === undefined) return { committed: false, snapshot: snapshot(getAt(path)) };
+
           setAt(path, next);
-          return { committed: true };
+
+          if (mode === 'after') throw new Error('simulated_timeout_after_commit');
+
+          return { committed: true, snapshot: snapshot(getAt(path)) };
         }
       };
     }

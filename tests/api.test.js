@@ -1,14 +1,22 @@
 // اختبارات الخادم بمزود ذكاء اصطناعي وهمي (mock): لا تثبت الاتصال الفعلي بالمزود.
 const test = require('node:test'), assert = require('node:assert');
+// المصادقة وتحديد المعدّل صارا إلزاميين في /api/analyze: نُحاكي Firebase Admin (توكن صالح + قاعدة بيانات وهمية للعدّاد).
+// اختبارات المصادقة نفسها في analyze-auth.test.js.
+const { createFakeDb } = require('./fake-admin-db');
+let fdb = createFakeDb();
+const firebasePath = require.resolve('../api/_lib/firebase-admin');
+require.cache[firebasePath] = { id: firebasePath, filename: firebasePath, loaded: true, exports: { getFirebaseAdmin: async () => ({
+  auth: { verifyIdToken: async t => { if (t !== 'tok-ok') throw Object.assign(new Error('bad'), { code: 'auth/invalid-id-token' }); return { uid: 'u1', email: 'a@example.com', email_verified: true }; } },
+  database: fdb.database }) } };
 const handler = require('../api/analyze.js');
 const data = require('../data/sample-data.json');
 const body = (o = {}) => ({ itemId: 'i1', delay: 10, safety: 3, items: data.items, suppliers: data.suppliers, orders: data.orders, ...o });
-const call = async (b, method = 'POST', headers = {}) => { let code, out, h = {}; const res = { setHeader: (k, v) => h[k] = v, status: c => (code = c, res), json: j => (out = j, res), end: () => res };
+const call = async (b, method = 'POST', headers = {}) => { headers = { authorization: 'Bearer tok-ok', ...headers }; let code, out, h = {}; const res = { setHeader: (k, v) => h[k] = v, status: c => (code = c, res), json: j => (out = j, res), end: () => res };
   await handler({ method, body: b, headers }, res); return { code, out, h }; };
 const real = global.fetch;
 // شكل رد Gemini: candidates[0].content.parts[].text
 const model = (text, status = 200) => { global.fetch = async () => ({ ok: status === 200, status, json: async () => (status === 200 ? { candidates: [{ content: { parts: [{ text }] } }] } : { error: { message: 'x' } }) }); };
-test.beforeEach(() => { process.env.GEMINI_API_KEY = 'test-key'; process.env.AI_MODEL = 'test-model'; process.env.ALLOWED_ORIGIN = 'https://ok.example'; });
+test.beforeEach(() => { fdb = createFakeDb(); process.env.GEMINI_API_KEY = 'test-key'; process.env.AI_MODEL = 'test-model'; process.env.ALLOWED_ORIGIN = 'https://ok.example'; });
 test.after(() => { global.fetch = real; });
 
 test('بدون مفتاح: 503 برسالة واضحة', async () => { delete process.env.GEMINI_API_KEY; const r = await call(body()); assert.equal(r.code, 503); assert.equal(r.out.code, 'not_configured'); });
