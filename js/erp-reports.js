@@ -46,10 +46,13 @@
       { title: 'انحراف الاستهلاك والهالك (الأوامر المكتملة)', columns: [col('item', 'المادة'), col('req', 'المعياري', 'num'), col('act', 'الفعلي', 'num'), col('var', 'الانحراف', 'num'), col('waste', 'الهالك', 'num'), col('wastePct', 'الهالك %', 'num'), col('cost', 'التكلفة', 'money')], rows: vrows }] };
   }
   /* ---- المبيعات ---- */
+  // تكلفة المرتجعات التي أُعيدت فعلًا إلى المخزون فقط (سطر المرتجع يحمل cost=0 للمرتجع التالف). المرتجع التالف لا يُعكس معه
+  // حساب تكلفة البضاعة المباعة 5100 في الأستاذ، فلا تُضاف تكلفته إلى ربح الفاتورة (وإلا اختلف ربح الفواتير عن قائمة الدخل).
+  const restockedCost = (d, s) => r2(d.returns.filter(r => r.saleId === s.id).reduce((a, r) => a + toList(r.lines).reduce((b, l) => b + (Number(l.cost) || 0), 0), 0));
   const ps = s => s.status === 'ملغي' ? 'ملغاة' : (E.saleOutstanding(s) <= 0.005 ? 'مسددة' : (s.paid > 0 ? 'مسددة جزئيًا' : 'غير مسددة'));
   function sales(d, f = {}) {
     const all = d.sales.filter(s => inR(s.date, f) && (!f.customerId || s.customerId === f.customerId)); const act = all.filter(s => s.status !== 'ملغي');
-    const rows = all.map(s => ({ date: dOf(s.date), no: s.no || s.id, customer: s.customerName || s.customer || '—', total: s.total, disc: s.discount || 0, ret: s.returned || 0, paid: s.paid || 0, due: s.status === 'ملغي' ? 0 : E.saleOutstanding(s), cogs: s.legacy ? '' : (s.cogs || 0), profit: s.legacy ? '' : r2((s.total || 0) - (s.returned || 0) - (s.cogs || 0) + sum(toList(s.lines).map(l => ({ v: l.returnedCost || 0 })), 'v')), status: ps(s) }));
+    const rows = all.map(s => ({ date: dOf(s.date), no: s.no || s.id, customer: s.customerName || s.customer || '—', total: s.total, disc: s.discount || 0, ret: s.returned || 0, paid: s.paid || 0, due: s.status === 'ملغي' ? 0 : E.saleOutstanding(s), cogs: s.legacy ? '' : (s.cogs || 0), profit: s.legacy ? '' : r2((s.total || 0) - (s.returned || 0) - (s.cogs || 0) + restockedCost(d, s)), status: ps(s) }));
     const live = rows.filter((r, i) => all[i].status !== 'ملغي'); const byItem = {}, byCust = {};
     for (const s of act) { for (const l of toList(s.lines)) { const o = byItem[l.itemId] || (byItem[l.itemId] = { q: 0, rq: 0, v: 0 }); o.q = r3(o.q + l.qty); o.rq = r3(o.rq + (l.returnedQty || 0)); o.v = r2(o.v + l.net - (l.returnedValue || 0)); }
       const k = s.customerName || s.customer || 'عميل عابر'; const o = byCust[k] || (byCust[k] = { n: 0, v: 0, due: 0 }); o.n++; o.v = r2(o.v + s.total - (s.returned || 0)); o.due = r2(o.due + E.saleOutstanding(s)); }

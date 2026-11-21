@@ -1,0 +1,2074 @@
+
+> nabdh@2.0.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Accept invitation error: Error: simulated_write_failure
+#     at Object.update (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:82:40)
+#     at completeLink (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/_lib/reconcile.js:79:24)
+#     at async handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:269:31)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:64:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:208:13)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Accept invitation error: Error: simulated_timeout_after_commit
+#     at Object.update (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:89:39)
+#     at completeLink (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/_lib/reconcile.js:79:24)
+#     at async handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:269:31)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:64:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:296:15)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Accept invitation error: Error: simulated_write_failure
+#     at Object.update (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:82:40)
+#     at completeLink (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/_lib/reconcile.js:79:24)
+#     at async handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:269:31)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:64:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:324:15)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Accept invitation error: Error: simulated_timeout_after_commit
+#     at Object.transaction (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:102:39)
+#     at handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:205:35)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:64:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:343:17)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Accept invitation error: Error: simulated_timeout_after_commit
+#     at Object.transaction (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:102:39)
+#     at handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:205:35)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:64:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:361:17)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Accept invitation error: Error: simulated_write_failure
+#     at Object.update (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:82:40)
+#     at completeLink (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/_lib/reconcile.js:79:24)
+#     at async handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:269:31)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:64:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/accept-invitation.test.js:383:15)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Subtest: رفض غير POST / بلا توكن / توكن Firebase غير صالح
+ok 1 - رفض غير POST / بلا توكن / توكن Firebase غير صالح
+  ---
+  duration_ms: 3.588481
+  type: 'test'
+  ...
+# Subtest: رفض مدخلات بصيغة خاطئة
+ok 2 - رفض مدخلات بصيغة خاطئة
+  ---
+  duration_ms: 1.008877
+  type: 'test'
+  ...
+# Subtest: رفض البريد غير المؤكَّد ولا تُنشأ عضوية
+ok 3 - رفض البريد غير المؤكَّد ولا تُنشأ عضوية
+  ---
+  duration_ms: 0.484602
+  type: 'test'
+  ...
+# Subtest: رفض توكن دعوة خاطئ أو دعوة غير موجودة: 404
+ok 4 - رفض توكن دعوة خاطئ أو دعوة غير موجودة: 404
+  ---
+  duration_ms: 1.401692
+  type: 'test'
+  ...
+# Subtest: مستخدم آخر يملك الرابط لا يستطيع قبول دعوة مخصصة لغيره
+ok 5 - مستخدم آخر يملك الرابط لا يستطيع قبول دعوة مخصصة لغيره
+  ---
+  duration_ms: 1.291586
+  type: 'test'
+  ...
+# Subtest: السوبر أدمن نفسه لا يتجاوز تطابق البريد
+ok 6 - السوبر أدمن نفسه لا يتجاوز تطابق البريد
+  ---
+  duration_ms: 0.754981
+  type: 'test'
+  ...
+# Subtest: دعوة منتهية: 410، ومسودة/فاشلة/مُلغاة: 409
+ok 7 - دعوة منتهية: 410، ومسودة/فاشلة/مُلغاة: 409
+  ---
+  duration_ms: 1.620374
+  type: 'test'
+  ...
+# Subtest: النجاح: ربط UID وإنشاء العضوية وتحديث الحالات
+ok 8 - النجاح: ربط UID وإنشاء العضوية وتحديث الحالات
+  ---
+  duration_ms: 4.399349
+  type: 'test'
+  ...
+# Subtest: منع إعادة الاستخدام: نفس المدير ثم شخص آخر
+ok 9 - منع إعادة الاستخدام: نفس المدير ثم شخص آخر
+  ---
+  duration_ms: 1.890381
+  type: 'test'
+  ...
+# Subtest: طلبان متزامنان لنفس الدعوة: واحد ينجح والآخر يُرفض وعضوية واحدة فقط
+ok 10 - طلبان متزامنان لنفس الدعوة: واحد ينجح والآخر يُرفض وعضوية واحدة فقط
+  ---
+  duration_ms: 1.20803
+  type: 'test'
+  ...
+# Subtest: فشل الكتابة النهائية يُرجع الحجز ولا يترك عضوية، ثم تنجح إعادة المحاولة
+ok 11 - فشل الكتابة النهائية يُرجع الحجز ولا يترك عضوية، ثم تنجح إعادة المحاولة
+  ---
+  duration_ms: 5.358054
+  type: 'test'
+  ...
+# Subtest: حجز قديم عالق لنفس المستخدم يُستأنف، أما لمستخدم آخر أو حديث فيُرفض
+ok 12 - حجز قديم عالق لنفس المستخدم يُستأنف، أما لمستخدم آخر أو حديث فيُرفض
+  ---
+  duration_ms: 1.551017
+  type: 'test'
+  ...
+# Subtest: الشركة تغيّر بريدها أو لم تعد بانتظار مدير: 409 دون أي حجز
+ok 13 - الشركة تغيّر بريدها أو لم تعد بانتظار مدير: 409 دون أي حجز
+  ---
+  duration_ms: 2.206177
+  type: 'test'
+  ...
+# Subtest: بريد من خارج الدعوة بنفس UID لا يمر حتى لو التوكن صحيح
+ok 14 - بريد من خارج الدعوة بنفس UID لا يمر حتى لو التوكن صحيح
+  ---
+  duration_ms: 0.477587
+  type: 'test'
+  ...
+# Subtest: دعوة في send_pending يحملها صاحبها بتوكن صحيح تُقبل (تعذّر تسجيل sent بعد الإرسال)
+ok 15 - دعوة في send_pending يحملها صاحبها بتوكن صحيح تُقبل (تعذّر تسجيل sent بعد الإرسال)
+  ---
+  duration_ms: 1.179122
+  type: 'test'
+  ...
+# Subtest: الكتابة النهائية حُفظت ثم انقطع الإقرار: النتيجة نجاح والحالة متسقة بلا إرجاع للحجز
+ok 16 - الكتابة النهائية حُفظت ثم انقطع الإقرار: النتيجة نجاح والحالة متسقة بلا إرجاع للحجز
+  ---
+  duration_ms: 1.693406
+  type: 'test'
+  ...
+# Subtest: الكتابة النهائية حُفظت ثم انقطع الإقرار وفشلت قراءة التحقق: 500 لكن لا تضارب ولا استخدام ثانٍ
+ok 17 - الكتابة النهائية حُفظت ثم انقطع الإقرار وفشلت قراءة التحقق: 500 لكن لا تضارب ولا استخدام ثانٍ
+  ---
+  duration_ms: 3.259778
+  type: 'test'
+  ...
+# Subtest: فشل الكتابة مرة واحدة: المحاولة الداخلية تُكمل الربط بنجاح
+ok 18 - فشل الكتابة مرة واحدة: المحاولة الداخلية تُكمل الربط بنجاح
+  ---
+  duration_ms: 2.461303
+  type: 'test'
+  ...
+# Subtest: فشل الكتابة دائمًا: يُرجَع الحجز، ولا ربط ولا عضوية، وتنجح إعادة المحاولة لاحقًا
+ok 19 - فشل الكتابة دائمًا: يُرجَع الحجز، ولا ربط ولا عضوية، وتنجح إعادة المحاولة لاحقًا
+  ---
+  duration_ms: 2.888825
+  type: 'test'
+  ...
+# Subtest: الحجز نفسه حُفظ ثم انقطع الإقرار: يُحاول إرجاعه وتنجح إعادة المحاولة فورًا
+ok 20 - الحجز نفسه حُفظ ثم انقطع الإقرار: يُحاول إرجاعه وتنجح إعادة المحاولة فورًا
+  ---
+  duration_ms: 1.30352
+  type: 'test'
+  ...
+# Subtest: الحجز حُفظ وفشل إرجاعه أيضًا: يبقى محجوزًا لصاحبه ويُستأنف بعد المهلة دون مساس بغيره
+ok 21 - الحجز حُفظ وفشل إرجاعه أيضًا: يبقى محجوزًا لصاحبه ويُستأنف بعد المهلة دون مساس بغيره
+  ---
+  duration_ms: 7.281228
+  type: 'test'
+  ...
+# Subtest: عطل في القراءة بعد فشل الكتابة لا يُرجع الحجز بالتخمين (حالة غير معروفة)
+ok 22 - عطل في القراءة بعد فشل الكتابة لا يُرجع الحجز بالتخمين (حالة غير معروفة)
+  ---
+  duration_ms: 4.202035
+  type: 'test'
+  ...
+# Subtest: مصالحة عند الدخول: ربط مكتمل لكن الدعوة ما زالت accepting فتُستكمل دون استخدام جديد
+ok 23 - مصالحة عند الدخول: ربط مكتمل لكن الدعوة ما زالت accepting فتُستكمل دون استخدام جديد
+  ---
+  duration_ms: 1.189653
+  type: 'test'
+  ...
+# Subtest: لا يُكتب فوق مدير آخر مربوط بالشركة أبدًا
+ok 24 - لا يُكتب فوق مدير آخر مربوط بالشركة أبدًا
+  ---
+  duration_ms: 2.623171
+  type: 'test'
+  ...
+# Subtest: بيانات شركة قائمة لا تُستبدل عند القبول
+ok 25 - بيانات شركة قائمة لا تُستبدل عند القبول
+  ---
+  duration_ms: 0.746349
+  type: 'test'
+  ...
+# Subtest: الصفحة موجودة ومترابطة: كل id يستعمله accept.js موجود في index.html والسكربتات بالترتيب الصحيح
+ok 26 - الصفحة موجودة ومترابطة: كل id يستعمله accept.js موجود في index.html والسكربتات بالترتيب الصحيح
+  ---
+  duration_ms: 1.903618
+  type: 'test'
+  ...
+# Subtest: يقرأ المعرّف والتوكن من الـ fragment ويمسحهما من شريط العنوان فورًا
+ok 27 - يقرأ المعرّف والتوكن من الـ fragment ويمسحهما من شريط العنوان فورًا
+  ---
+  duration_ms: 4.626222
+  type: 'test'
+  ...
+# Subtest: رابط ناقص أو بصيغة خاطئة: رسالة واضحة ولا نماذج دخول ولا طلبات
+ok 28 - رابط ناقص أو بصيغة خاطئة: رسالة واضحة ولا نماذج دخول ولا طلبات
+  ---
+  duration_ms: 4.172493
+  type: 'test'
+  ...
+# Subtest: Firebase غير محمَّل: رسالة خطأ بدل انهيار
+ok 29 - Firebase غير محمَّل: رسالة خطأ بدل انهيار
+  ---
+  duration_ms: 0.958044
+  type: 'test'
+  ...
+# Subtest: غير مسجَّل: يظهر نموذج الدخول؛ تسجيل الدخول يمرّر البريد وكلمة المرور؛ الخطأ برسالة عربية
+ok 30 - غير مسجَّل: يظهر نموذج الدخول؛ تسجيل الدخول يمرّر البريد وكلمة المرور؛ الخطأ برسالة عربية
+  ---
+  duration_ms: 1.557809
+  type: 'test'
+  ...
+# Subtest: إنشاء حساب: يُنشئ ثم يُرسل رسالة تأكيد البريد، ويرفض كلمة مرور قصيرة
+ok 31 - إنشاء حساب: يُنشئ ثم يُرسل رسالة تأكيد البريد، ويرفض كلمة مرور قصيرة
+  ---
+  duration_ms: 1.550366
+  type: 'test'
+  ...
+# Subtest: مسجَّل لكن بريده غير مؤكَّد: لا يُرسَل أي طلب قبول، وزر إعادة إرسال التأكيد يظهر
+ok 32 - مسجَّل لكن بريده غير مؤكَّد: لا يُرسَل أي طلب قبول، وزر إعادة إرسال التأكيد يظهر
+  ---
+  duration_ms: 1.367789
+  type: 'test'
+  ...
+# Subtest: القبول: POST إلى /api/accept-invitation بتوكن Firebase حديث وجسم صحيح، دون التوكن في العنوان
+ok 33 - القبول: POST إلى /api/accept-invitation بتوكن Firebase حديث وجسم صحيح، دون التوكن في العنوان
+  ---
+  duration_ms: 3.015123
+  type: 'test'
+  ...
+# Subtest: أخطاء الخادم تُترجم لرسائل عربية ولا يُسرَّب توكن ولا تفاصيل داخلية
+ok 34 - أخطاء الخادم تُترجم لرسائل عربية ولا يُسرَّب توكن ولا تفاصيل داخلية
+  ---
+  duration_ms: 7.165245
+  type: 'test'
+  ...
+# Subtest: دعوة مستخدمة سابقًا من نفس المستخدم (linkedToYou): يُخبَر أن ربطه قائم دون إعادة استخدام
+ok 35 - دعوة مستخدمة سابقًا من نفس المستخدم (linkedToYou): يُخبَر أن ربطه قائم دون إعادة استخدام
+  ---
+  duration_ms: 1.405445
+  type: 'test'
+  ...
+# Subtest: انقطاع الشبكة: رسالة عامة والزر يعود قابلًا للاستعمال، والتوكن لا يظهر في السجلات
+ok 36 - انقطاع الشبكة: رسالة عامة والزر يعود قابلًا للاستعمال، والتوكن لا يظهر في السجلات
+  ---
+  duration_ms: 1.301655
+  type: 'test'
+  ...
+# Subtest: تسجيل الخروج واستخدام حساب آخر يستدعي signOut
+ok 37 - تسجيل الخروج واستخدام حساب آخر يستدعي signOut
+  ---
+  duration_ms: 1.080492
+  type: 'test'
+  ...
+# Subtest: دعوة موظف: الرابط صالح، والجسم يحمل معرّف الدعوة كما هو، والنجاح يعرض الدور ويحفظ معرّف الشركة من رد الخادم
+ok 38 - دعوة موظف: الرابط صالح، والجسم يحمل معرّف الدعوة كما هو، والنجاح يعرض الدور ويحفظ معرّف الشركة من رد الخادم
+  ---
+  duration_ms: 1.208448
+  type: 'test'
+  ...
+# Subtest: دعوة موظف مستخدمة سابقًا من صاحبها: يُحفظ معرّف الشركة القادم من الخادم (لا يُشتق من معرّف الدعوة)
+ok 39 - دعوة موظف مستخدمة سابقًا من صاحبها: يُحفظ معرّف الشركة القادم من الخادم (لا يُشتق من معرّف الدعوة)
+  ---
+  duration_ms: 2.419158
+  type: 'test'
+  ...
+# Subtest: أخطاء دعوة الموظف الخاصة: عضو بالفعل وشركة غير فعّالة
+ok 40 - أخطاء دعوة الموظف الخاصة: عضو بالفعل وشركة غير فعّالة
+  ---
+  duration_ms: 1.944468
+  type: 'test'
+  ...
+# Subtest: رابط بمعرّف من نوع غير معروف أو بمحارف غير مسموحة يُرفض
+ok 41 - رابط بمعرّف من نوع غير معروف أو بمحارف غير مسموحة يُرفض
+  ---
+  duration_ms: 2.951017
+  type: 'test'
+  ...
+# Subtest: المصروفات: التحقق والقيد والخزينة
+ok 42 - المصروفات: التحقق والقيد والخزينة
+  ---
+  duration_ms: 11.211102
+  type: 'test'
+  ...
+# Subtest: الخزينة: إيداع وسحب بلا رصيد سالب
+ok 43 - الخزينة: إيداع وسحب بلا رصيد سالب
+  ---
+  duration_ms: 0.904473
+  type: 'test'
+  ...
+# Subtest: دورة كاملة: إنتاج ← بيع آجل ← تحصيل ← مصروف؛ الميزانية متوازنة والربح صحيح
+ok 44 - دورة كاملة: إنتاج ← بيع آجل ← تحصيل ← مصروف؛ الميزانية متوازنة والربح صحيح
+  ---
+  duration_ms: 17.624776
+  type: 'test'
+  ...
+# Subtest: فلاتر التاريخ في التقارير المالية
+ok 45 - فلاتر التاريخ في التقارير المالية
+  ---
+  duration_ms: 2.417044
+  type: 'test'
+  ...
+# Subtest: إلغاء فاتورة لا يترك أثرًا محاسبيًا ولا يكسر الميزان
+ok 46 - إلغاء فاتورة لا يترك أثرًا محاسبيًا ولا يكسر الميزان
+  ---
+  duration_ms: 4.489046
+  type: 'test'
+  ...
+# admin-check failed: {"result":"unauthorized","name":"Error","message":"unauthorized"}
+# admin-check failed: {"result":"unauthorized","code":"auth/id-token-expired","name":"Error","message":"expired"}
+# admin-check failed: {"result":"forbidden","name":"Error","message":"forbidden","details":{"configured":true,"configuredRawLength":7,"configuredLength":7,"tokenUidLength":11}}
+# admin-check failed: {"result":"server_error","name":"Error","message":"database_unavailable"}
+# Subtest: رفض الطلب بدون توكن: 401
+ok 47 - رفض الطلب بدون توكن: 401
+  ---
+  duration_ms: 2.794496
+  type: 'test'
+  ...
+# Subtest: رفض التوكن المنتهي: 401
+ok 48 - رفض التوكن المنتهي: 401
+  ---
+  duration_ms: 0.571544
+  type: 'test'
+  ...
+# Subtest: رفض المستخدم العادي: 403
+ok 49 - رفض المستخدم العادي: 403
+  ---
+  duration_ms: 0.50388
+  type: 'test'
+  ...
+# Subtest: نجاح المدير العام: 200
+ok 50 - نجاح المدير العام: 200
+  ---
+  duration_ms: 0.32615
+  type: 'test'
+  ...
+# Subtest: رفض طريقة غير GET: 405
+ok 51 - رفض طريقة غير GET: 405
+  ---
+  duration_ms: 1.8918
+  type: 'test'
+  ...
+# Subtest: خطأ غير متوقع في التحقق: 500
+ok 52 - خطأ غير متوقع في التحقق: 500
+  ---
+  duration_ms: 0.86189
+  type: 'test'
+  ...
+# Subtest: Super Admin الصحيح: 200 و role=SUPER_ADMIN، ويُستدعى التحقق مع فحص الإبطال
+ok 53 - Super Admin الصحيح: 200 و role=SUPER_ADMIN، ويُستدعى التحقق مع فحص الإبطال
+  ---
+  duration_ms: 2.044673
+  type: 'test'
+  ...
+# Subtest: قيمة SUPER_ADMIN_UID بمسافة أو سطر جديد زائد (خطأ لصق شائع) لا تحجب المدير الحقيقي
+ok 54 - قيمة SUPER_ADMIN_UID بمسافة أو سطر جديد زائد (خطأ لصق شائع) لا تحجب المدير الحقيقي
+  ---
+  duration_ms: 0.739988
+  type: 'test'
+  ...
+# Subtest: رفض آمن: المتغير غائب أو فارغ أو مسافات فقط → 403 (لا يُمنح أحد)
+ok 55 - رفض آمن: المتغير غائب أو فارغ أو مسافات فقط → 403 (لا يُمنح أحد)
+  ---
+  duration_ms: 1.234341
+  type: 'test'
+  ...
+# Subtest: الصلاحية لا تُمنح بالبريد وحده، ولا بـ UID مختلف أو مشابه (حالة أحرف/بادئة/لاحقة)
+ok 56 - الصلاحية لا تُمنح بالبريد وحده، ولا بـ UID مختلف أو مشابه (حالة أحرف/بادئة/لاحقة)
+  ---
+  duration_ms: 0.705701
+  type: 'test'
+  ...
+# Subtest: غياب التوكن، أو صيغة غير Bearer: 401 ولا يُستدعى Firebase
+ok 57 - غياب التوكن، أو صيغة غير Bearer: 401 ولا يُستدعى Firebase
+  ---
+  duration_ms: 0.763028
+  type: 'test'
+  ...
+# Subtest: توكن غير صالح/منتهٍ/مُبطَل/مستخدم معطّل: 401، ويُسجَّل السبب الأصلي في الخادم دون إرساله للعميل
+ok 58 - توكن غير صالح/منتهٍ/مُبطَل/مستخدم معطّل: 401، ويُسجَّل السبب الأصلي في الخادم دون إرساله للعميل
+  ---
+  duration_ms: 1.835207
+  type: 'test'
+  ...
+# Subtest: أعطال Firebase Admin/الإعداد: 500 برد عام آمن، والسبب الحقيقي في السجل مع حجب أي JWT
+ok 59 - أعطال Firebase Admin/الإعداد: 500 برد عام آمن، والسبب الحقيقي في السجل مع حجب أي JWT
+  ---
+  duration_ms: 1.064085
+  type: 'test'
+  ...
+# Subtest: عدم تطابق UID: السجل يحوي أطوالًا فقط، ولا يكشف قيمة UID المُعدّ ولا uid المستخدم
+ok 60 - عدم تطابق UID: السجل يحوي أطوالًا فقط، ولا يكشف قيمة UID المُعدّ ولا uid المستخدم
+  ---
+  duration_ms: 0.333515
+  type: 'test'
+  ...
+# Subtest: طريقة غير GET: 405 (POST/PUT/DELETE/OPTIONS...) دون أي تحقق
+ok 61 - طريقة غير GET: 405 (POST/PUT/DELETE/OPTIONS...) دون أي تحقق
+  ---
+  duration_ms: 0.533248
+  type: 'test'
+  ...
+# Subtest: [مكتبة firebase-admin الحقيقية دون شبكة] اختلاف GCP_PROJECT_ID عن مشروع Firebase للتوكن → auth/argument-error → 401
+ok 62 - [مكتبة firebase-admin الحقيقية دون شبكة] اختلاف GCP_PROJECT_ID عن مشروع Firebase للتوكن → auth/argument-error → 401
+  ---
+  duration_ms: 135.621345
+  type: 'test'
+  ...
+# Subtest: واجهة الإدارة: 403 → رسالة عدم التصريح الأصلية؛ 500 و401 → رسائل مختلفة تدل على الخادم/الجلسة
+ok 63 - واجهة الإدارة: 403 → رسالة عدم التصريح الأصلية؛ 500 و401 → رسائل مختلفة تدل على الخادم/الجلسة
+  ---
+  duration_ms: 2.996895
+  type: 'test'
+  ...
+# Subtest: واجهة الإدارة: ردّ 200 بدور غير SUPER_ADMIN لا يفتح اللوحة
+ok 64 - واجهة الإدارة: ردّ 200 بدور غير SUPER_ADMIN لا يفتح اللوحة
+  ---
+  duration_ms: 0.944775
+  type: 'test'
+  ...
+# Subtest: واجهة الإدارة: 200 + SUPER_ADMIN تفتح اللوحة وتحمّل الشركات
+ok 65 - واجهة الإدارة: 200 + SUPER_ADMIN تفتح اللوحة وتحمّل الشركات
+  ---
+  duration_ms: 0.997072
+  type: 'test'
+  ...
+# Admin company list error: Error: database_unavailable
+#     at Object.once (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/admin-companies-list.test.js:13:17)
+#     at handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/admin-companies-list.js:54:54)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/admin-companies-list.test.js:71:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/admin-companies-list.test.js:121:13)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Subtest: عرض الشركات للسوبر أدمن: 200
+ok 66 - عرض الشركات للسوبر أدمن: 200
+  ---
+  duration_ms: 1.434951
+  type: 'test'
+  ...
+# Subtest: قائمة فارغة عند عدم وجود شركات: 200
+ok 67 - قائمة فارغة عند عدم وجود شركات: 200
+  ---
+  duration_ms: 0.831088
+  type: 'test'
+  ...
+# Subtest: رفض الطلب بدون توكن: 401
+ok 68 - رفض الطلب بدون توكن: 401
+  ---
+  duration_ms: 1.398913
+  type: 'test'
+  ...
+# Subtest: رفض المستخدم العادي: 403
+ok 69 - رفض المستخدم العادي: 403
+  ---
+  duration_ms: 0.334307
+  type: 'test'
+  ...
+# Subtest: رفض طريقة غير GET: 405
+ok 70 - رفض طريقة غير GET: 405
+  ---
+  duration_ms: 0.448794
+  type: 'test'
+  ...
+# Subtest: خطأ قاعدة البيانات: 500
+ok 71 - خطأ قاعدة البيانات: 500
+  ---
+  duration_ms: 1.086344
+  type: 'test'
+  ...
+# Admin company creation error: Error: database_unavailable
+#     at Object.set (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/admin-companies.test.js:18:21)
+#     at handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/admin-companies.js:72:24)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/admin-companies.test.js:105:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/admin-companies.test.js:181:13)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Subtest: إنشاء شركة بنجاح: 201
+ok 72 - إنشاء شركة بنجاح: 201
+  ---
+  duration_ms: 1.792648
+  type: 'test'
+  ...
+# Subtest: منع تكرار اسم الشركة: 409
+ok 73 - منع تكرار اسم الشركة: 409
+  ---
+  duration_ms: 1.584854
+  type: 'test'
+  ...
+# Subtest: رفض الطلب بدون توكن: 401
+ok 74 - رفض الطلب بدون توكن: 401
+  ---
+  duration_ms: 0.29269
+  type: 'test'
+  ...
+# Subtest: رفض المستخدم العادي: 403
+ok 75 - رفض المستخدم العادي: 403
+  ---
+  duration_ms: 0.232031
+  type: 'test'
+  ...
+# Subtest: رفض اسم الشركة غير الصحيح: 400
+ok 76 - رفض اسم الشركة غير الصحيح: 400
+  ---
+  duration_ms: 0.660637
+  type: 'test'
+  ...
+# Subtest: رفض البريد الإلكتروني غير الصحيح: 400
+ok 77 - رفض البريد الإلكتروني غير الصحيح: 400
+  ---
+  duration_ms: 0.3044
+  type: 'test'
+  ...
+# Subtest: رفض طريقة غير POST: 405
+ok 78 - رفض طريقة غير POST: 405
+  ---
+  duration_ms: 0.145608
+  type: 'test'
+  ...
+# Subtest: فشل الحفظ يعيد حجز الاسم: 500
+ok 79 - فشل الحفظ يعيد حجز الاسم: 500
+  ---
+  duration_ms: 1.681843
+  type: 'test'
+  ...
+# Subtest: رفض غير POST / بلا توكن / مستخدم عادي
+ok 80 - رفض غير POST / بلا توكن / مستخدم عادي
+  ---
+  duration_ms: 1.810569
+  type: 'test'
+  ...
+# Subtest: رفض معرّف شركة غير صالح وشركة غير موجودة
+ok 81 - رفض معرّف شركة غير صالح وشركة غير موجودة
+  ---
+  duration_ms: 0.714705
+  type: 'test'
+  ...
+# Subtest: رفض شركة لا تنتظر مديرًا أو بريدًا غير صالح
+ok 82 - رفض شركة لا تنتظر مديرًا أو بريدًا غير صالح
+  ---
+  duration_ms: 0.593084
+  type: 'test'
+  ...
+# Subtest: إعداد ناقص: 500 برمز واضح ولا يُكتب شيء
+ok 83 - إعداد ناقص: 500 برمز واضح ولا يُكتب شيء
+  ---
+  duration_ms: 0.610648
+  type: 'test'
+  ...
+# Subtest: نجاح الإرسال: تخزين البصمة فقط وإرسال الرابط للبريد الصحيح
+ok 84 - نجاح الإرسال: تخزين البصمة فقط وإرسال الرابط للبريد الصحيح
+  ---
+  duration_ms: 3.335296
+  type: 'test'
+  ...
+# Subtest: فشل مزوّد البريد: 502 والحالة send_failed وليست sent
+ok 85 - فشل مزوّد البريد: 502 والحالة send_failed وليست sent
+  ---
+  duration_ms: 0.677567
+  type: 'test'
+  ...
+# Subtest: إعادة الإرسال تُبطل التوكن القديم وتُصدر جديدًا
+ok 86 - إعادة الإرسال تُبطل التوكن القديم وتُصدر جديدًا
+  ---
+  duration_ms: 1.008354
+  type: 'test'
+  ...
+# Subtest: إعادة الإرسال بعد فشل سابق تنجح
+ok 87 - إعادة الإرسال بعد فشل سابق تنجح
+  ---
+  duration_ms: 0.822678
+  type: 'test'
+  ...
+# Subtest: تتحول المسودة القديمة إلى دعوة مرسلة مع الحفاظ على بياناتها
+ok 88 - تتحول المسودة القديمة إلى دعوة مرسلة مع الحفاظ على بياناتها
+  ---
+  duration_ms: 0.712394
+  type: 'test'
+  ...
+# Subtest: منع الإرسال بعد قبول الدعوة أو أثناء القبول
+ok 89 - منع الإرسال بعد قبول الدعوة أو أثناء القبول
+  ---
+  duration_ms: 0.757331
+  type: 'test'
+  ...
+# Subtest: قفل الإرسال الجاري يمنع التكرار ثم ينتهي
+ok 90 - قفل الإرسال الجاري يمنع التكرار ثم ينتهي
+  ---
+  duration_ms: 0.573927
+  type: 'test'
+  ...
+# Subtest: شركة مربوطة بمدير بالفعل لا تقبل دعوة جديدة
+ok 91 - شركة مربوطة بمدير بالفعل لا تقبل دعوة جديدة
+  ---
+  duration_ms: 0.291023
+  type: 'test'
+  ...
+# Subtest: رفض أي طريقة غير POST
+ok 92 - رفض أي طريقة غير POST
+  ---
+  duration_ms: 1.089939
+  type: 'test'
+  ...
+# Subtest: رفض المستخدم غير المسجل: 401
+ok 93 - رفض المستخدم غير المسجل: 401
+  ---
+  duration_ms: 0.701745
+  type: 'test'
+  ...
+# Subtest: رفض المستخدم غير المسؤول: 403
+ok 94 - رفض المستخدم غير المسؤول: 403
+  ---
+  duration_ms: 0.265268
+  type: 'test'
+  ...
+# Subtest: رفض معرّف الشركة غير الصحيح
+ok 95 - رفض معرّف الشركة غير الصحيح
+  ---
+  duration_ms: 0.339806
+  type: 'test'
+  ...
+# Subtest: رفض الشركة غير الموجودة: 404
+ok 96 - رفض الشركة غير الموجودة: 404
+  ---
+  duration_ms: 0.555289
+  type: 'test'
+  ...
+# Subtest: إنشاء مسودة دعوة للمدير دون إرسال بريد
+ok 97 - إنشاء مسودة دعوة للمدير دون إرسال بريد
+  ---
+  duration_ms: 0.505197
+  type: 'test'
+  ...
+# Subtest: منع إنشاء دعوة ثانية للشركة نفسها
+ok 98 - منع إنشاء دعوة ثانية للشركة نفسها
+  ---
+  duration_ms: 0.291769
+  type: 'test'
+  ...
+# Subtest: رفض شركة لا تنتظر تعيين مدير
+ok 99 - رفض شركة لا تنتظر تعيين مدير
+  ---
+  duration_ms: 0.165315
+  type: 'test'
+  ...
+# Subtest: رفض البريد غير الصحيح المحفوظ للشركة
+ok 100 - رفض البريد غير الصحيح المحفوظ للشركة
+  ---
+  duration_ms: 1.586075
+  type: 'test'
+  ...
+# Subtest: مدير النظام فقط: 405 / 401 / 403 / إجراء غير معروف
+ok 101 - مدير النظام فقط: 405 / 401 / 403 / إجراء غير معروف
+  ---
+  duration_ms: 2.789352
+  type: 'test'
+  ...
+# Subtest: reconcile-company: متسقة / تُصلَح / غير موجودة / معرّف سيئ
+ok 102 - reconcile-company: متسقة / تُصلَح / غير موجودة / معرّف سيئ
+  ---
+  duration_ms: 2.674906
+  type: 'test'
+  ...
+# Subtest: enable-server-ops: نسخة احتياطية write-once ثم العلم، ولا يمس بيانات المستخدم
+ok 103 - enable-server-ops: نسخة احتياطية write-once ثم العلم، ولا يمس بيانات المستخدم
+  ---
+  duration_ms: 6.695202
+  type: 'test'
+  ...
+# Subtest: enable-server-ops يرفض: بلا بيانات / بنية قديمة / فشل فحص السلامة، دون وضع العلم
+ok 104 - enable-server-ops يرفض: بلا بيانات / بنية قديمة / فشل فحص السلامة، دون وضع العلم
+  ---
+  duration_ms: 1.974835
+  type: 'test'
+  ...
+# Subtest: disable-server-ops يحذف العلم فقط ويُبقي النسخة الاحتياطية
+ok 105 - disable-server-ops يحذف العلم فقط ويُبقي النسخة الاحتياطية
+  ---
+  duration_ms: 2.832306
+  type: 'test'
+  ...
+# Subtest: رفض المدير العام عند غياب SUPER_ADMIN_UID: forbidden
+ok 106 - رفض المدير العام عند غياب SUPER_ADMIN_UID: forbidden
+  ---
+  duration_ms: 1.580475
+  type: 'test'
+  ...
+# Analyze error: Error: simulated_transaction_failure
+#     at Object.transaction (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:94:40)
+#     at consumeRateLimit (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/_lib/rate-limit.js:20:28)
+#     at handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/analyze.js:247:29)
+#     at async call (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/analyze-auth.test.js:38:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/analyze-auth.test.js:124:13)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Subtest: بلا توكن: 401 ولا يُستدعى المزوّد المدفوع أبدًا
+ok 107 - بلا توكن: 401 ولا يُستدعى المزوّد المدفوع أبدًا
+  ---
+  duration_ms: 1.730697
+  type: 'test'
+  ...
+# Subtest: ping بلا توكن أيضًا 401 (كان يستهلك المزوّد دون مصادقة)
+ok 108 - ping بلا توكن أيضًا 401 (كان يستهلك المزوّد دون مصادقة)
+  ---
+  duration_ms: 0.350099
+  type: 'test'
+  ...
+# Subtest: توكن غير صالح أو بصيغة خاطئة: 401
+ok 109 - توكن غير صالح أو بصيغة خاطئة: 401
+  ---
+  duration_ms: 0.49408
+  type: 'test'
+  ...
+# Subtest: بريد غير مؤكَّد: 403 ولا استدعاء للمزوّد
+ok 110 - بريد غير مؤكَّد: 403 ولا استدعاء للمزوّد
+  ---
+  duration_ms: 0.214454
+  type: 'test'
+  ...
+# Subtest: مستخدم موثَّق: ينجح الطلب، والمفتاح يذهب في ترويسة لا في عنوان الطلب
+ok 111 - مستخدم موثَّق: ينجح الطلب، والمفتاح يذهب في ترويسة لا في عنوان الطلب
+  ---
+  duration_ms: 2.325737
+  type: 'test'
+  ...
+# Subtest: تحديد المعدّل: الطلب 21 في الدقيقة يُرفض 429 مع Retry-After ولا يصل للمزوّد
+ok 112 - تحديد المعدّل: الطلب 21 في الدقيقة يُرفض 429 مع Retry-After ولا يصل للمزوّد
+  ---
+  duration_ms: 5.527189
+  type: 'test'
+  ...
+# Subtest: تحديد المعدّل لكل مستخدم على حدة: استنفاد مستخدم لا يحجب غيره
+ok 113 - تحديد المعدّل لكل مستخدم على حدة: استنفاد مستخدم لا يحجب غيره
+  ---
+  duration_ms: 4.130443
+  type: 'test'
+  ...
+# Subtest: consumeRateLimit: تُفتح نافذة جديدة بعد انقضاء المدة، وتُرفض المفاتيح غير الآمنة
+ok 114 - consumeRateLimit: تُفتح نافذة جديدة بعد انقضاء المدة، وتُرفض المفاتيح غير الآمنة
+  ---
+  duration_ms: 0.793825
+  type: 'test'
+  ...
+# Subtest: عطل مخزن العدّاد: الفشل مغلق (لا يُستدعى المزوّد المدفوع)
+ok 115 - عطل مخزن العدّاد: الفشل مغلق (لا يُستدعى المزوّد المدفوع)
+  ---
+  duration_ms: 1.792915
+  type: 'test'
+  ...
+# Subtest: رسائل خطأ المزوّد لا تُسرَّب للعميل (تُسجَّل في الخادم فقط)
+ok 116 - رسائل خطأ المزوّد لا تُسرَّب للعميل (تُسجَّل في الخادم فقط)
+  ---
+  duration_ms: 0.771307
+  type: 'test'
+  ...
+# Subtest: CORS: طلب preflight لا يتطلب توكنًا لكنه يعلن ترويسة Authorization
+ok 117 - CORS: طلب preflight لا يتطلب توكنًا لكنه يعلن ترويسة Authorization
+  ---
+  duration_ms: 0.277222
+  type: 'test'
+  ...
+# Gemini model/request error: 404 x
+# Subtest: بدون مفتاح: 503 برسالة واضحة
+ok 118 - بدون مفتاح: 503 برسالة واضحة
+  ---
+  duration_ms: 4.003187
+  type: 'test'
+  ...
+# Subtest: مدخلات غير صالحة: 400
+ok 119 - مدخلات غير صالحة: 400
+  ---
+  duration_ms: 0.991625
+  type: 'test'
+  ...
+# Subtest: بيانات ناقصة: 422 بدل تخمين
+ok 120 - بيانات ناقصة: 422 بدل تخمين
+  ---
+  duration_ms: 0.380023
+  type: 'test'
+  ...
+# Subtest: نجاح: الأرقام من الكود الرياضي والمورد المختلق يُحذف
+ok 121 - نجاح: الأرقام من الكود الرياضي والمورد المختلق يُحذف
+  ---
+  duration_ms: 1.616534
+  type: 'test'
+  ...
+# Subtest: رد غير JSON من النموذج: 502
+ok 122 - رد غير JSON من النموذج: 502
+  ---
+  duration_ms: 0.966432
+  type: 'test'
+  ...
+# Subtest: أخطاء المزود تُترجم
+ok 123 - أخطاء المزود تُترجم
+  ---
+  duration_ms: 3.302997
+  type: 'test'
+  ...
+# Subtest: ping ينجح مع مزود وهمي
+ok 124 - ping ينجح مع مزود وهمي
+  ---
+  duration_ms: 0.540504
+  type: 'test'
+  ...
+# Subtest: CORS: يسمح بالأصل المحدد فقط
+ok 125 - CORS: يسمح بالأصل المحدد فقط
+  ---
+  duration_ms: 0.259946
+  type: 'test'
+  ...
+# Operation failed: cashEntry Error: PERMISSION_DENIED
+#     at t.ctx.NabdhFirebase.runTransaction (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/app.test.js:82:74)
+#     at Object.run (store.js:35:26) {
+#   code: 'PERMISSION_DENIED'
+# }
+# Subtest: حساب جديد: يُنشأ بنية ERP كاملة بمخزنين افتراضيين وإعدادات الشركة
+ok 126 - حساب جديد: يُنشأ بنية ERP كاملة بمخزنين افتراضيين وإعدادات الشركة
+  ---
+  duration_ms: 34.221678
+  type: 'test'
+  ...
+# Subtest: حساب من الإصدار 1: لا يُعرض النظام قبل مراجعة الترقية، ولا تتغير البيانات قبل الضغط
+ok 127 - حساب من الإصدار 1: لا يُعرض النظام قبل مراجعة الترقية، ولا تتغير البيانات قبل الضغط
+  ---
+  duration_ms: 5.679407
+  type: 'test'
+  ...
+# Subtest: الترقية: نسخة احتياطية، حفظ كل السجلات القديمة، واختيار المستخدم لنوع الصنف
+ok 128 - الترقية: نسخة احتياطية، حفظ كل السجلات القديمة، واختيار المستخدم لنوع الصنف
+  ---
+  duration_ms: 8.56127
+  type: 'test'
+  ...
+# Subtest: act: بيع يخصم المخزون ويحدّث DB المحلي من نتيجة المعاملة المؤكدة فقط
+ok 129 - act: بيع يخصم المخزون ويحدّث DB المحلي من نتيجة المعاملة المؤكدة فقط
+  ---
+  duration_ms: 9.137575
+  type: 'test'
+  ...
+# Subtest: act: بيع أكبر من الرصيد يُرفض ولا يتغير شيء محليًا أو في الخادم
+ok 130 - act: بيع أكبر من الرصيد يُرفض ولا يتغير شيء محليًا أو في الخادم
+  ---
+  duration_ms: 4.84831
+  type: 'test'
+  ...
+# Subtest: act: إعادة إرسال نفس opId لا تكرر العملية
+ok 131 - act: إعادة إرسال نفس opId لا تكرر العملية
+  ---
+  duration_ms: 5.57859
+  type: 'test'
+  ...
+# Subtest: act: خطأ صلاحيات Firebase يتحول لرسالة واضحة بلا تغيير محلي
+ok 132 - act: خطأ صلاحيات Firebase يتحول لرسالة واضحة بلا تغيير محلي
+  ---
+  duration_ms: 5.440852
+  type: 'test'
+  ...
+# Subtest: تبديل المستخدم أثناء التحميل: النتيجة المتأخرة تُهمل ولا تظهر بيانات مستخدم لآخر
+ok 133 - تبديل المستخدم أثناء التحميل: النتيجة المتأخرة تُهمل ولا تظهر بيانات مستخدم لآخر
+  ---
+  duration_ms: 4.074004
+  type: 'test'
+  ...
+# Subtest: مرتجع تالف: ربح الفاتورة في تقرير المبيعات يطابق مجمل الربح في قائمة الدخل (كان يزيد بتكلفة التالف)
+ok 134 - مرتجع تالف: ربح الفاتورة في تقرير المبيعات يطابق مجمل الربح في قائمة الدخل (كان يزيد بتكلفة التالف)
+  ---
+  duration_ms: 5.869488
+  type: 'test'
+  ...
+# Subtest: مرتجع صالح ثم تالف ثم صالح على فاتورة واحدة: مجموع أرباح الفواتير = مجمل الربح بالأستاذ
+ok 135 - مرتجع صالح ثم تالف ثم صالح على فاتورة واحدة: مجموع أرباح الفواتير = مجمل الربح بالأستاذ
+  ---
+  duration_ms: 3.216813
+  type: 'test'
+  ...
+# Subtest: إلغاء فاتورة مدفوعة والخزينة لا تكفي لردّها: يُرفض insufficient_cash والبيانات كما هي
+ok 136 - إلغاء فاتورة مدفوعة والخزينة لا تكفي لردّها: يُرفض insufficient_cash والبيانات كما هي
+  ---
+  duration_ms: 1.274171
+  type: 'test'
+  ...
+# Subtest: إلغاء الفاتورة: ينجح عند كفاية الخزينة، وعند تفعيل السماح برصيد سالب، وفاتورة آجلة بلا نقد لا تتأثر
+ok 137 - إلغاء الفاتورة: ينجح عند كفاية الخزينة، وعند تفعيل السماح برصيد سالب، وفاتورة آجلة بلا نقد لا تتأثر
+  ---
+  duration_ms: 3.030847
+  type: 'test'
+  ...
+# Subtest: opId: طول محدود وأحرف آمنة فقط، و__proto__ مرفوض؛ و«constructor» وأمثاله تُنفَّذ مرة واحدة فقط
+ok 138 - opId: طول محدود وأحرف آمنة فقط، و__proto__ مرفوض؛ و«constructor» وأمثاله تُنفَّذ مرة واحدة فقط
+  ---
+  duration_ms: 1.475812
+  type: 'test'
+  ...
+# Subtest: قبول عالق ثم إعادة المحاولة لا يعيد تفعيل موظف أوقفه المدير (كان يكتب status=active فوق suspended)
+ok 139 - قبول عالق ثم إعادة المحاولة لا يعيد تفعيل موظف أوقفه المدير (كان يكتب status=active فوق suspended)
+  ---
+  duration_ms: 2.523667
+  type: 'test'
+  ...
+# Subtest: المصالحة تُكمل الناقص فقط: عضوية مفقودة تُنشأ نشطة، وربط حساب مفقود يُنشأ دون مساس بالعضوية القائمة
+ok 140 - المصالحة تُكمل الناقص فقط: عضوية مفقودة تُنشأ نشطة، وربط حساب مفقود يُنشأ دون مساس بالعضوية القائمة
+  ---
+  duration_ms: 0.828368
+  type: 'test'
+  ...
+# Subtest: تعارض دور بين العضوية والدعوة: مراجعة يدوية ولا كتابة (العضوية كما هي)
+ok 141 - تعارض دور بين العضوية والدعوة: مراجعة يدوية ولا كتابة (العضوية كما هي)
+  ---
+  duration_ms: 1.061678
+  type: 'test'
+  ...
+# Subtest: تغيير دور وحالة الموظف يُسجَّلان في adminAudit بالفاعل والقيم القديمة والجديدة، دون أي توكن
+ok 142 - تغيير دور وحالة الموظف يُسجَّلان في adminAudit بالفاعل والقيم القديمة والجديدة، دون أي توكن
+  ---
+  duration_ms: 1.142199
+  type: 'test'
+  ...
+# Subtest: محاولة مرفوضة (مدير شركة أخرى) لا تغيّر شيئًا ولا تُسجَّل كنجاح
+ok 143 - محاولة مرفوضة (مدير شركة أخرى) لا تغيّر شيئًا ولا تُسجَّل كنجاح
+  ---
+  duration_ms: 1.141182
+  type: 'test'
+  ...
+# Subtest: فشل كتابة السجل لا يُسقط العملية الأساسية (تُسجَّل في سجل الخادم)
+ok 144 - فشل كتابة السجل لا يُسقط العملية الأساسية (تُسجَّل في سجل الخادم)
+  ---
+  duration_ms: 0.573948
+  type: 'test'
+  ...
+# Subtest: vercel.json: ترويسات الأمان الأساسية موجودة، وAPI بلا تخزين مؤقت
+ok 145 - vercel.json: ترويسات الأمان الأساسية موجودة، وAPI بلا تخزين مؤقت
+  ---
+  duration_ms: 0.291008
+  type: 'test'
+  ...
+# Subtest: الحزمة النهائية: لا ملفات .env حقيقية ولا رموز Vercel OIDC داخل شجرة المشروع التي تُسلَّم
+ok 146 - الحزمة النهائية: لا ملفات .env حقيقية ولا رموز Vercel OIDC داخل شجرة المشروع التي تُسلَّم
+  ---
+  duration_ms: 3.698895
+  type: 'test'
+  ...
+# Subtest: أيام التغطية
+ok 147 - أيام التغطية
+  ---
+  duration_ms: 0.720355
+  type: 'test'
+  ...
+# Subtest: الفجوة والحالة
+ok 148 - الفجوة والحالة
+  ---
+  duration_ms: 0.214656
+  type: 'test'
+  ...
+# Subtest: كمية إعادة الطلب
+ok 149 - كمية إعادة الطلب
+  ---
+  duration_ms: 0.142625
+  type: 'test'
+  ...
+# Subtest: ترتيب البدلاء يستبعد المورد الحالي
+ok 150 - ترتيب البدلاء يستبعد المورد الحالي
+  ---
+  duration_ms: 0.246165
+  type: 'test'
+  ...
+# Subtest: مقارنة الانتظار بالبديل
+ok 151 - مقارنة الانتظار بالبديل
+  ---
+  duration_ms: 0.149369
+  type: 'test'
+  ...
+# Subtest: مدير شركة بلا حساب شخصي: يُحمَّل ERP الشركة نفسه ولا يُنشأ users/{uid} ولا يُكتب شيء من العميل
+ok 152 - مدير شركة بلا حساب شخصي: يُحمَّل ERP الشركة نفسه ولا يُنشأ users/{uid} ولا يُكتب شيء من العميل
+  ---
+  duration_ms: 30.624979
+  type: 'test'
+  ...
+# Subtest: عملية من العميل تمر عبر الخادم: تُحفظ في بيانات الشركة وتحدّث DB المحلي، ولا كتابة مباشرة من العميل
+ok 153 - عملية من العميل تمر عبر الخادم: تُحفظ في بيانات الشركة وتحدّث DB المحلي، ولا كتابة مباشرة من العميل
+  ---
+  duration_ms: 8.48429
+  type: 'test'
+  ...
+# Subtest: رفض المحرك يصل للواجهة برمزه ورسالته العربية، والبيانات المحلية والمخزَّنة كما هي
+ok 154 - رفض المحرك يصل للواجهة برمزه ورسالته العربية، والبيانات المحلية والمخزَّنة كما هي
+  ---
+  duration_ms: 7.203024
+  type: 'test'
+  ...
+# Subtest: منع التكرار عبر العميل: نفس opId مرتين يُحتسب مرة واحدة
+ok 155 - منع التكرار عبر العميل: نفس opId مرتين يُحتسب مرة واحدة
+  ---
+  duration_ms: 6.877254
+  type: 'test'
+  ...
+# Subtest: أخطاء الخادم (شركة موقوفة، انقطاع شبكة) تصل برمز واضح ولا تغيّر DB المحلي
+ok 156 - أخطاء الخادم (شركة موقوفة، انقطاع شبكة) تصل برمز واضح ولا تغيّر DB المحلي
+  ---
+  duration_ms: 11.235526
+  type: 'test'
+  ...
+# Subtest: حساب قديم له بيانات + عضوية شركة: يبقى شخصيًا افتراضيًا بلا أي نداء خادم، ويبدّل لشركته عند الاختيار
+ok 157 - حساب قديم له بيانات + عضوية شركة: يبقى شخصيًا افتراضيًا بلا أي نداء خادم، ويبدّل لشركته عند الاختيار
+  ---
+  duration_ms: 10.673505
+  type: 'test'
+  ...
+# Subtest: تفضيل شركة غير مرتبطة بالحساب يُتجاهل (لا وصول لشركة أخرى عبر التفضيل)
+ok 158 - تفضيل شركة غير مرتبطة بالحساب يُتجاهل (لا وصول لشركة أخرى عبر التفضيل)
+  ---
+  duration_ms: 5.846934
+  type: 'test'
+  ...
+# Subtest: حساب قديم بلا عضويات لا يتأثر: يُحمَّل كما كان ولا نداء خادم
+ok 159 - حساب قديم بلا عضويات لا يتأثر: يُحمَّل كما كان ولا نداء خادم
+  ---
+  duration_ms: 5.375346
+  type: 'test'
+  ...
+# Subtest: قواعد الشركات لم تُنشر بعد (permission denied): الحساب القديم يعمل كما كان، والجديد يرى خطأ ولا يُنشأ له حساب شخصي فارغ
+ok 160 - قواعد الشركات لم تُنشر بعد (permission denied): الحساب القديم يعمل كما كان، والجديد يرى خطأ ولا يُنشأ له حساب شخصي فارغ
+  ---
+  duration_ms: 8.128904
+  type: 'test'
+  ...
+# Subtest: عطل شبكة أثناء اكتشاف الشركات لمن لا بيانات شخصية له: خطأ وليس إنشاء حساب شخصي فارغ
+ok 161 - عطل شبكة أثناء اكتشاف الشركات لمن لا بيانات شخصية له: خطأ وليس إنشاء حساب شخصي فارغ
+  ---
+  duration_ms: 5.904846
+  type: 'test'
+  ...
+# Subtest: بيانات الشركة غير مهيأة أو بنية قديمة: خطأ واضح ولا تغيير
+ok 162 - بيانات الشركة غير مهيأة أو بنية قديمة: خطأ واضح ولا تغيير
+  ---
+  duration_ms: 8.839182
+  type: 'test'
+  ...
+# Subtest: حساب شخصي رُحِّل إلى عمليات الخادم (serverOps): العمليات عبر الخادم فقط والعميل لا يكتب على users/{uid}
+ok 163 - حساب شخصي رُحِّل إلى عمليات الخادم (serverOps): العمليات عبر الخادم فقط والعميل لا يكتب على users/{uid}
+  ---
+  duration_ms: 5.801524
+  type: 'test'
+  ...
+# Accept invitation error: Error: simulated_write_failure
+#     at Object.update (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/fake-admin-db.js:82:40)
+#     at completeStaffLink (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/_lib/reconcile.js:208:24)
+#     at handler (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/api/accept-invitation.js:270:18)
+#     at async post (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/company-staff.test.js:66:3)
+#     at async TestContext.<anonymous> (/home/claude/work/NABDH-Sales-System-nabdh-test-v3-corrected/NABDH-Sales-System-nabdh-test/tests/company-staff.test.js:248:9)
+#     at async Test.run (node:internal/test_runner/test:1054:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+# Subtest: رفض: غير POST / بلا توكن / بريد غير مؤكَّد / شركة أو إجراء غير صالح
+ok 164 - رفض: غير POST / بلا توكن / بريد غير مؤكَّد / شركة أو إجراء غير صالح
+  ---
+  duration_ms: 9.674941
+  type: 'test'
+  ...
+# Subtest: إدارة الفريق لمدير الشركة فقط: الموظفون والغرباء ومديرو الشركات الأخرى ممنوعون من كل الإجراءات
+ok 165 - إدارة الفريق لمدير الشركة فقط: الموظفون والغرباء ومديرو الشركات الأخرى ممنوعون من كل الإجراءات
+  ---
+  duration_ms: 4.196849
+  type: 'test'
+  ...
+# Subtest: دعوة موظف لكل دور: يُخزَّن الدور والبصمة فقط، والبريد للعنوان الصحيح بوصف الدور، بلا توكن في الرد
+ok 166 - دعوة موظف لكل دور: يُخزَّن الدور والبصمة فقط، والبريد للعنوان الصحيح بوصف الدور، بلا توكن في الرد
+  ---
+  duration_ms: 7.522718
+  type: 'test'
+  ...
+# Subtest: التحقق من الدعوة: لا دعوة مدير ولا دور مجهول ولا بريد سيئ ولا عضو قائم، وإعدادات ناقصة بلا أي كتابة
+ok 167 - التحقق من الدعوة: لا دعوة مدير ولا دور مجهول ولا بريد سيئ ولا عضو قائم، وإعدادات ناقصة بلا أي كتابة
+  ---
+  duration_ms: 3.111854
+  type: 'test'
+  ...
+# Subtest: فشل مزوّد البريد: 502 والدعوة send_failed ثم تنجح إعادة الدعوة
+ok 168 - فشل مزوّد البريد: 502 والدعوة send_failed ثم تنجح إعادة الدعوة
+  ---
+  duration_ms: 3.952036
+  type: 'test'
+  ...
+# Subtest: إعادة الدعوة تُبطل الرابط القديم وتسمح بتغيير الدور قبل القبول
+ok 169 - إعادة الدعوة تُبطل الرابط القديم وتسمح بتغيير الدور قبل القبول
+  ---
+  duration_ms: 4.644995
+  type: 'test'
+  ...
+# Subtest: القبول: عضوية بالدور المدعو، ربط الحساب بالشركة، الشركة ومديرها وبياناتها لا تتغير
+ok 170 - القبول: عضوية بالدور المدعو، ربط الحساب بالشركة، الشركة ومديرها وبياناتها لا تتغير
+  ---
+  duration_ms: 5.570289
+  type: 'test'
+  ...
+# Subtest: أمان القبول: بريد مختلف 403، لا استخدام ثانٍ، منتهية 410، مدير آخر لا يقبل دعوة غيره، وتوكن خاطئ 404
+ok 171 - أمان القبول: بريد مختلف 403، لا استخدام ثانٍ، منتهية 410، مدير آخر لا يقبل دعوة غيره، وتوكن خاطئ 404
+  ---
+  duration_ms: 6.053019
+  type: 'test'
+  ...
+# Subtest: قبول متزامن: عضوية واحدة فقط
+ok 172 - قبول متزامن: عضوية واحدة فقط
+  ---
+  duration_ms: 3.551591
+  type: 'test'
+  ...
+# Subtest: دعوة تُقبل لشركة غير فعّالة أو لعضو قائم: مرفوضة بسبب واضح ولا تغيّر شيئًا
+ok 173 - دعوة تُقبل لشركة غير فعّالة أو لعضو قائم: مرفوضة بسبب واضح ولا تغيّر شيئًا
+  ---
+  duration_ms: 3.592355
+  type: 'test'
+  ...
+# Subtest: أعطال ملتبسة عند قبول الموظف: كتابة حُفظت ثم انقطع الإقرار تُصالَح، وفشل كامل يُرجع الحجز
+ok 174 - أعطال ملتبسة عند قبول الموظف: كتابة حُفظت ثم انقطع الإقرار تُصالَح، وفشل كامل يُرجع الحجز
+  ---
+  duration_ms: 9.747291
+  type: 'test'
+  ...
+# Subtest: قائمة الفريق: الأعضاء والدعوات المعلّقة (المقبولة تختفي، المنتهية تُحسب) بلا بصمات توكن، ولشركتها فقط
+ok 175 - قائمة الفريق: الأعضاء والدعوات المعلّقة (المقبولة تختفي، المنتهية تُحسب) بلا بصمات توكن، ولشركتها فقط
+  ---
+  duration_ms: 6.105938
+  type: 'test'
+  ...
+# Subtest: إلغاء الدعوة: تمنع القبول، ولا تُلغى مقبولة، ولا تُلغى دعوة شركة أخرى
+ok 176 - إلغاء الدعوة: تمنع القبول، ولا تُلغى مقبولة، ولا تُلغى دعوة شركة أخرى
+  ---
+  duration_ms: 3.432337
+  type: 'test'
+  ...
+# Subtest: إيقاف الموظف يقطع وصوله فورًا (قراءة وعمليات) والتفعيل يعيده؛ المدير والنفس محميان
+ok 177 - إيقاف الموظف يقطع وصوله فورًا (قراءة وعمليات) والتفعيل يعيده؛ المدير والنفس محميان
+  ---
+  duration_ms: 3.390805
+  type: 'test'
+  ...
+# Subtest: تغيير الدور: العضوية وربط الحساب معًا، وتتبدل الصلاحيات فورًا؛ لا ترقية إلى مدير
+ok 178 - تغيير الدور: العضوية وربط الحساب معًا، وتتبدل الصلاحيات فورًا؛ لا ترقية إلى مدير
+  ---
+  duration_ms: 3.347851
+  type: 'test'
+  ...
+# Subtest: الدورة الكاملة: دعوة محاسب ← قبوله ← يقرأ المحاسبة فقط وينفّذ عملياتها ولا يمس الموارد البشرية
+ok 179 - الدورة الكاملة: دعوة محاسب ← قبوله ← يقرأ المحاسبة فقط وينفّذ عملياتها ولا يمس الموارد البشرية
+  ---
+  duration_ms: 10.994924
+  type: 'test'
+  ...
+# Subtest: القراءة: كل دور يستلم بيانات قسمه فقط، ولا يصل غير المدير سجل التدقيق ولا العدّادات
+ok 180 - القراءة: كل دور يستلم بيانات قسمه فقط، ولا يصل غير المدير سجل التدقيق ولا العدّادات
+  ---
+  duration_ms: 18.064635
+  type: 'test'
+  ...
+# Subtest: الأرقام المحسوبة من بيانات كل دور تطابق الحقيقية (الخزينة، الذمم، الأرصدة، قيمة المخزون، التقارير)
+ok 181 - الأرقام المحسوبة من بيانات كل دور تطابق الحقيقية (الخزينة، الذمم، الأرصدة، قيمة المخزون، التقارير)
+  ---
+  duration_ms: 15.87363
+  type: 'test'
+  ...
+# Subtest: عدد مشاكل السلامة للمحاسب يُحسب على البيانات الكاملة ويكشف أي فساد حقيقي
+ok 182 - عدد مشاكل السلامة للمحاسب يُحسب على البيانات الكاملة ويكشف أي فساد حقيقي
+  ---
+  duration_ms: 6.553352
+  type: 'test'
+  ...
+# Subtest: HR: ينفّذ عمليات الموارد البشرية فقط، وتصله بياناته فقط حتى في رد العملية
+ok 183 - HR: ينفّذ عمليات الموارد البشرية فقط، وتصله بياناته فقط حتى في رد العملية
+  ---
+  duration_ms: 5.79918
+  type: 'test'
+  ...
+# Subtest: المحاسب: يرحّل الرواتب المعتمدة بقيد صحيح دون رؤية سطور الموظفين، ولا يمس الموارد البشرية ولا المخزون
+ok 184 - المحاسب: يرحّل الرواتب المعتمدة بقيد صحيح دون رؤية سطور الموظفين، ولا يمس الموارد البشرية ولا المخزون
+  ---
+  duration_ms: 14.804039
+  type: 'test'
+  ...
+# Subtest: أمين المخازن: سندات المخزون فقط، وحذف الأصناف واستلام الموردين وفواتير البيع ممنوعة
+ok 185 - أمين المخازن: سندات المخزون فقط، وحذف الأصناف واستلام الموردين وفواتير البيع ممنوعة
+  ---
+  duration_ms: 7.155004
+  type: 'test'
+  ...
+# Subtest: المبيعات: فواتير وعملاء وتحصيل فقط، والإلغاء والحذف وكل ما سواه ممنوع، والرصيد يُفرض من المحرك
+ok 186 - المبيعات: فواتير وعملاء وتحصيل فقط، والإلغاء والحذف وكل ما سواه ممنوع، والرصيد يُفرض من المحرك
+  ---
+  duration_ms: 7.256928
+  type: 'test'
+  ...
+# Subtest: المدير: كل العمليات بما فيها الموارد البشرية والمحاسبة والمخزون، ويستلم البيانات كاملة
+ok 187 - المدير: كل العمليات بما فيها الموارد البشرية والمحاسبة والمخزون، ويستلم البيانات كاملة
+  ---
+  duration_ms: 6.833696
+  type: 'test'
+  ...
+# Subtest: دور غير معروف أو عضو موقوف أو من شركة أخرى: ممنوع من القراءة والعمليات
+ok 188 - دور غير معروف أو عضو موقوف أو من شركة أخرى: ممنوع من القراءة والعمليات
+  ---
+  duration_ms: 4.378711
+  type: 'test'
+  ...
+# Subtest: القراءة: لا تُنشئ بيانات، وترفض نطاق المستخدم، والبيانات الناقصة/القديمة برسائل واضحة
+ok 189 - القراءة: لا تُنشئ بيانات، وترفض نطاق المستخدم، والبيانات الناقصة/القديمة برسائل واضحة
+  ---
+  duration_ms: 3.540928
+  type: 'test'
+  ...
+# Subtest: المبيعات لا تستلم أي حقل تكلفة: لا سعر شراء ولا قيمة مخزون ولا تكلفة بضاعة مباعة، وصفحاتها وأرقامها سليمة
+ok 190 - المبيعات لا تستلم أي حقل تكلفة: لا سعر شراء ولا قيمة مخزون ولا تكلفة بضاعة مباعة، وصفحاتها وأرقامها سليمة
+  ---
+  duration_ms: 4.81084
+  type: 'test'
+  ...
+# Subtest: رفض: غير POST / بلا توكن / بريد غير مؤكَّد / مدخلات ناقصة أو نطاق غير معروف
+ok 191 - رفض: غير POST / بلا توكن / بريد غير مؤكَّد / مدخلات ناقصة أو نطاق غير معروف
+  ---
+  duration_ms: 8.768832
+  type: 'test'
+  ...
+# Subtest: مدير الشركة ينفّذ عملية حقيقية: تُحفظ في بيانات شركته فقط ولا يُنشأ حساب شخصي
+ok 192 - مدير الشركة ينفّذ عملية حقيقية: تُحفظ في بيانات شركته فقط ولا يُنشأ حساب شخصي
+  ---
+  duration_ms: 6.134417
+  type: 'test'
+  ...
+# Subtest: اسم المنفّذ في سجل التدقيق يُؤخذ من التوكن الموثَّق وليس من العميل
+ok 193 - اسم المنفّذ في سجل التدقيق يُؤخذ من التوكن الموثَّق وليس من العميل
+  ---
+  duration_ms: 4.647529
+  type: 'test'
+  ...
+# Subtest: عزل الشركات: مدير شركة 1 لا يكتب في شركة 2 ولا يقرأ منها عبر الخادم
+ok 194 - عزل الشركات: مدير شركة 1 لا يكتب في شركة 2 ولا يقرأ منها عبر الخادم
+  ---
+  duration_ms: 3.352067
+  type: 'test'
+  ...
+# Subtest: غير الأعضاء والأعضاء الموقوفون والأدوار غير المعرّفة والشركات غير الفعّالة: 403 بلا أي تغيير
+ok 195 - غير الأعضاء والأعضاء الموقوفون والأدوار غير المعرّفة والشركات غير الفعّالة: 403 بلا أي تغيير
+  ---
+  duration_ms: 5.062038
+  type: 'test'
+  ...
+# Subtest: قواعد المحرك مفروضة: رصيد غير كافٍ يُرفض بـ422 ورسالة عربية والبيانات كما هي
+ok 196 - قواعد المحرك مفروضة: رصيد غير كافٍ يُرفض بـ422 ورسالة عربية والبيانات كما هي
+  ---
+  duration_ms: 3.819699
+  type: 'test'
+  ...
+# Subtest: بيع بعد استلام مخزون: المخزون والمحاسبة تتغيران معًا وتبقى السلامة
+ok 197 - بيع بعد استلام مخزون: المخزون والمحاسبة تتغيران معًا وتبقى السلامة
+  ---
+  duration_ms: 8.322426
+  type: 'test'
+  ...
+# Subtest: منع التكرار: نفس opId مرتين ينفَّذ مرة واحدة والثاني duplicate، ومتزامنًا كذلك
+ok 198 - منع التكرار: نفس opId مرتين ينفَّذ مرة واحدة والثاني duplicate، ومتزامنًا كذلك
+  ---
+  duration_ms: 7.941034
+  type: 'test'
+  ...
+# Subtest: عمليتان مختلفتان متزامنتان تُنفَّذان كلتاهما دون فقد
+ok 199 - عمليتان مختلفتان متزامنتان تُنفَّذان كلتاهما دون فقد
+  ---
+  duration_ms: 4.693518
+  type: 'test'
+  ...
+# Subtest: أسماء عمليات خاطئة أو حساسة للنموذج (constructor/__proto__/toString) مرفوضة
+ok 200 - أسماء عمليات خاطئة أو حساسة للنموذج (constructor/__proto__/toString) مرفوضة
+  ---
+  duration_ms: 4.365334
+  type: 'test'
+  ...
+# Subtest: بيانات الشركة غير موجودة أو بنية قديمة: 422 دون إنشاء أي شيء
+ok 201 - بيانات الشركة غير موجودة أو بنية قديمة: 422 دون إنشاء أي شيء
+  ---
+  duration_ms: 2.775826
+  type: 'test'
+  ...
+# Subtest: تاريخ العميل: يُقبل ضمن ±يوم من الخادم وإلا يُستبدل بتاريخ الخادم
+ok 202 - تاريخ العميل: يُقبل ضمن ±يوم من الخادم وإلا يُستبدل بتاريخ الخادم
+  ---
+  duration_ms: 2.528453
+  type: 'test'
+  ...
+# Subtest: scope=user مرفوض افتراضيًا، ويعمل لصاحب العلم فقط وعلى بياناته هو
+ok 203 - scope=user مرفوض افتراضيًا، ويعمل لصاحب العلم فقط وعلى بياناته هو
+  ---
+  duration_ms: 5.457638
+  type: 'test'
+  ...
+# Subtest: الموظفون: إنشاء بكود تلقائي، تعديل، تحقق من المدخلات
+ok 204 - الموظفون: إنشاء بكود تلقائي، تعديل، تحقق من المدخلات
+  ---
+  duration_ms: 4.515617
+  type: 'test'
+  ...
+# Subtest: إنهاء الخدمة والحذف: الحذف ممنوع لمن له سجلات
+ok 205 - إنهاء الخدمة والحذف: الحذف ممنوع لمن له سجلات
+  ---
+  duration_ms: 3.34244
+  type: 'test'
+  ...
+# Subtest: الحضور: تسجيل جماعي، استبدال سجل اليوم نفسه، ورفض المستقبل والحالات الخاطئة والتكرار
+ok 206 - الحضور: تسجيل جماعي، استبدال سجل اليوم نفسه، ورفض المستقبل والحالات الخاطئة والتكرار
+  ---
+  duration_ms: 1.419624
+  type: 'test'
+  ...
+# Subtest: الإجازات: طلب وقرار، حساب الأيام، ومنع التداخل وتكرار القرار
+ok 207 - الإجازات: طلب وقرار، حساب الأيام، ومنع التداخل وتكرار القرار
+  ---
+  duration_ms: 1.060528
+  type: 'test'
+  ...
+# Subtest: كشف الرواتب: يحسب الغياب والإجازة غير المدفوعة والمكافآت والخصومات بدقة
+ok 208 - كشف الرواتب: يحسب الغياب والإجازة غير المدفوعة والمكافآت والخصومات بدقة
+  ---
+  duration_ms: 2.058229
+  type: 'test'
+  ...
+# Subtest: الإجازة غير المدفوعة العابرة للشهور تُقصّ على الشهر المطلوب فقط
+ok 209 - الإجازة غير المدفوعة العابرة للشهور تُقصّ على الشهر المطلوب فقط
+  ---
+  duration_ms: 0.800474
+  type: 'test'
+  ...
+# Subtest: الخصم لا يتجاوز الراتب، وصافي سالب مرفوض، وموظف عُيّن بعد الشهر لا يُحتسب
+ok 210 - الخصم لا يتجاوز الراتب، وصافي سالب مرفوض، وموظف عُيّن بعد الشهر لا يُحتسب
+  ---
+  duration_ms: 1.822591
+  type: 'test'
+  ...
+# Subtest: دورة الكشف: مسودة قابلة لإعادة الإعداد ← اعتماد ← ترحيل للمحاسبة مرة واحدة بقيد صحيح
+ok 211 - دورة الكشف: مسودة قابلة لإعادة الإعداد ← اعتماد ← ترحيل للمحاسبة مرة واحدة بقيد صحيح
+  ---
+  duration_ms: 1.815335
+  type: 'test'
+  ...
+# Subtest: منع التكرار بـopId لعمليات الموارد البشرية (لا موظف ولا راتب مزدوج)
+ok 212 - منع التكرار بـopId لعمليات الموارد البشرية (لا موظف ولا راتب مزدوج)
+  ---
+  duration_ms: 0.542955
+  type: 'test'
+  ...
+# Subtest: حساب قديم بلا مجموعات الموارد البشرية يبقى سليمًا؛ ensure تضيفها فارغة دون ترحيل
+ok 213 - حساب قديم بلا مجموعات الموارد البشرية يبقى سليمًا؛ ensure تضيفها فارغة دون ترحيل
+  ---
+  duration_ms: 0.550233
+  type: 'test'
+  ...
+# Subtest: Firebase يحوّل المصفوفات إلى كائنات: عمليات الموارد البشرية تتعامل مع الشكلين
+ok 214 - Firebase يحوّل المصفوفات إلى كائنات: عمليات الموارد البشرية تتعامل مع الشكلين
+  ---
+  duration_ms: 0.38346
+  type: 'test'
+  ...
+# Subtest: سند استلام يزيد الرصيد ويكتب الدفتر والقيد المحاسبي
+ok 215 - سند استلام يزيد الرصيد ويكتب الدفتر والقيد المحاسبي
+  ---
+  duration_ms: 5.286245
+  type: 'test'
+  ...
+# Subtest: لا رصيد سالب: صرف أكبر من المتاح يُرفض ولا يغيّر شيئًا
+ok 216 - لا رصيد سالب: صرف أكبر من المتاح يُرفض ولا يغيّر شيئًا
+  ---
+  duration_ms: 1.501034
+  type: 'test'
+  ...
+# Subtest: الصرف حتى الصفر مسموح وتتصفّر القيمة تمامًا
+ok 217 - الصرف حتى الصفر مسموح وتتصفّر القيمة تمامًا
+  ---
+  duration_ms: 1.367863
+  type: 'test'
+  ...
+# Subtest: فشل بند ثانٍ يلغي السند كله (ذرّية)
+ok 218 - فشل بند ثانٍ يلغي السند كله (ذرّية)
+  ---
+  duration_ms: 2.830062
+  type: 'test'
+  ...
+# Subtest: منع تكرار العملية بنفس المعرّف
+ok 219 - منع تكرار العملية بنفس المعرّف
+  ---
+  duration_ms: 1.248106
+  type: 'test'
+  ...
+# Subtest: معرّف عملية غير صالح يُرفض
+ok 220 - معرّف عملية غير صالح يُرفض
+  ---
+  duration_ms: 0.303368
+  type: 'test'
+  ...
+# Subtest: فصل المواد الخام عن المنتجات التامة
+ok 221 - فصل المواد الخام عن المنتجات التامة
+  ---
+  duration_ms: 5.437794
+  type: 'test'
+  ...
+# Subtest: التسوية: فرق بالزيادة والنقص، سبب مطلوب، ولا فرق = رفض
+ok 222 - التسوية: فرق بالزيادة والنقص، سبب مطلوب، ولا فرق = رفض
+  ---
+  duration_ms: 3.1548
+  type: 'test'
+  ...
+# Subtest: متوسط التكلفة المتحرك
+ok 223 - متوسط التكلفة المتحرك
+  ---
+  duration_ms: 1.528589
+  type: 'test'
+  ...
+# Subtest: تنبيه الحد الأدنى بعد الصرف + قائمة النواقص
+ok 224 - تنبيه الحد الأدنى بعد الصرف + قائمة النواقص
+  ---
+  duration_ms: 2.708956
+  type: 'test'
+  ...
+# Subtest: مدخلات غير صالحة تُرفض
+ok 225 - مدخلات غير صالحة تُرفض
+  ---
+  duration_ms: 1.857172
+  type: 'test'
+  ...
+# Subtest: حماية الأصناف: كود مكرر، حذف صنف له رصيد/حركات، تغيير النوع
+ok 226 - حماية الأصناف: كود مكرر، حذف صنف له رصيد/حركات، تغيير النوع
+  ---
+  duration_ms: 3.438398
+  type: 'test'
+  ...
+# Subtest: اختبار عشوائي: بعد مئات العمليات تبقى كل قواعد السلامة صحيحة
+ok 227 - اختبار عشوائي: بعد مئات العمليات تبقى كل قواعد السلامة صحيحة
+  ---
+  duration_ms: 2075.699231
+  type: 'test'
+  ...
+# Subtest: الدورة الكاملة لدعوة مدير الشركة
+ok 228 - الدورة الكاملة لدعوة مدير الشركة
+  ---
+  duration_ms: 8.361527
+  type: 'test'
+  ...
+# Subtest: الدعوة المنتهية تظهر في اللوحة كمنتهية ويمكن إعادة إصدارها
+ok 229 - الدعوة المنتهية تظهر في اللوحة كمنتهية ويمكن إعادة إصدارها
+  ---
+  duration_ms: 1.141615
+  type: 'test'
+  ...
+# Subtest: invitation token is random and has the expected format
+ok 230 - invitation token is random and has the expected format
+  ---
+  duration_ms: 2.58511
+  type: 'test'
+  ...
+# Subtest: only the matching token verifies against its hash
+ok 231 - only the matching token verifies against its hash
+  ---
+  duration_ms: 1.198373
+  type: 'test'
+  ...
+# Subtest: invalid tokens and hashes are rejected safely
+ok 232 - invalid tokens and hashes are rejected safely
+  ---
+  duration_ms: 0.836944
+  type: 'test'
+  ...
+# Subtest: invitation expires after 48 hours
+ok 233 - invitation expires after 48 hours
+  ---
+  duration_ms: 0.276678
+  type: 'test'
+  ...
+# Subtest: invalid expiry is treated as expired
+ok 234 - invalid expiry is treated as expired
+  ---
+  duration_ms: 0.260885
+  type: 'test'
+  ...
+# Subtest: invitation email is normalized
+ok 235 - invitation email is normalized
+  ---
+  duration_ms: 0.167376
+  type: 'test'
+  ...
+# Subtest: الترحيل يحفظ كل السجلات القديمة ولا يغيّر الكميات
+ok 236 - الترحيل يحفظ كل السجلات القديمة ولا يغيّر الكميات
+  ---
+  duration_ms: 10.67826
+  type: 'test'
+  ...
+# Subtest: تصنيف الأصناف: ما بيع يصبح تام، والباقي خام، واختيار المستخدم يغلب التخمين
+ok 237 - تصنيف الأصناف: ما بيع يصبح تام، والباقي خام، واختيار المستخدم يغلب التخمين
+  ---
+  duration_ms: 1.277361
+  type: 'test'
+  ...
+# Subtest: الفواتير والأوامر القديمة تتحول لبنية البنود، والملغاة لا تُحتسب مدفوعة
+ok 238 - الفواتير والأوامر القديمة تتحول لبنية البنود، والملغاة لا تُحتسب مدفوعة
+  ---
+  duration_ms: 0.819854
+  type: 'test'
+  ...
+# Subtest: الترحيل متكرر وآمن (idempotent) ويقبل بيانات فارغة أو ناقصة أو كائنات بدل مصفوفات
+ok 239 - الترحيل متكرر وآمن (idempotent) ويقبل بيانات فارغة أو ناقصة أو كائنات بدل مصفوفات
+  ---
+  duration_ms: 3.040948
+  type: 'test'
+  ...
+# Subtest: بعد الترحيل تعمل العمليات الجديدة على الأصناف القديمة (بيع من الرصيد المرحّل)
+ok 240 - بعد الترحيل تعمل العمليات الجديدة على الأصناف القديمة (بيع من الرصيد المرحّل)
+  ---
+  duration_ms: 3.352786
+  type: 'test'
+  ...
+# Subtest: الوصفة: المنتج تام والمكونات خام ولا تكرار
+ok 241 - الوصفة: المنتج تام والمكونات خام ولا تكرار
+  ---
+  duration_ms: 5.967822
+  type: 'test'
+  ...
+# Subtest: حساب الاحتياج يشمل نسبة الهالك المسموح
+ok 242 - حساب الاحتياج يشمل نسبة الهالك المسموح
+  ---
+  duration_ms: 1.364974
+  type: 'test'
+  ...
+# Subtest: فحص توفر المواد: العجز يمنع البدء ويذكر المواد الناقصة
+ok 243 - فحص توفر المواد: العجز يمنع البدء ويذكر المواد الناقصة
+  ---
+  duration_ms: 2.341479
+  type: 'test'
+  ...
+# Subtest: إكمال الإنتاج: استهلاك، هالك، تكلفة، واستلام منتج تام
+ok 244 - إكمال الإنتاج: استهلاك، هالك، تكلفة، واستلام منتج تام
+  ---
+  duration_ms: 2.600259
+  type: 'test'
+  ...
+# Subtest: الإنتاج لا يستهلك أكثر من المتاح ولا يُكمل أمرًا مرتين
+ok 245 - الإنتاج لا يستهلك أكثر من المتاح ولا يُكمل أمرًا مرتين
+  ---
+  duration_ms: 2.829523
+  type: 'test'
+  ...
+# Subtest: أمر الإنتاج: المخازن بنوعها الصحيح وإلغاء المسودة بلا أثر مخزني
+ok 246 - أمر الإنتاج: المخازن بنوعها الصحيح وإلغاء المسودة بلا أثر مخزني
+  ---
+  duration_ms: 1.549628
+  type: 'test'
+  ...
+# Subtest: الإنتاج بتكلفة المتوسط المتحرك بعد استلام مورد بسعر مختلف
+ok 247 - الإنتاج بتكلفة المتوسط المتحرك بعد استلام مورد بسعر مختلف
+  ---
+  duration_ms: 1.789712
+  type: 'test'
+  ...
+# Subtest: أمر الشراء: التحقق من المورد والبنود والأسعار
+ok 248 - أمر الشراء: التحقق من المورد والبنود والأسعار
+  ---
+  duration_ms: 6.403064
+  type: 'test'
+  ...
+# Subtest: لا استلام قبل اعتماد الأمر، والحالات تتبع تسلسلًا صحيحًا
+ok 249 - لا استلام قبل اعتماد الأمر، والحالات تتبع تسلسلًا صحيحًا
+  ---
+  duration_ms: 2.300513
+  type: 'test'
+  ...
+# Subtest: استلام جزئي ثم كلي: مخزون + ذمم دائنة + حد أقصى للمتبقي
+ok 250 - استلام جزئي ثم كلي: مخزون + ذمم دائنة + حد أقصى للمتبقي
+  ---
+  duration_ms: 3.005279
+  type: 'test'
+  ...
+# Subtest: تكلفة الاستلام بسعر مختلف تحدّث متوسط التكلفة
+ok 251 - تكلفة الاستلام بسعر مختلف تحدّث متوسط التكلفة
+  ---
+  duration_ms: 1.583243
+  type: 'test'
+  ...
+# Subtest: سداد المورد: لا يتجاوز المستحق ولا رصيد الخزينة
+ok 252 - سداد المورد: لا يتجاوز المستحق ولا رصيد الخزينة
+  ---
+  duration_ms: 3.283176
+  type: 'test'
+  ...
+# Subtest: إلغاء الأمر وحذفه وحماية المورد
+ok 253 - إلغاء الأمر وحذفه وحماية المورد
+  ---
+  duration_ms: 2.85964
+  type: 'test'
+  ...
+# Subtest: لا تتكرر العملية عند إعادة إرسال نفس opId (استلام بضاعة)
+ok 254 - لا تتكرر العملية عند إعادة إرسال نفس opId (استلام بضاعة)
+  ---
+  duration_ms: 1.67899
+  type: 'test'
+  ...
+# Subtest: حالة قبل أي قبول وحالة ربط كامل: لا تعارضات
+ok 255 - حالة قبل أي قبول وحالة ربط كامل: لا تعارضات
+  ---
+  duration_ms: 1.536307
+  type: 'test'
+  ...
+# Subtest: اكتشاف كل تعارض محتمل بين الدعوة والشركة والعضوية
+ok 256 - اكتشاف كل تعارض محتمل بين الدعوة والشركة والعضوية
+  ---
+  duration_ms: 1.641516
+  type: 'test'
+  ...
+# Subtest: الإصلاح للأمام يُكمل الناقص بنية موثَّقة ويكون متكررًا (idempotent)
+ok 257 - الإصلاح للأمام يُكمل الناقص بنية موثَّقة ويكون متكررًا (idempotent)
+  ---
+  duration_ms: 1.553478
+  type: 'test'
+  ...
+# Subtest: بلا نية موثَّقة أو مع مدير آخر: مراجعة يدوية ولا كتابة
+ok 258 - بلا نية موثَّقة أو مع مدير آخر: مراجعة يدوية ولا كتابة
+  ---
+  duration_ms: 0.350356
+  type: 'test'
+  ...
+# Subtest: رفض إصلاح عضوية موظف متعارضة دون استبدال بياناتها
+ok 259 - رفض إصلاح عضوية موظف متعارضة دون استبدال بياناتها
+  ---
+  duration_ms: 0.3302
+  type: 'test'
+  ...
+# Subtest: الملفات الحرجة موجودة في الحزمة
+ok 260 - الملفات الحرجة موجودة في الحزمة
+  ---
+  duration_ms: 0.813963
+  type: 'test'
+  ...
+# Subtest: .env.example يضم كل متغير بيئة يقرأه كود api/ (يتزامن تلقائيًا) ولا يحتوي أسرارًا حقيقية
+ok 261 - .env.example يضم كل متغير بيئة يقرأه كود api/ (يتزامن تلقائيًا) ولا يحتوي أسرارًا حقيقية
+  ---
+  duration_ms: 3.409009
+  type: 'test'
+  ...
+# Subtest: .gitignore: يتجاهل ملفات .env الحقيقية ويستثني .env.example صراحةً بعد أنماط التجاهل
+ok 262 - .gitignore: يتجاهل ملفات .env الحقيقية ويستثني .env.example صراحةً بعد أنماط التجاهل
+  ---
+  duration_ms: 0.265024
+  type: 'test'
+  ...
+# Subtest: git check-ignore الفعلي: .env.example غير متجاهَل و.env و.env.local متجاهَلان
+ok 263 - git check-ignore الفعلي: .env.example غير متجاهَل و.env و.env.local متجاهَلان
+  ---
+  duration_ms: 15.725559
+  type: 'test'
+  ...
+# Subtest: كل اعتماد خارجي يستورده كود api/ معلَن في package.json
+ok 264 - كل اعتماد خارجي يستورده كود api/ معلَن في package.json
+  ---
+  duration_ms: 2.293979
+  type: 'test'
+  ...
+# Subtest: vercel.json صالح، كل دالة مذكورة فيه موجودة، وعدد الدوال ضمن حد الخطة المجانية (12)
+ok 265 - vercel.json صالح، كل دالة مذكورة فيه موجودة، وعدد الدوال ضمن حد الخطة المجانية (12)
+  ---
+  duration_ms: 0.253258
+  type: 'test'
+  ...
+# Subtest: index.html يحمّل ملفات الموارد البشرية والأدوار بالترتيب الصحيح (المحرك ثم الأدوار ثم الواجهة ثم app.js)
+ok 266 - index.html يحمّل ملفات الموارد البشرية والأدوار بالترتيب الصحيح (المحرك ثم الأدوار ثم الواجهة ثم app.js)
+  ---
+  duration_ms: 0.71306
+  type: 'test'
+  ...
+# Subtest: كل التقارير تُنتج أقسامًا وأعمدة وصفوفًا بالشكل المتفق عليه
+ok 267 - كل التقارير تُنتج أقسامًا وأعمدة وصفوفًا بالشكل المتفق عليه
+  ---
+  duration_ms: 17.116475
+  type: 'test'
+  ...
+# Subtest: تقرير المخزون: أرصدة بالمخازن وتنبيه الحد الأدنى ومطابقة القيمة للأستاذ
+ok 268 - تقرير المخزون: أرصدة بالمخازن وتنبيه الحد الأدنى ومطابقة القيمة للأستاذ
+  ---
+  duration_ms: 2.801919
+  type: 'test'
+  ...
+# Subtest: دفتر الحركة: فلاتر التاريخ والصنف والنوع وإجماليات الوارد/الصادر
+ok 269 - دفتر الحركة: فلاتر التاريخ والصنف والنوع وإجماليات الوارد/الصادر
+  ---
+  duration_ms: 3.050628
+  type: 'test'
+  ...
+# Subtest: تقرير الإنتاج: التكلفة والهالك والانحراف
+ok 270 - تقرير الإنتاج: التكلفة والهالك والانحراف
+  ---
+  duration_ms: 2.586567
+  type: 'test'
+  ...
+# Subtest: تقرير المبيعات والمشتريات: إجماليات وأرصدة
+ok 271 - تقرير المبيعات والمشتريات: إجماليات وأرصدة
+  ---
+  duration_ms: 2.978248
+  type: 'test'
+  ...
+# Subtest: لوحة المؤشرات تطابق الأستاذ العام
+ok 272 - لوحة المؤشرات تطابق الأستاذ العام
+  ---
+  duration_ms: 2.668935
+  type: 'test'
+  ...
+# Subtest: تقرير مخاطر الذكاء الاصطناعي: الاستهلاك الفعلي والعجز وسجل القرارات البشرية
+ok 273 - تقرير مخاطر الذكاء الاصطناعي: الاستهلاك الفعلي والعجز وسجل القرارات البشرية
+  ---
+  duration_ms: 3.902594
+  type: 'test'
+  ...
+# Subtest: سجل المراجعة يسجّل كل عملية ولا يُكتب فوقه
+ok 274 - سجل المراجعة يسجّل كل عملية ولا يُكتب فوقه
+  ---
+  duration_ms: 3.864989
+  type: 'test'
+  ...
+# Subtest: تصدير Excel حقيقي: ملف ZIP/OOXML صالح بأوراق RTL
+ok 275 - تصدير Excel حقيقي: ملف ZIP/OOXML صالح بأوراق RTL
+  ---
+  duration_ms: 6.174354
+  type: 'test'
+  ...
+# Subtest: كل دور يرى أقسامه فقط في الشريط، ويفتح على قسمه، والمدير يرى كل شيء + فريق العمل
+ok 276 - كل دور يرى أقسامه فقط في الشريط، ويفتح على قسمه، والمدير يرى كل شيء + فريق العمل
+  ---
+  duration_ms: 62.009458
+  type: 'test'
+  ...
+# Subtest: محاولة فتح قسم غير مسموح عبر الرابط تُعاد إلى قسم الدور، ولا تُعرض بياناته
+ok 277 - محاولة فتح قسم غير مسموح عبر الرابط تُعاد إلى قسم الدور، ولا تُعرض بياناته
+  ---
+  duration_ms: 10.106432
+  type: 'test'
+  ...
+# Subtest: الموارد البشرية: صفحاتها الأربع تُعرض ببياناتها، وأزرارها مناسبة لدورها، ولا ترحيل للمحاسبة
+ok 278 - الموارد البشرية: صفحاتها الأربع تُعرض ببياناتها، وأزرارها مناسبة لدورها، ولا ترحيل للمحاسبة
+  ---
+  duration_ms: 6.011299
+  type: 'test'
+  ...
+# Subtest: المحاسب: المحاسبة سليمة بلا إنذارات كاذبة، وتبويب الرواتب بالترحيل ورؤوس فقط بلا أسماء موظفين
+ok 279 - المحاسب: المحاسبة سليمة بلا إنذارات كاذبة، وتبويب الرواتب بالترحيل ورؤوس فقط بلا أسماء موظفين
+  ---
+  duration_ms: 12.808103
+  type: 'test'
+  ...
+# Subtest: أمين المخازن: صفحات المخزون بأصنافه وأرصدته وقيمة المخزون الصحيحة، ولا شيء من المبيعات أو الأفراد
+ok 280 - أمين المخازن: صفحات المخزون بأصنافه وأرصدته وقيمة المخزون الصحيحة، ولا شيء من المبيعات أو الأفراد
+  ---
+  duration_ms: 12.260396
+  type: 'test'
+  ...
+# Subtest: المبيعات: صفحة المبيعات بأرصدة العملاء الصحيحة (المستحق) وبلا وصول لأي قسم آخر
+ok 281 - المبيعات: صفحة المبيعات بأرصدة العملاء الصحيحة (المستحق) وبلا وصول لأي قسم آخر
+  ---
+  duration_ms: 5.55712
+  type: 'test'
+  ...
+# Subtest: المدير: كل الأقسام تعمل بما فيها الموارد البشرية، وتتغير الأرقام بعد عملية بين القسمين
+ok 282 - المدير: كل الأقسام تعمل بما فيها الموارد البشرية، وتتغير الأرقام بعد عملية بين القسمين
+  ---
+  duration_ms: 11.101289
+  type: 'test'
+  ...
+# Subtest: فريق العمل: المدير يرى الأعضاء ويدعو ويغيّر الدور ويوقف؛ الموظف لا يصل لأي من ذلك
+ok 283 - فريق العمل: المدير يرى الأعضاء ويدعو ويغيّر الدور ويوقف؛ الموظف لا يصل لأي من ذلك
+  ---
+  duration_ms: 36.285845
+  type: 'test'
+  ...
+# Subtest: إيقاف الموظف أثناء جلسته يغلق الواجهة عند المزامنة، وتغيير دوره يبدّل أقسامه
+ok 284 - إيقاف الموظف أثناء جلسته يغلق الواجهة عند المزامنة، وتغيير دوره يبدّل أقسامه
+  ---
+  duration_ms: 8.212502
+  type: 'test'
+  ...
+# Subtest: الحساب الشخصي القديم: كل الأقسام عدا الفريق (بما فيها الموارد البشرية)، بلا أي تغيير في سلوكه
+ok 285 - الحساب الشخصي القديم: كل الأقسام عدا الفريق (بما فيها الموارد البشرية)، بلا أي تغيير في سلوكه
+  ---
+  duration_ms: 9.161831
+  type: 'test'
+  ...
+# Subtest: أدوار الموظفين الأربعة + المدير، وكل دور بتسمية عربية
+ok 286 - أدوار الموظفين الأربعة + المدير، وكل دور بتسمية عربية
+  ---
+  duration_ms: 1.449718
+  type: 'test'
+  ...
+# Subtest: كل عملية يمنحها دور موجودة فعلًا في المحرك (لا أخطاء إملائية)
+ok 287 - كل عملية يمنحها دور موجودة فعلًا في المحرك (لا أخطاء إملائية)
+  ---
+  duration_ms: 0.228831
+  type: 'test'
+  ...
+# Subtest: المدير يملك كل عمليات المحرك؛ والموظف لا يملك إلا عمليات قسمه المسماة
+ok 288 - المدير يملك كل عمليات المحرك؛ والموظف لا يملك إلا عمليات قسمه المسماة
+  ---
+  duration_ms: 0.494565
+  type: 'test'
+  ...
+# Subtest: صلاحيات غير صالحة مرفوضة: دور مجهول، عملية ليست نصًا، أسماء الكائنات
+ok 289 - صلاحيات غير صالحة مرفوضة: دور مجهول، عملية ليست نصًا، أسماء الكائنات
+  ---
+  duration_ms: 0.119679
+  type: 'test'
+  ...
+# Subtest: الأقسام: المدير يرى كل شيء، والموظف قسمه فقط، ومجهول لا يرى شيئًا
+ok 290 - الأقسام: المدير يرى كل شيء، والموظف قسمه فقط، ومجهول لا يرى شيئًا
+  ---
+  duration_ms: 0.291445
+  type: 'test'
+  ...
+# Subtest: إسقاط HR: مجموعاته فقط، بلا حسابات ولا مبيعات ولا تدقيق
+ok 291 - إسقاط HR: مجموعاته فقط، بلا حسابات ولا مبيعات ولا تدقيق
+  ---
+  duration_ms: 4.354891
+  type: 'test'
+  ...
+# Subtest: إسقاط المحاسب: كشف الرواتب رؤوس فقط بلا أسطر الموظفين، ولا موظفين ولا مخزون
+ok 292 - إسقاط المحاسب: كشف الرواتب رؤوس فقط بلا أسطر الموظفين، ولا موظفين ولا مخزون
+  ---
+  duration_ms: 1.097486
+  type: 'test'
+  ...
+# Subtest: إسقاط أمين المخازن: قيود حسابات المخزون 13xx فقط ولا تسريب لحسابات أخرى
+ok 293 - إسقاط أمين المخازن: قيود حسابات المخزون 13xx فقط ولا تسريب لحسابات أخرى
+  ---
+  duration_ms: 1.001746
+  type: 'test'
+  ...
+# Subtest: إسقاط المبيعات، والمدير يستلم الكائن كما هو، والدور المجهول لا يستلم شيئًا
+ok 294 - إسقاط المبيعات، والمدير يستلم الكائن كما هو، والدور المجهول لا يستلم شيئًا
+  ---
+  duration_ms: 1.061134
+  type: 'test'
+  ...
+# Subtest: الجذر مغلق والعقد المعروفة فقط موجودة (لا wildcard علوي)
+ok 295 - الجذر مغلق والعقد المعروفة فقط موجودة (لا wildcard علوي)
+  ---
+  duration_ms: 1.197194
+  type: 'test'
+  ...
+# Subtest: قواعد users و backups القديمة لم تتغير حرفيًا في الملف الرئيسي
+ok 296 - قواعد users و backups القديمة لم تتغير حرفيًا في الملف الرئيسي
+  ---
+  duration_ms: 0.310986
+  type: 'test'
+  ...
+# Subtest: العقد الجديدة: لا كتابة من أي عميل في أي مستوى؛ بيانات الشركة لا تُقرأ مباشرة أبدًا (القراءة عبر الخادم المُصفّي حسب الدور)
+ok 297 - العقد الجديدة: لا كتابة من أي عميل في أي مستوى؛ بيانات الشركة لا تُقرأ مباشرة أبدًا (القراءة عبر الخادم المُصفّي حسب الدور)
+  ---
+  duration_ms: 0.419448
+  type: 'test'
+  ...
+# Subtest: ملف المرحلة 2 يطابق الرئيسي عدا شرط منع كتابة users/$uid المباشرة لمن فُعّل له serverOps
+ok 298 - ملف المرحلة 2 يطابق الرئيسي عدا شرط منع كتابة users/$uid المباشرة لمن فُعّل له serverOps
+  ---
+  duration_ms: 0.176347
+  type: 'test'
+  ...
+# Subtest: البيع يخصم المنتج التام تلقائيًا ويسجّل التكلفة والإيراد
+ok 299 - البيع يخصم المنتج التام تلقائيًا ويسجّل التكلفة والإيراد
+  ---
+  duration_ms: 8.891758
+  type: 'test'
+  ...
+# Subtest: البيع بكمية أكبر من المتاح أو لمادة خام أو من مخزن خاطئ يُرفض
+ok 300 - البيع بكمية أكبر من المتاح أو لمادة خام أو من مخزن خاطئ يُرفض
+  ---
+  duration_ms: 4.212215
+  type: 'test'
+  ...
+# Subtest: البيع الآجل: عميل مسجّل مطلوب، حد الائتمان، الخصم، والمدفوع
+ok 301 - البيع الآجل: عميل مسجّل مطلوب، حد الائتمان، الخصم، والمدفوع
+  ---
+  duration_ms: 3.922402
+  type: 'test'
+  ...
+# Subtest: التحصيل: توزيع على الأقدم، ولا تحصيل أكبر من المستحق
+ok 302 - التحصيل: توزيع على الأقدم، ولا تحصيل أكبر من المستحق
+  ---
+  duration_ms: 9.738975
+  type: 'test'
+  ...
+# Subtest: المرتجعات: إعادة للمخزون، تخفيض الذمم أو رد نقدي، ولا إفراط
+ok 303 - المرتجعات: إعادة للمخزون، تخفيض الذمم أو رد نقدي، ولا إفراط
+  ---
+  duration_ms: 3.972844
+  type: 'test'
+  ...
+# Subtest: مرتجع تالف لا يعود للمخزون ولا يعكس التكلفة
+ok 304 - مرتجع تالف لا يعود للمخزون ولا يعكس التكلفة
+  ---
+  duration_ms: 2.41002
+  type: 'test'
+  ...
+# Subtest: إلغاء الفاتورة يعيد المخزون بتكلفته الأصلية ويعكس القيود
+ok 305 - إلغاء الفاتورة يعيد المخزون بتكلفته الأصلية ويعكس القيود
+  ---
+  duration_ms: 4.642128
+  type: 'test'
+  ...
+# Subtest: عملاء: حذف عميل له فواتير مرفوض، وعميل مكرر مرفوض
+ok 306 - عملاء: حذف عميل له فواتير مرفوض، وعميل مكرر مرفوض
+  ---
+  duration_ms: 2.195358
+  type: 'test'
+  ...
+# Subtest: رفض أي عملية قبل ترقية البنية، ثم الترقية تنسخ احتياطيًا وتحفظ البيانات القديمة
+ok 307 - رفض أي عملية قبل ترقية البنية، ثم الترقية تنسخ احتياطيًا وتحفظ البيانات القديمة
+  ---
+  duration_ms: 6.236128
+  type: 'test'
+  ...
+# Subtest: عملية عبر المعاملة تُحفظ بشكل صالح لـ Firebase (لا undefined) وبنفس النتيجة
+ok 308 - عملية عبر المعاملة تُحفظ بشكل صالح لـ Firebase (لا undefined) وبنفس النتيجة
+  ---
+  duration_ms: 2.098667
+  type: 'test'
+  ...
+# Subtest: منع التكرار: نفس opId لا يُنفَّذ مرتين حتى عبر المعاملة
+ok 309 - منع التكرار: نفس opId لا يُنفَّذ مرتين حتى عبر المعاملة
+  ---
+  duration_ms: 2.23177
+  type: 'test'
+  ...
+# Subtest: تعديل متزامن من جهاز آخر: لا يضيع تعديل أي طرف
+ok 310 - تعديل متزامن من جهاز آخر: لا يضيع تعديل أي طرف
+  ---
+  duration_ms: 3.00573
+  type: 'test'
+  ...
+# Subtest: تعديل متزامن يجعل العملية غير صالحة: تُعاد على أحدث نسخة وتُرفض (لا رصيد نقدي سالب)
+ok 311 - تعديل متزامن يجعل العملية غير صالحة: تُعاد على أحدث نسخة وتُرفض (لا رصيد نقدي سالب)
+  ---
+  duration_ms: 2.49461
+  type: 'test'
+  ...
+# Subtest: رفض عملية تخالف قواعد المخزون على نسخة الخادم الأحدث (لا رصيد سالب)
+ok 312 - رفض عملية تخالف قواعد المخزون على نسخة الخادم الأحدث (لا رصيد سالب)
+  ---
+  duration_ms: 1.531767
+  type: 'test'
+  ...
+# Subtest: بيانات تعود من Firebase ككائنات بدل مصفوفات تُقرأ سليمة
+ok 313 - بيانات تعود من Firebase ككائنات بدل مصفوفات تُقرأ سليمة
+  ---
+  duration_ms: 1.265059
+  type: 'test'
+  ...
+# Subtest: رفض أي طريقة غير POST: 405
+ok 314 - رفض أي طريقة غير POST: 405
+  ---
+  duration_ms: 0.956448
+  type: 'test'
+  ...
+# Subtest: رفض الطلب بدون تسجيل دخول: 401
+ok 315 - رفض الطلب بدون تسجيل دخول: 401
+  ---
+  duration_ms: 1.513344
+  type: 'test'
+  ...
+# Subtest: رفض المستخدم غير المصرح له: 403
+ok 316 - رفض المستخدم غير المصرح له: 403
+  ---
+  duration_ms: 0.347118
+  type: 'test'
+  ...
+# Subtest: رفض الإرسال عند غياب مفتاح Resend
+ok 317 - رفض الإرسال عند غياب مفتاح Resend
+  ---
+  duration_ms: 0.371699
+  type: 'test'
+  ...
+# Subtest: إرسال الاختبار إلى عنوان Resend التجريبي الثابت فقط
+ok 318 - إرسال الاختبار إلى عنوان Resend التجريبي الثابت فقط
+  ---
+  duration_ms: 1.171441
+  type: 'test'
+  ...
+# Subtest: اعتبار رفض Resend فشلًا في الإرسال: 502
+ok 319 - اعتبار رفض Resend فشلًا في الإرسال: 502
+  ---
+  duration_ms: 0.401393
+  type: 'test'
+  ...
+# Subtest: كل صفحة وتبويب تُرسم ببيانات مصنع كاملة بلا أخطاء ولا قيم تالفة
+ok 320 - كل صفحة وتبويب تُرسم ببيانات مصنع كاملة بلا أخطاء ولا قيم تالفة
+  ---
+  duration_ms: 78.133671
+  type: 'test'
+  ...
+# Subtest: كل صفحة تُرسم أيضًا على بيانات فارغة (حساب جديد)
+ok 321 - كل صفحة تُرسم أيضًا على بيانات فارغة (حساب جديد)
+  ---
+  duration_ms: 15.320864
+  type: 'test'
+  ...
+# Subtest: كل زر data-act ظاهر في أي صفحة له معالج مسجّل في UI.actions
+ok 322 - كل زر data-act ظاهر في أي صفحة له معالج مسجّل في UI.actions
+  ---
+  duration_ms: 22.817707
+  type: 'test'
+  ...
+# Subtest: أزرار الفتح (new-*، v-*) تبني نماذجها دون أخطاء
+ok 323 - أزرار الفتح (new-*، v-*) تبني نماذجها دون أخطاء
+  ---
+  duration_ms: 13.38236
+  type: 'test'
+  ...
+# Subtest: المرشحات تعمل: بحث الفواتير وتصفية التقارير بالتاريخ
+ok 324 - المرشحات تعمل: بحث الفواتير وتصفية التقارير بالتاريخ
+  ---
+  duration_ms: 8.000699
+  type: 'test'
+  ...
+# Subtest: تصدير التقارير: CSV وExcel يُنتجان ملفين صالحين من بيانات التقرير نفسها
+ok 325 - تصدير التقارير: CSV وExcel يُنتجان ملفين صالحين من بيانات التقرير نفسها
+  ---
+  duration_ms: 10.983117
+  type: 'test'
+  ...
+# Subtest: شاشة الترقية تعرض أصناف الإصدار 1 وتحفظ اختيار النوع
+ok 326 - شاشة الترقية تعرض أصناف الإصدار 1 وتحفظ اختيار النوع
+  ---
+  duration_ms: 2.827032
+  type: 'test'
+  ...
+# Subtest: طلبات الذكاء الاصطناعي تُسطَّح بنود أوامر الشراء المفتوحة (الكمية المتبقية فقط)
+ok 327 - طلبات الذكاء الاصطناعي تُسطَّح بنود أوامر الشراء المفتوحة (الكمية المتبقية فقط)
+  ---
+  duration_ms: 7.207932
+  type: 'test'
+  ...
+# Subtest: نوافذ العرض (فاتورة، أمر شراء، أمر إنتاج، سند) تُبنى سليمة وأزرارها لها معالجات
+ok 328 - نوافذ العرض (فاتورة، أمر شراء، أمر إنتاج، سند) تُبنى سليمة وأزرارها لها معالجات
+  ---
+  duration_ms: 19.305218
+  type: 'test'
+  ...
+# Subtest: أمان: أسماء تحتوي HTML/سكربت تُعرض نصًا مُهرَّبًا في كل الصفحات (لا حقن)
+ok 329 - أمان: أسماء تحتوي HTML/سكربت تُعرض نصًا مُهرَّبًا في كل الصفحات (لا حقن)
+  ---
+  duration_ms: 15.918986
+  type: 'test'
+  ...
+1..329
+# tests 329
+# suites 0
+# pass 329
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14772.037791

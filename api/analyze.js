@@ -1,4 +1,13 @@
 const Calc = require('../js/calc.js');
+const { requireUser } = require('./_lib/verify-user');
+const { getFirebaseAdmin } = require('./_lib/firebase-admin');
+const { consumeRateLimit } = require('./_lib/rate-limit');
+
+// الخدمة مكلفة (مزوّد خارجي مدفوع): تتطلب مستخدمًا موثَّقًا ببريد مؤكَّد + حدًّا للطلبات لكل مستخدم.
+const RATE_LIMITS = [
+  { bucket: 'analyze-min', limit: 20, windowMs: 60 * 1000 },
+  { bucket: 'analyze-day', limit: 300, windowMs: 24 * 60 * 60 * 1000 }
+];
 
 const LIM = { items: 200, suppliers: 100, orders: 300 };
 const err = (status, error, code) => Object.assign(new Error(error), { status, code });
@@ -127,7 +136,8 @@ async function callModel(system, content) {
     throw err(503, 'مفتاح Gemini غير موجود. أضف GEMINI_API_KEY في إعدادات Vercel.', 'not_configured');
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+  // المفتاح في الترويسة لا في عنوان الطلب (عناوين الطلبات تظهر في سجلات الوسطاء والأخطاء).
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
 
   for (let attempt = 1; attempt <= 2; attempt++) {
     const ac = new AbortController();
@@ -137,7 +147,7 @@ async function callModel(system, content) {
       const r = await fetch(url, {
         method: 'POST',
         signal: ac.signal,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: system }] },
           contents: [{ role: 'user', parts: [{ text: content }] }],
@@ -152,7 +162,8 @@ async function callModel(system, content) {
       const j = await r.json().catch(() => ({}));
 
       if (r.status === 400 || r.status === 404) {
-        throw err(502, j.error?.message || 'اسم نموذج Gemini غير صحيح أو الطلب غير صالح.', 'provider_model');
+        console.error('Gemini model/request error:', r.status, j.error?.message);
+        throw err(502, 'اسم نموذج Gemini غير صحيح أو الطلب غير صالح.', 'provider_model');
       }
 
       if (r.status === 401 || r.status === 403) {
@@ -169,7 +180,8 @@ async function callModel(system, content) {
       }
 
       if (!r.ok) {
-        throw err(502, j.error?.message || 'فشل الاتصال بـ Gemini.', 'provider_error');
+        console.error('Gemini provider error:', r.status, j.error?.message);
+        throw err(502, 'فشل الاتصال بـ Gemini.', 'provider_error');
       }
 
       const result = (j.candidates?.[0]?.content?.parts || [])
@@ -206,11 +218,39 @@ async function handler(req, res) {
 
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   try {
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'POST') throw err(405, 'الطريقة غير مسموحة؛ استخدم POST.', 'method');
+
+    // المصادقة تُفرض على الخادم قبل أي معالجة أو استدعاء للمزوّد (CORS وحده لا يحمي من الطلبات المباشرة).
+    let decoded;
+
+    try {
+      decoded = await requireUser(req);
+    } catch (authError) {
+      if (authError && authError.message === 'unauthorized') {
+        throw err(401, 'يلزم تسجيل الدخول لاستخدام التحليل.', 'unauthorized');
+      }
+
+      throw authError;
+    }
+
+    if (decoded.email_verified !== true) {
+      throw err(403, 'يلزم تأكيد البريد الإلكتروني أولًا.', 'email_not_verified');
+    }
+
+    const { database } = await getFirebaseAdmin();
+
+    for (const rule of RATE_LIMITS) {
+      const verdict = await consumeRateLimit(database, rule.bucket, decoded.uid, rule);
+
+      if (!verdict.allowed) {
+        res.setHeader('Retry-After', String(verdict.retryAfterSec));
+        throw err(429, 'تجاوزت الحد المسموح من طلبات التحليل. حاول لاحقًا.', 'too_many_requests');
+      }
+    }
 
     const b = typeof req.body === 'string'
       ? (() => {
@@ -273,6 +313,8 @@ async function handler(req, res) {
       notices
     });
   } catch (e) {
+    if (!e.status) console.error('Analyze error:', e);
+
     return res.status(e.status || 500).json({
       ok: false,
       error: e.status ? e.message : 'خطأ غير متوقع في الخادم.',

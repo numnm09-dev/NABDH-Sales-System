@@ -12,9 +12,10 @@
   }
   // يعمل على نسخة؛ يرمي الخطأ دون أي تغيير في db الأصلية
   function exec(db, ctx, fn) {
-    if (!ctx || typeof ctx.opId !== 'string' || !ctx.opId || /[.$#\[\]\/]/.test(ctx.opId)) throw err('معرّف العملية مفقود أو غير صالح.', 'no_op_id');
+    // المعرّف يصبح مفتاحًا في Realtime Database: أحرف آمنة وطول محدود (الحد الأقصى للمفتاح 768 بايت)، و__proto__ ممنوع لأن الإسناد إليه لا يُسجَّل فيُكرَّر التنفيذ عند إعادة المحاولة.
+    if (!ctx || typeof ctx.opId !== 'string' || !/^[A-Za-z0-9_-]{1,100}$/.test(ctx.opId) || ctx.opId === '__proto__') throw err('معرّف العملية مفقود أو غير صالح.', 'no_op_id');
     const d = ensure(clone(db));
-    if (d.ops[ctx.opId]) throw err('هذه العملية سُجّلت مسبقًا ولن تُكرَّر.', 'duplicate');
+    if (Object.prototype.hasOwnProperty.call(d.ops, ctx.opId)) throw err('هذه العملية سُجّلت مسبقًا ولن تُكرَّر.', 'duplicate');
     const result = fn(d, ctx);
     d.ops[ctx.opId] = nowOf(ctx);
     d.rev = (Number(d.rev) || 0) + 1;   // يُستخدم لكشف النسخ القديمة داخل المعاملة

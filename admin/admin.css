@@ -169,3 +169,50 @@ button:hover {
     margin-top: 22px;
   }
 }
+
+/* بطاقة الشركة وحالة الدعوة */
+.company-card {
+  border: 1px solid #e5ebf2;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+
+.company-card p {
+  margin: 8px 0;
+}
+
+.company-status {
+  display: inline-block;
+  background: #eef6f5;
+  color: #087e78;
+  border-radius: 14px;
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+.invite-line {
+  font-size: 14px;
+  color: #4a5b70;
+}
+
+.invite-line.linked {
+  color: #087e78;
+  word-break: break-all;
+}
+
+.invite-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.invite-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.invite-msg {
+  color: #8a6500;
+  font-size: 13px;
+}

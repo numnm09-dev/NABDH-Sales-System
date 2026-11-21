@@ -218,15 +218,20 @@ function viewProd(id) {
 }
 
 /* ========== المحاسبة ========== */
+// بيانات المحاسب جزئية، فيصله عدد مشاكل السلامة محسوبًا على الخادم من البيانات الكاملة بدل فحص محلي يعطي إنذارات كاذبة.
+const integrityOf = db => db.__integrity
+  ? Array.from({ length: db.__integrity.count }, () => 'عدم اتساق في الأرصدة — التفاصيل لدى مدير الشركة.')
+  : E_.verify(db, {});
 const ACC_TABS = { summary: 'الملخص المالي', cash: 'الخزينة', expenses: 'المصروفات', journal: 'القيود' };
 
 function pageAccounting(tab) {
-  tab = ACC_TABS[tab] ? tab : 'summary';
-  return `<h2>المحاسبة</h2>${TABS('accounting', ACC_TABS, tab)}` + ({ summary: accSummary, cash: accCash, expenses: accExpenses, journal: accJournal })[tab]();
+  const tabs = typeof accPayroll === 'function' ? { ...ACC_TABS, payroll: 'الرواتب' } : ACC_TABS;
+  tab = tabs[tab] ? tab : 'summary';
+  return `<h2>المحاسبة</h2>${TABS('accounting', tabs, tab)}` + ({ summary: accSummary, cash: accCash, expenses: accExpenses, journal: accJournal, payroll: typeof accPayroll === 'function' ? accPayroll : () => '' })[tab]();
 }
 
 function accSummary() {
-  const t = localToday(), m = Reports.pnl(DB, { from: t.slice(0, 7) + '-01', to: t }), all = Reports.pnl(DB, {}), b = E_.balances(DB), bad = E_.verify(DB, {});
+  const t = localToday(), m = Reports.pnl(DB, { from: t.slice(0, 7) + '-01', to: t }), all = Reports.pnl(DB, {}), b = E_.balances(DB), bad = integrityOf(DB);
   const P = (l, a, bb) => ROW([l, money(a), money(bb)]);
   return `<div class="grid">${KPI(money(b['1100'] || 0), 'النقدية (ج)')}${KPI(money(b['1200'] || 0), 'العملاء (ج)')}${KPI(money(-(b['2100'] || 0)), 'الموردون (ج)')}${KPI(money((b['1310'] || 0) + (b['1320'] || 0)), 'قيمة المخزون (ج)')}</div>
   <div class="box"><h3>قائمة الدخل</h3>${TBL(['البند', 'هذا الشهر', 'الإجمالي'], [P('إيرادات المبيعات', m.revenue, all.revenue), P('(−) مردودات', m.returns, all.returns), P('<b>صافي الإيرادات</b>', m.netRevenue, all.netRevenue), P('(−) تكلفة البضاعة المباعة', m.cogs, all.cogs), P('<b>مجمل الربح</b>', m.grossProfit, all.grossProfit), P('(−) مصروفات تشغيلية', m.opex, all.opex), P('(−/+) فروقات وتسويات مخزون', m.adjustments, all.adjustments), P('<b>صافي الربح / الخسارة</b>', m.netProfit, all.netProfit)])}

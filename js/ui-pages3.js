@@ -113,7 +113,14 @@ function apiUrl() {
   return { u };
 }
 async function aiPost(u, body) {
-  let r; try { r = await fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+  // الخادم يشترط مستخدمًا موثَّقًا. رمز الدخول لا يُرسَل إلا إلى نفس نطاق التطبيق، حتى لا يصل رابط خارجي
+  // (يُحفظ في إعدادات الشركة) إلى هوية المستخدم.
+  let sameOrigin = false;
+  try { sameOrigin = new URL(u, location.href).origin === location.origin; } catch { sameOrigin = false; }
+  if (!sameOrigin) throw new Error('رابط خادم الذكاء الاصطناعي يجب أن يكون على نفس نطاق التطبيق (مثال: ' + location.origin + '/api/analyze). عدّله من الإعدادات.');
+  if (!currentUser) throw new Error('سجّل الدخول أولًا لاستخدام الذكاء الاصطناعي.');
+  let token; try { token = await currentUser.getIdToken(); } catch { throw new Error('تعذّر التحقق من الجلسة. أعد تسجيل الدخول.'); }
+  let r; try { r = await fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(body) }); }
   catch { throw new Error('تعذّر الوصول إلى الخادم. تحقق من الرابط في الإعدادات ومن ضبط ALLOWED_ORIGIN (CORS) على Vercel.'); }
   let j; try { j = await r.json(); } catch { throw new Error('رد الخادم غير مفهوم (قد يكون الرابط خاطئًا).'); }
   if (!r.ok || !j || !j.ok) throw new Error(AI_ERR[(j || {}).code] || (j || {}).error || 'فشل الطلب');

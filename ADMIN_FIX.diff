@@ -1,0 +1,98 @@
+--- a/api/admin-check.js
++++ b/api/admin-check.js
+@@ -1,5 +1,20 @@
+ const { requireSuperAdmin } = require('./_lib/require-super-admin');
+ 
++const redact = text => String(text || '').replace(/eyJ[\w-]+\.[\w-]+\.[\w-]*/g, '[jwt]').slice(0, 300);
++
++function logAdminCheckFailure(error) {
++  const root = error && error.cause ? error.cause : error;
++
++  console.error('admin-check failed:', JSON.stringify({
++    result: error && error.message === 'unauthorized' ? 'unauthorized' :
++      error && error.message === 'forbidden' ? 'forbidden' : 'server_error',
++    code: root && root.code,
++    name: root && root.name,
++    message: redact(root && root.message),
++    details: error && error.details
++  }));
++}
++
+ module.exports = async function handler(req, res) {
+   if (req.method !== 'GET') {
+     return res.status(405).json({
+@@ -16,6 +31,9 @@
+       role: 'SUPER_ADMIN'
+     });
+   } catch (error) {
++    // كل سبب رفض أو فشل يُسجَّل في سجلات الخادم (بدون توكنات) كي يُعرف السبب الحقيقي من Vercel Logs.
++    logAdminCheckFailure(error);
++
+     const status =
+       error.message === 'unauthorized' ? 401 :
+       error.message === 'forbidden' ? 403 : 500;
+--- a/api/_lib/require-super-admin.js
++++ b/api/_lib/require-super-admin.js
+@@ -1,4 +1,4 @@
+-﻿const { getFirebaseAdmin } = require('./firebase-admin');
++const { getFirebaseAdmin } = require('./firebase-admin');
+ 
+ const INVALID_TOKEN_CODES = new Set([
+   'auth/argument-error',
+@@ -23,19 +23,29 @@
+     decoded = await auth.verifyIdToken(match[1], true);
+   } catch (error) {
+     if (INVALID_TOKEN_CODES.has(error.code)) {
+-      throw new Error('unauthorized');
++      // السبب الأصلي (مثل auth/argument-error عند اختلاف المشروع) يُحفظ للتسجيل في الخادم فقط، ولا يُرسل للعميل.
++      throw Object.assign(new Error('unauthorized'), { cause: error });
+     }
+     throw error;
+   }
+ 
+-  if (
+-    !process.env.SUPER_ADMIN_UID ||
+-    decoded.uid !== process.env.SUPER_ADMIN_UID
+-  ) {
+-    throw new Error('forbidden');
++  // مسافة/سطر جديد زائد عند لصق القيمة في Vercel يكسر المطابقة الصارمة؛ UID في Firebase لا يحوي مسافات.
++  const rawExpected = process.env.SUPER_ADMIN_UID || '';
++  const expected = rawExpected.trim();
++
++  if (!expected || decoded.uid !== expected) {
++    throw Object.assign(new Error('forbidden'), {
++      // أطوال فقط (لا قيم) لتشخيص عدم المطابقة دون كشف الـ UID في السجلات.
++      details: {
++        configured: Boolean(expected),
++        configuredRawLength: rawExpected.length,
++        configuredLength: expected.length,
++        tokenUidLength: String(decoded.uid || '').length
++      }
++    });
+   }
+ 
+   return decoded;
+ }
+ 
+-module.exports = { requireSuperAdmin };
++module.exports = { requireSuperAdmin };
+--- a/admin/admin.js
++++ b/admin/admin.js
+@@ -264,6 +264,17 @@
+ 
+       const result = await response.json();
+ 
++      if (response.status === 500) {
++        // عطل في الخادم (إعداد Firebase Admin/Vercel) وليس رفضًا للصلاحية.
++        deny('تعذر التحقق من الصلاحيات بسبب خطأ في إعداد الخادم. راجع سجلات Vercel للدالة admin-check.');
++        return;
++      }
++
++      if (response.status === 401) {
++        deny('تعذر التحقق من جلسة الدخول على الخادم. سجّل الخروج ثم الدخول مرة أخرى (وراجع سجلات Vercel إن تكرر).');
++        return;
++      }
++
+       if (!response.ok || result.role !== 'SUPER_ADMIN') {
+         deny('غير مصرح لك بدخول لوحة مدير النظام.');
+         return;

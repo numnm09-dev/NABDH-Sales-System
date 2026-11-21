@@ -1,5 +1,6 @@
 const { requireSuperAdmin } = require('./_lib/require-super-admin');
 const { getFirebaseAdmin } = require('./_lib/firebase-admin');
+const { logAdminEvent } = require('./_lib/audit-log');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -84,6 +85,8 @@ module.exports = async function handler(req, res) {
       );
       throw error;
     }
+
+    await logAdminEvent(database, { action: 'company.create', actor: admin.uid, companyId, target: companyId });
 
     return res.status(201).json({
       ok: true,

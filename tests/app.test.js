@@ -1,4 +1,4 @@
-/* اختبار تكاملي لغلاف التطبيق (app.js الحقيقي) فوق محاكي Firebase: تحميل حساب جديد، ترقية حساب قديم بخطوة مراجعة،
+﻿/* اختبار تكاملي لغلاف التطبيق (app.js الحقيقي) فوق محاكي Firebase: تحميل حساب جديد، ترقية حساب قديم بخطوة مراجعة،
    تنفيذ العمليات عبر act()، رفض الرصيد غير الكافي بلا تغيير، منع التكرار، تحويل خطأ الصلاحيات، وإبطال التحميل المتأخر عند تبديل المستخدم.
    المحاكي لا يثبت سلوك Firebase الحقيقي (قواعد الأمان مثلًا)؛ اختبار قواعد الأمان الفعلية يحتاج مشروع Firebase (انظر README). */
 const test = require('node:test'), assert = require('node:assert');
@@ -11,7 +11,7 @@ function boot(initialUsers) {
   const el = () => ({ style: {}, classList: { toggle: noop, add: noop, remove: noop, contains: () => false }, dataset: {}, innerHTML: '', textContent: '', hidden: false, elements: {}, open: false, isConnected: true,
     querySelector: () => null, querySelectorAll: () => [], addEventListener: noop, setAttribute: noop, appendChild: noop, showModal: noop, close: noop, click: noop, remove: noop, focus: noop });
   const shared = el();
-  const ctx = { console: { ...console, error: noop, warn: noop }, Math, Date, JSON, Intl, Number, String, Array, Object, Set, Map, Promise, RegExp, Error, isFinite, isNaN, parseFloat, parseInt, setTimeout, clearTimeout, setInterval, clearInterval, TextEncoder, TextDecoder, Uint8Array, Uint32Array, DataView, ArrayBuffer, Blob: class { }, FormData: class { }, URL: { createObjectURL: () => 'blob:x', revokeObjectURL: noop } };
+  const ctx = { console: { ...console, error: console.error, warn: console.warn }, Math, Date, JSON, Intl, Number, String, Array, Object, Set, Map, Promise, RegExp, Error, isFinite, isNaN, parseFloat, parseInt, setTimeout, clearTimeout, setInterval, clearInterval, TextEncoder, TextDecoder, Uint8Array, Uint32Array, DataView, ArrayBuffer, Blob: class { }, FormData: class { }, URL: { createObjectURL: () => 'blob:x', revokeObjectURL: noop } };
   ctx.window = ctx; ctx.self = ctx; ctx.globalThis = ctx;
   ctx.document = { readyState: 'loading', title: '', visibilityState: 'visible', activeElement: null, body: el(), querySelector: () => shared, querySelectorAll: () => [], addEventListener: noop, createElement: el, getElementById: () => null };
   ctx.location = { hash: '' }; ctx.addEventListener = noop; ctx.removeEventListener = noop; ctx.print = noop; ctx.confirm = () => true; ctx.prompt = () => 'سبب';
@@ -92,3 +92,4 @@ test('تبديل المستخدم أثناء التحميل: النتيجة ال
   await t.run('handleAuth(null)'); release(); await loading;
   assert.equal(t.run('DB'), null); assert.equal(t.run('ready'), false);
 });
+

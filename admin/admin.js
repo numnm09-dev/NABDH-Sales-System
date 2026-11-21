@@ -47,8 +47,173 @@
       badge.className = 'company-status';
 
       card.append(name, email, badge);
+
+      const invitationLine = document.createElement('p');
+      invitationLine.className = 'invite-line';
+      invitationLine.textContent =
+        'حالة الدعوة: ' + invitationLabel(company.invitation);
+      card.appendChild(invitationLine);
+
+      if (company.integrity && company.integrity.ok === false) {
+        const warning = document.createElement('p');
+        warning.className = 'invite-msg';
+        warning.textContent = 'تنبيه: عدم اتساق في الدعوة/الربط — ' +
+          company.integrity.issues.map(code => INTEGRITY_LABELS[code] || code).join('، ');
+
+        const fix = document.createElement('button');
+        fix.type = 'button';
+        fix.className = 'invite-btn';
+        fix.textContent = 'فحص وإصلاح الاتساق';
+
+        const fixResult = document.createElement('p');
+        fixResult.className = 'invite-msg';
+        fixResult.setAttribute('role', 'status');
+
+        fix.addEventListener('click', () => reconcileCompany(company, fix, fixResult));
+        card.append(warning, fix, fixResult);
+      }
+
+      if (company.managerUid) {
+        const link = document.createElement('p');
+        link.className = 'invite-line linked';
+        link.textContent = 'تم ربط المدير (UID: ' + company.managerUid + ')';
+        card.appendChild(link);
+      } else if (company.status === 'pending_manager') {
+        const resend = !!(company.invitation && company.invitation.status !== 'draft');
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'invite-btn';
+        button.textContent = resend ? 'إعادة إرسال الدعوة' : 'إرسال الدعوة';
+
+        const result = document.createElement('p');
+        result.className = 'invite-msg';
+        result.setAttribute('role', 'status');
+
+        button.addEventListener('click', () => sendInvitation(company, resend, button, result));
+        card.append(button, result);
+      }
+
       list.appendChild(card);
     });
+  }
+
+  const INVITATION_LABELS = {
+    draft: 'مسودة (لم تُرسل بعد)',
+    send_pending: 'جارٍ الإرسال',
+    send_failed: 'فشل الإرسال — أعد المحاولة',
+    sent: 'أُرسلت — بانتظار قبول المدير',
+    expired: 'انتهت صلاحيتها — أعد الإرسال',
+    accepting: 'قيد القبول',
+    accepted: 'قُبلت'
+  };
+
+  const SEND_ERRORS = {
+    email_service_not_configured: 'خدمة البريد غير مُعدّة على الخادم (RESEND_API_KEY).',
+    app_base_url_not_configured: 'رابط التطبيق غير مُعدّ على الخادم (APP_BASE_URL).',
+    email_send_failed: 'فشل مزوّد البريد في إرسال الدعوة. حاول مرة أخرى.',
+    company_not_waiting_for_manager: 'هذه الشركة لا تنتظر ربط مدير.',
+    manager_email_invalid: 'بريد المدير المحفوظ للشركة غير صالح.',
+    invitation_already_accepted: 'الدعوة قُبلت بالفعل.',
+    invitation_send_in_progress: 'هناك عملية إرسال جارية لهذه الدعوة. انتظر قليلًا.',
+    company_not_found: 'الشركة غير موجودة.'
+  };
+
+  const INTEGRITY_LABELS = {
+    company_not_linked: 'الشركة غير مربوطة رغم قبول الدعوة',
+    invitation_not_accepted: 'الشركة مربوطة والدعوة غير مسجّلة كمقبولة',
+    member_missing: 'عضوية المدير ناقصة',
+    user_company_missing: 'ربط حساب المدير بالشركة ناقص',
+    company_data_missing: 'بيانات الشركة غير مهيأة',
+    company_missing: 'الشركة غير موجودة'
+  };
+
+  async function reconcileCompany(company, button, result) {
+    button.disabled = true;
+    result.textContent = 'جارٍ الفحص...';
+
+    try {
+      const user = window.NabdhFirebase.auth.currentUser;
+      const token = user ? await user.getIdToken() : authToken;
+
+      const response = await fetch('/api/admin-maintenance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        },
+        body: JSON.stringify({ action: 'reconcile-company', companyId: company.id })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        result.textContent = 'تعذّر الفحص. حاول مرة أخرى.';
+        button.disabled = false;
+        return;
+      }
+
+      if (data.status === 'needs_manual_review') {
+        result.textContent = 'يحتاج مراجعة يدوية: لا يوجد دليل موثّق كافٍ للإصلاح التلقائي.';
+        button.disabled = false;
+        return;
+      }
+
+      message.textContent = data.status === 'repaired' ? 'تم إصلاح الاتساق.' : 'البيانات متسقة.';
+      await loadCompanies();
+
+    } catch (error) {
+      console.error('Reconcile error:', error);
+      result.textContent = 'حدث خطأ أثناء الاتصال. حاول مرة أخرى.';
+      button.disabled = false;
+    }
+  }
+
+  function invitationLabel(invitation) {
+    if (!invitation) return 'لم تُرسل دعوة بعد';
+    return INVITATION_LABELS[invitation.status] || invitation.status;
+  }
+
+  async function sendInvitation(company, resend, button, result) {
+    if (resend && !window.confirm(
+      'إعادة الإرسال تُلغي الرابط السابق وتُنشئ رابطًا جديدًا. هل تريد المتابعة؟'
+    )) {
+      return;
+    }
+
+    button.disabled = true;
+    result.textContent = 'جارٍ إرسال الدعوة...';
+
+    try {
+      const user = window.NabdhFirebase.auth.currentUser;
+      const token = user ? await user.getIdToken() : authToken;
+
+      const response = await fetch('/api/admin-invitations-send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        },
+        body: JSON.stringify({ companyId: company.id })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        result.textContent =
+          SEND_ERRORS[data.error] || 'تعذر إرسال الدعوة. حاول مرة أخرى.';
+        button.disabled = false;
+        return;
+      }
+
+      message.textContent = 'تم قبول الدعوة من مزوّد البريد وهي في طريقها إلى ' + data.invitation.email;
+      await loadCompanies();
+
+    } catch (error) {
+      console.error('Invitation send error:', error);
+      result.textContent = 'حدث خطأ أثناء الاتصال. حاول مرة أخرى.';
+      button.disabled = false;
+    }
   }
 
   async function loadCompanies() {
@@ -98,6 +263,17 @@
       });
 
       const result = await response.json();
+
+      if (response.status === 500) {
+        // عطل في الخادم (إعداد Firebase Admin/Vercel) وليس رفضًا للصلاحية.
+        deny('تعذر التحقق من الصلاحيات بسبب خطأ في إعداد الخادم. راجع سجلات Vercel للدالة admin-check.');
+        return;
+      }
+
+      if (response.status === 401) {
+        deny('تعذر التحقق من جلسة الدخول على الخادم. سجّل الخروج ثم الدخول مرة أخرى (وراجع سجلات Vercel إن تكرر).');
+        return;
+      }
 
       if (!response.ok || result.role !== 'SUPER_ADMIN') {
         deny('غير مصرح لك بدخول لوحة مدير النظام.');

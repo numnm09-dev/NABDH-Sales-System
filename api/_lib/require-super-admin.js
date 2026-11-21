@@ -17,24 +17,32 @@ async function requireSuperAdmin(req) {
   }
 
   const { auth } = await getFirebaseAdmin();
-
   let decoded;
 
   try {
     decoded = await auth.verifyIdToken(match[1], true);
   } catch (error) {
     if (INVALID_TOKEN_CODES.has(error.code)) {
-      throw new Error('unauthorized');
+      // السبب الأصلي (مثل auth/argument-error عند اختلاف المشروع) يُحفظ للتسجيل في الخادم فقط، ولا يُرسل للعميل.
+      throw Object.assign(new Error('unauthorized'), { cause: error });
     }
-
     throw error;
   }
 
-  if (
-    !process.env.SUPER_ADMIN_UID ||
-    decoded.uid !== process.env.SUPER_ADMIN_UID
-  ) {
-    throw new Error('forbidden');
+  // مسافة/سطر جديد زائد عند لصق القيمة في Vercel يكسر المطابقة الصارمة؛ UID في Firebase لا يحوي مسافات.
+  const rawExpected = process.env.SUPER_ADMIN_UID || '';
+  const expected = rawExpected.trim();
+
+  if (!expected || decoded.uid !== expected) {
+    throw Object.assign(new Error('forbidden'), {
+      // أطوال فقط (لا قيم) لتشخيص عدم المطابقة دون كشف الـ UID في السجلات.
+      details: {
+        configured: Boolean(expected),
+        configuredRawLength: rawExpected.length,
+        configuredLength: expected.length,
+        tokenUidLength: String(decoded.uid || '').length
+      }
+    });
   }
 
   return decoded;

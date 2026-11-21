@@ -241,6 +241,9 @@
     const s = need(d, 'sales', inp.id, 'الفاتورة'); if (s.status === 'ملغي') throw err('الفاتورة ملغاة بالفعل.', 'bad_status');
     if ((s.returned || 0) > 0 || d.returns.some(r => r.saleId === s.id)) throw err('لا يمكن إلغاء فاتورة لها مرتجعات.', 'has_returns');
     const date = needDate(inp.date, ctx);
+    // عكس القيود يُخرج من الخزينة ما حُصِّل على الفاتورة (دفعة الفاتورة وتحصيلاتها): يخضع لقاعدة رصيد الخزينة نفسها المطبّقة على المرتجعات وكل خروج نقدي.
+    const cashBack = r2(d.journal.filter(j => j.saleId === s.id && !j.reversed && !j.reverses).reduce((a, j) => a + j.lines.filter(l => l.acct === '1100').reduce((b, l) => b + (l.dr || 0) - (l.cr || 0), 0), 0));
+    if (cashBack > 0) needCash(d, cashBack, 'رد المبالغ المحصَّلة عن الفاتورة الملغاة');
     let wh = find(d, 'warehouses', s.whId); if (!wh || wh.kind !== 'finished' || wh.active === false) wh = d.warehouses.find(w => w.kind === 'finished' && w.active !== false); if (!wh) throw err('لا يوجد مخزن منتجات تامة نشط لاستلام الكمية.', 'no_wh');
     let legacyValue = 0;
     for (const l of toList(s.lines)) {

@@ -3,6 +3,65 @@
     "api/analyze.js": {
       "maxDuration": 60,
       "includeFiles": "js/calc.js"
+    },
+    "api/erp-op.js": {
+      "maxDuration": 30,
+      "includeFiles": "js/*.js"
+    },
+    "api/accept-invitation.js": {
+      "maxDuration": 30,
+      "includeFiles": "js/*.js"
+    },
+    "api/admin-maintenance.js": {
+      "maxDuration": 30,
+      "includeFiles": "js/*.js"
+    },
+    "api/admin-companies-list.js": {
+      "includeFiles": "js/*.js"
+    },
+    "api/company-staff.js": {
+      "maxDuration": 30,
+      "includeFiles": "js/*.js"
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app; frame-src 'self' https://*.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ]
 }

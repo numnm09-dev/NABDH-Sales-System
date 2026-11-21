@@ -1,5 +1,43 @@
 const { requireSuperAdmin } = require('./_lib/require-super-admin');
 const { getFirebaseAdmin } = require('./_lib/firebase-admin');
+const { isInvitationExpired } = require('./_lib/invitations');
+const { describeState } = require('./_lib/reconcile');
+
+// حالة الدعوة كما تُعرض للإدارة. لا تُرجَع بصمة التوكن ولا أي توكن أبدًا.
+function describeInvitation(invitation) {
+  if (!invitation || typeof invitation !== 'object') return null;
+
+  const status =
+    invitation.status === 'sent' && isInvitationExpired(invitation.expiresAt)
+      ? 'expired'
+      : invitation.status || 'draft';
+
+  return {
+    status,
+    deliveryStatus: invitation.deliveryStatus || 'not_sent',
+    email: invitation.email || '',
+    expiresAt: invitation.expiresAt || null,
+    sentAt: invitation.sentAt || null,
+    acceptedAt: invitation.acceptedAt || null
+  };
+}
+
+// فحص خفيف للاتساق بين الدعوة والشركة والعضوية (للعرض فقط؛ الإصلاح عبر admin-maintenance).
+function integrityOf(companyId, company, invitation, companyMembers) {
+  const uid = (invitation && invitation.acceptedBy) || company.managerUid || null;
+
+  const { issues } = describeState({
+    companyId,
+    invitation: invitation || null,
+    company,
+    uid,
+    member: uid && companyMembers ? companyMembers[uid] || null : null,
+    userCompany: true,
+    hasData: true
+  }, { partial: true });
+
+  return { ok: issues.length === 0, issues };
+}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -16,14 +54,37 @@ module.exports = async function handler(req, res) {
     const snapshot = await database.ref('companies').once('value');
     const data = snapshot.val() || {};
 
-    const companies = Object.entries(data).map(([id, company]) => ({
-      id,
-      name: company.name || '',
-      managerEmail: company.managerEmail || '',
-      managerStatus: company.managerStatus || 'pending_invitation',
-      status: company.status || 'pending_manager',
-      createdAt: company.createdAt || null
-    }));
+    const invitationsSnapshot = await database.ref('invitations').once('value');
+    const invitations = invitationsSnapshot.val() || {};
+
+    const membersSnapshot = await database.ref('companyMembers').once('value');
+    const members = membersSnapshot.val() || {};
+
+    const companies = Object.entries(data).map(([id, company]) => {
+      const managerUid = company.managerUid || null;
+      const member = managerUid ? (members[id] || {})[managerUid] : null;
+
+      return {
+        id,
+        name: company.name || '',
+        managerEmail: company.managerEmail || '',
+        managerStatus: company.managerStatus || 'pending_invitation',
+        status: company.status || 'pending_manager',
+        createdAt: company.createdAt || null,
+        managerUid,
+        managerLinkedAt: company.managerLinkedAt || null,
+        manager: member
+          ? {
+              uid: member.uid || managerUid,
+              email: member.email || '',
+              role: member.role || 'MANAGER',
+              status: member.status || 'active'
+            }
+          : null,
+        invitation: describeInvitation(invitations[`manager_${id}`]),
+        integrity: integrityOf(id, company, invitations[`manager_${id}`], members[id])
+      };
+    });
 
     return res.status(200).json({
       ok: true,
