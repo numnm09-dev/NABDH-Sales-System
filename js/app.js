@@ -3,7 +3,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = n => n == null || !isFinite(n) ? '—' : (Math.round(n * 10) / 10).toLocaleString('ar-EG');
 const VER = ['تجريبي', 'مرشح يحتاج إلى تأكيد', 'تم التحقق'];
-const PAGES = { home: 'لوحة التحكم', sales: 'المبيعات', purchasing: 'المشتريات', inventory: 'المخازن والمخزون', production: 'الإنتاج', accounting: 'المحاسبة', reports: 'التقارير', risk: 'تحليل المخاطر', sim: 'المحاكاة', settings: 'الإعدادات' };
+const PAGES = { home: 'لوحة التحكم', sales: 'المبيعات', purchasing: 'المشتريات', inventory: 'المخازن والمخزون', production: 'الإنتاج', accounting: 'المحاسبة', hr: 'الموارد البشرية', reports: 'التقارير', risk: 'تحليل المخاطر', sim: 'المحاكاة', team: 'فريق العمل', settings: 'الإعدادات' };
 const LEGACY_HASH = { items: 'inventory/stock', orders: 'purchasing/orders', suppliers: 'purchasing/suppliers' };
 
 const NEW_USER_SETTINGS = {
@@ -25,6 +25,9 @@ let opQueue = Promise.resolve();
 let pendingOps = 0;
 let authStarted = false;
 let rawLegacy = null;
+let scope = { type: 'user' };   // { type: 'company', companyId, name } عند العمل على بيانات شركة
+let serverOps = false;          // حساب شخصي رُحِّل إلى عمليات الخادم (يضعه مدير النظام فقط)
+let scopeOptions = [];          // خيارات المبدّل: [{ key: 'user' | companyId, label }]
 
 // الفترة المختارة في لوحة التحكم
 let homePeriod = 'week';
@@ -112,6 +115,17 @@ const mkCtx = (opId, extra = {}) => ({
   ...extra
 });
 
+// استدعاء عمليات الخادم بتوكن Firebase حديث. الواجهة تُخدَّم من نفس نطاق /api (Vercel) كما في لوحة الإدارة.
+async function callServer(body, user = currentUser, path = '/api/erp-op') {
+  const token = await user.getIdToken();
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    body: JSON.stringify(body)
+  });
+  return { status: response.status, data: await response.json().catch(() => null) };
+}
+
 async function act(op, input, opId) {
   const fb = window.NabdhFirebase;
 
@@ -124,7 +138,10 @@ async function act(op, input, opId) {
 
   pendingOps++;
 
-  const job = opQueue.then(() => Store.run(fb, owner, ctx, op, input));
+  const remote = scope.type === 'company' || serverOps;
+  const job = opQueue.then(() => remote
+    ? Store.runRemote(callServer, scope.type === 'company' ? { type: 'company', companyId: scope.companyId } : { type: 'user' }, ctx, op, input)
+    : Store.run(fb, owner, ctx, op, input));
   opQueue = job.catch(() => { });
 
   try {
@@ -185,6 +202,47 @@ function safeRoute() {
 }
 
 /* ---------- تحميل البيانات ---------- */
+/* ---------- نطاق البيانات: حساب شخصي (users/{uid}) أو شركة (companyData/{id}) ---------- */
+const scopePrefKey = uid => 'nabdh.scope.' + uid;
+
+function readScopePref(uid) {
+  try { return localStorage.getItem(scopePrefKey(uid)) || ''; } catch (e) { return ''; }
+}
+
+function writeScopePref(uid, key) {
+  try { localStorage.setItem(scopePrefKey(uid), key); } catch (e) { /* التفضيل اختياري */ }
+}
+
+// الشركات المرتبطة بالحساب. أي تعذّر في القراءة (ومنه عدم نشر قواعد الشركات بعد) يُعاد كـ failed:
+// فمن لديه بيانات شخصية يكمل بها كما كان تمامًا، ومن لا بيانات شخصية له يرى خطأ ولا يُنشأ له حساب شخصي فارغ
+// (قد يكون مديرًا لشركة). لذلك تُنشر القواعد قبل أي دعوات أو تسجيل جديد (انظر README).
+async function discoverCompanies(fb, uid) {
+  try {
+    const snap = await fb.get(fb.ref(fb.db, 'userCompanies/' + uid));
+    const val = snap.exists() ? snap.val() : {};
+    const list = Object.entries(val || {})
+      .filter(([id, m]) => m && typeof m === 'object')
+      .map(([id, m]) => ({ companyId: id, role: String(m.role || ''), name: String(m.name || '') }));
+    return { list, failed: false };
+  } catch (e) {
+    return { list: [], failed: true };
+  }
+}
+
+async function discoverServerOps(fb, uid) {
+  try { return (await fb.get(fb.ref(fb.db, 'serverOps/' + uid))).exists(); } catch (e) { return false; }
+}
+
+// من لديه بيانات شخصية يبقى عليها افتراضيًا (لا تغيير لسلوك الحسابات القديمة) ما لم يختر شركة؛
+// ومن لا بيانات شخصية له يُفتح على شركته ولا تُنشأ له قاعدة بيانات شخصية.
+function chooseScope(uid, list, legacyExists) {
+  if (!list.length) return null;
+  const pref = readScopePref(uid);
+  const preferred = pref && list.find(c => c.companyId === pref);
+  if (legacyExists) return preferred || null;
+  return preferred || list[0];
+}
+
 async function loadUserData(user, v) {
   const fb = window.NabdhFirebase;
 
@@ -194,9 +252,33 @@ async function loadUserData(user, v) {
 
     if (v !== authVersion) return;
 
+    const access = await discoverCompanies(fb, user.uid);
+
+    if (v !== authVersion) return;
+
+    const legacyExists = snapshot.exists();
+
+    scopeOptions = [];
+    if (access.list.length) {
+      if (legacyExists) scopeOptions.push({ key: 'user', label: 'حسابي الشخصي' });
+      access.list.forEach(c => scopeOptions.push({ key: c.companyId, label: c.name || 'شركة' }));
+    }
+
+    const choice = chooseScope(user.uid, access.list, legacyExists);
+
+    if (choice) return await loadCompanyScope(user, v, choice);
+
+    // لا يُنشأ حساب شخصي جديد إن تعذّر التحقق من الشركات (قد يكون المستخدم مديرًا لشركة).
+    if (!legacyExists && access.failed)
+      throw Engine.err('تعذّر التحقق من الشركات المرتبطة بحسابك. أعد المحاولة.', 'discovery_failed');
+
+    serverOps = legacyExists ? await discoverServerOps(fb, user.uid) : false;
+
+    if (v !== authVersion) return;
+
     let raw = null;
 
-    if (snapshot.exists()) {
+    if (legacyExists) {
       raw = snapshot.val();
     } else {
       const m = Engine.migrate(
@@ -234,6 +316,29 @@ async function loadUserData(user, v) {
 
     showErr('تعذّر تحميل بيانات حسابك: ' + fbErrorMsg(error));
   }
+}
+
+// بيانات الشركة لا تُقرأ من Firebase مباشرة أبدًا: الخادم يتحقق من العضوية ويُرسل فقط ما يحق لدور هذا المستخدم.
+async function loadCompanyScope(user, v, choice) {
+  const reply = await callServer({ scope: 'company', companyId: choice.companyId, action: 'read' }, user);
+
+  if (v !== authVersion) return;
+
+  const data = reply && reply.data;
+
+  if (!data || !data.ok) {
+    const code = (data && data.error) || 'server_error';
+    throw Engine.err(
+      (data && data.message) ||
+        (code === 'forbidden' ? 'ليست لديك صلاحية الوصول إلى هذه الشركة (قد يكون وصولك موقوفًا).' : 'تعذّر تحميل بيانات الشركة. أعد المحاولة.'),
+      code
+    );
+  }
+
+  scope = { type: 'company', companyId: choice.companyId, name: (data.company && data.company.name) || choice.name, role: data.role };
+  serverOps = false;
+
+  return finishLoad(user, v, Engine.ensure(Engine.clone(data.db)));
 }
 
 function finishLoad(user, v, data) {
@@ -311,7 +416,34 @@ async function refreshData() {
   const owner = currentUser.uid;
 
   try {
-    const raw = (await fb.get(Store.userRef(fb, owner))).val();
+    let raw;
+
+    if (scope.type === 'company') {
+      const reply = await callServer({ scope: 'company', companyId: scope.companyId, action: 'read' });
+
+      if (v !== authVersion) return;
+
+      if (reply.status === 403) {
+        // أُوقف وصوله أو أُزيل: لا نترك واجهة تعمل على بيانات قديمة.
+        DB = null; ready = false;
+        showErr('تم إيقاف وصولك إلى هذه الشركة. تواصل مع مدير الشركة.');
+        return;
+      }
+
+      const data = reply.data;
+      if (!data || !data.ok) return;
+
+      if (data.role && data.role !== scope.role) {
+        scope = { ...scope, role: data.role };
+        DB = Engine.ensure(Engine.clone(data.db));
+        safeRoute();
+        return;
+      }
+
+      raw = data.db;
+    } else {
+      raw = (await fb.get(Store.userRef(fb, owner))).val();
+    }
 
     if (v !== authVersion || pendingOps || !raw ||
         !(Number(raw.schemaVersion) >= Engine.SCHEMA)) return;
@@ -467,6 +599,9 @@ async function handleAuth(user) {
   dbOwner = null;
   ready = false;
   rawLegacy = null;
+  scope = { type: 'user' };
+  serverOps = false;
+  scopeOptions = [];
 
   UI.reset();
   homePeriod = 'week';
@@ -526,7 +661,6 @@ UID: ${currentUser.uid}`;
     setShell('app');
     return;
   }
-
   setShell('app');
 
   if (nav) nav.innerHTML = '';
@@ -607,16 +741,66 @@ function parseHash() {
   };
 }
 
+function currentScopeKey() {
+  return scope.type === 'company' ? scope.companyId : 'user';
+}
+
+// يظهر المبدّل فقط لمن لديه أكثر من نطاق (حساب شخصي + شركة، أو عدة شركات).
+function scopeSwitchHtml() {
+  if (scopeOptions.length < 2) return '';
+
+  return `<select id="scopeSwitch" aria-label="نطاق البيانات">` +
+    scopeOptions.map(o =>
+      `<option value="${esc(o.key)}" ${o.key === currentScopeKey() ? 'selected' : ''}>${esc(o.label)}</option>`
+    ).join('') +
+    `</select>`;
+}
+
+function bindScopeSwitch() {
+  const sel = $('#scopeSwitch');
+  if (!sel) return;
+
+  sel.onchange = async () => {
+    if (!currentUser) return;
+    writeScopePref(currentUser.uid, sel.value);
+    await opQueue;
+    handleAuth(currentUser);
+  };
+}
+
+// الأقسام المتاحة: المدير كل الأقسام + الفريق، والموظف قسمه فقط (الفرض الحقيقي على الخادم؛ هذا إخفاء للواجهة)،
+// والحساب الشخصي كل الأقسام عدا الفريق.
+function visiblePages() {
+  const all = Object.keys(PAGES);
+  if (scope.type === 'company') return typeof Roles !== 'undefined' ? Roles.pagesFor(scope.role, all) : [];
+  return all.filter(k => k !== 'team');
+}
+
 function route() {
-  const { page, tab } = parseHash();
+  const allowed = visiblePages();
+  let { page, tab } = parseHash();
+
+  if (!allowed.length) {
+    $('#nav').innerHTML = `<button id="logoutBtn" class="sec">تسجيل الخروج</button>`;
+    $('#logoutBtn').onclick = logout;
+    $('#view').innerHTML = `<div class="box"><h2>لا توجد أقسام متاحة</h2><p>دورك الحالي لا يملك أقسامًا. تواصل مع مدير الشركة.</p></div>`;
+    return;
+  }
+
+  if (!allowed.includes(page)) {
+    page = allowed.includes('home') ? 'home' : allowed[0];
+    tab = '';
+  }
 
   $('#nav').innerHTML =
-    Object.entries(PAGES).map(([k, v]) =>
+    Object.entries(PAGES).filter(([k]) => allowed.includes(k)).map(([k, v]) =>
       `<a href="#${k}" ${k === page ? 'aria-current="page"' : ''}>${v}</a>`
     ).join('') +
+    scopeSwitchHtml() +
     `<button id="logoutBtn" class="sec">تسجيل الخروج</button>`;
 
   $('#logoutBtn').onclick = logout;
+  bindScopeSwitch();
 
   const views = {
     home: pageHome,
@@ -625,6 +809,8 @@ function route() {
     inventory: () => pageInventory(tab),
     production: () => pageProduction(tab),
     accounting: () => pageAccounting(tab),
+    hr: () => pageHr(tab),
+    team: () => pageTeam(tab),
     reports: () => pageReports(tab),
     risk: pageRisk,
     sim: pageSim,
