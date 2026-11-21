@@ -54,6 +54,25 @@
         'حالة الدعوة: ' + invitationLabel(company.invitation);
       card.appendChild(invitationLine);
 
+      if (company.integrity && company.integrity.ok === false) {
+        const warning = document.createElement('p');
+        warning.className = 'invite-msg';
+        warning.textContent = 'تنبيه: عدم اتساق في الدعوة/الربط — ' +
+          company.integrity.issues.map(code => INTEGRITY_LABELS[code] || code).join('، ');
+
+        const fix = document.createElement('button');
+        fix.type = 'button';
+        fix.className = 'invite-btn';
+        fix.textContent = 'فحص وإصلاح الاتساق';
+
+        const fixResult = document.createElement('p');
+        fixResult.className = 'invite-msg';
+        fixResult.setAttribute('role', 'status');
+
+        fix.addEventListener('click', () => reconcileCompany(company, fix, fixResult));
+        card.append(warning, fix, fixResult);
+      }
+
       if (company.managerUid) {
         const link = document.createElement('p');
         link.className = 'invite-line linked';
@@ -99,6 +118,56 @@
     invitation_send_in_progress: 'هناك عملية إرسال جارية لهذه الدعوة. انتظر قليلًا.',
     company_not_found: 'الشركة غير موجودة.'
   };
+
+  const INTEGRITY_LABELS = {
+    company_not_linked: 'الشركة غير مربوطة رغم قبول الدعوة',
+    invitation_not_accepted: 'الشركة مربوطة والدعوة غير مسجّلة كمقبولة',
+    member_missing: 'عضوية المدير ناقصة',
+    user_company_missing: 'ربط حساب المدير بالشركة ناقص',
+    company_data_missing: 'بيانات الشركة غير مهيأة',
+    company_missing: 'الشركة غير موجودة'
+  };
+
+  async function reconcileCompany(company, button, result) {
+    button.disabled = true;
+    result.textContent = 'جارٍ الفحص...';
+
+    try {
+      const user = window.NabdhFirebase.auth.currentUser;
+      const token = user ? await user.getIdToken() : authToken;
+
+      const response = await fetch('/api/admin-maintenance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        },
+        body: JSON.stringify({ action: 'reconcile-company', companyId: company.id })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        result.textContent = 'تعذّر الفحص. حاول مرة أخرى.';
+        button.disabled = false;
+        return;
+      }
+
+      if (data.status === 'needs_manual_review') {
+        result.textContent = 'يحتاج مراجعة يدوية: لا يوجد دليل موثّق كافٍ للإصلاح التلقائي.';
+        button.disabled = false;
+        return;
+      }
+
+      message.textContent = data.status === 'repaired' ? 'تم إصلاح الاتساق.' : 'البيانات متسقة.';
+      await loadCompanies();
+
+    } catch (error) {
+      console.error('Reconcile error:', error);
+      result.textContent = 'حدث خطأ أثناء الاتصال. حاول مرة أخرى.';
+      button.disabled = false;
+    }
+  }
 
   function invitationLabel(invitation) {
     if (!invitation) return 'لم تُرسل دعوة بعد';
@@ -194,6 +263,17 @@
       });
 
       const result = await response.json();
+
+      if (response.status === 500) {
+        // عطل في الخادم (إعداد Firebase Admin/Vercel) وليس رفضًا للصلاحية.
+        deny('تعذر التحقق من الصلاحيات بسبب خطأ في إعداد الخادم. راجع سجلات Vercel للدالة admin-check.');
+        return;
+      }
+
+      if (response.status === 401) {
+        deny('تعذر التحقق من جلسة الدخول على الخادم. سجّل الخروج ثم الدخول مرة أخرى (وراجع سجلات Vercel إن تكرر).');
+        return;
+      }
 
       if (!response.ok || result.role !== 'SUPER_ADMIN') {
         deny('غير مصرح لك بدخول لوحة مدير النظام.');
