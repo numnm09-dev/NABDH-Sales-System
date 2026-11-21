@@ -7,16 +7,21 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-function buildInvitationEmail({ companyName, link, ttlHours }) {
+function buildInvitationEmail({ companyName, link, ttlHours, roleLabel }) {
   const name = escapeHtml(companyName);
   const href = escapeHtml(link);
 
-  const subject = `دعوة لإدارة شركة ${String(companyName).slice(0, 100)} على نبض`;
+  const subject = roleLabel
+    ? `دعوة للانضمام إلى فريق ${String(companyName).slice(0, 100)} على نبض`
+    : `دعوة لإدارة شركة ${String(companyName).slice(0, 100)} على نبض`;
+  const role = roleLabel ? escapeHtml(roleLabel) : '';
 
   const html =
     '<div dir="rtl" style="font-family:Arial,sans-serif;line-height:1.8;color:#172b4d">' +
     '<h2>مرحبًا بك في نبض</h2>' +
-    `<p>تمت دعوتك لتكون مدير شركة <strong>${name}</strong> على منصة نبض.</p>` +
+    (roleLabel
+      ? `<p>تمت دعوتك للانضمام إلى فريق شركة <strong>${name}</strong> على منصة نبض بدور «<strong>${role}</strong>».</p>`
+      : `<p>تمت دعوتك لتكون مدير شركة <strong>${name}</strong> على منصة نبض.</p>`) +
     '<p>اضغط على الزر التالي، ثم سجّل الدخول أو أنشئ حسابًا بنفس هذا البريد الإلكتروني وأكّده لإتمام الربط:</p>' +
     `<p><a href="${href}" style="display:inline-block;background:#087e78;color:#fff;` +
     'padding:12px 22px;border-radius:8px;text-decoration:none">قبول الدعوة</a></p>' +
@@ -25,7 +30,9 @@ function buildInvitationEmail({ companyName, link, ttlHours }) {
     '</div>';
 
   const text =
-    `تمت دعوتك لتكون مدير شركة ${companyName} على منصة نبض.\n` +
+    (roleLabel
+      ? `تمت دعوتك للانضمام إلى فريق شركة ${companyName} على منصة نبض بدور «${roleLabel}».\n`
+      : `تمت دعوتك لتكون مدير شركة ${companyName} على منصة نبض.\n`) +
     `افتح الرابط التالي وسجّل بنفس هذا البريد وأكّده لإتمام الربط:\n${link}\n` +
     `الدعوة صالحة ${ttlHours} ساعة وتُستخدم مرة واحدة. إن لم تكن تتوقعها فتجاهلها.`;
 

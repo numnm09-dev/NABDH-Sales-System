@@ -8,8 +8,6 @@ const INVALID_TOKEN_CODES = new Set([
   'auth/user-disabled'
 ]);
 
-// يتحقق من Firebase ID Token لأي مستخدم مسجّل (وليس السوبر أدمن فقط).
-// أي توكن غير صالح => unauthorized، وأي عطل آخر يُمرَّر كما هو (500).
 async function requireUser(req) {
   const header = req.headers.authorization || '';
   const match = header.match(/^Bearer\s+(.+)$/i);

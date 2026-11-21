@@ -113,7 +113,8 @@ function evaluateInvitationForAccept(invitation, { token, email, uid, now = Date
     return { ok: false, status: 409, error: 'invitation_accept_in_progress' };
   }
 
-  if (invitation.status !== 'sent') {
+  // send_pending: التوكن موجود عند من وصله البريد؛ حيازته هي الإثبات (حالة تعذّر تسجيل «sent» بعد الإرسال).
+  if (invitation.status !== 'sent' && invitation.status !== 'send_pending') {
     return { ok: false, status: 409, error: 'invitation_not_active' };
   }
 
