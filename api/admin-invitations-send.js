@@ -1,5 +1,6 @@
 const { requireSuperAdmin } = require('./_lib/require-super-admin');
 const { getFirebaseAdmin } = require('./_lib/firebase-admin');
+const { logAdminEvent } = require('./_lib/audit-log');
 const mailer = require('./_lib/mailer');
 const { buildInvitationEmail } = require('./_lib/invitation-email');
 const {
@@ -170,6 +171,8 @@ module.exports = async function handler(req, res) {
       // الدعوة نفسها محفوظة بحالتها الصحيحة؛ هذا حقل عرض فقط.
       console.error('Company invited-status update error:', updateError);
     }
+
+    await logAdminEvent(database, { action: 'manager-invitation.send', actor: admin.uid, companyId, target: invitationId });
 
     return res.status(200).json({
       ok: true,

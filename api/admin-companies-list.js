@@ -1,6 +1,7 @@
 const { requireSuperAdmin } = require('./_lib/require-super-admin');
 const { getFirebaseAdmin } = require('./_lib/firebase-admin');
 const { isInvitationExpired } = require('./_lib/invitations');
+const { describeState } = require('./_lib/reconcile');
 
 // حالة الدعوة كما تُعرض للإدارة. لا تُرجَع بصمة التوكن ولا أي توكن أبدًا.
 function describeInvitation(invitation) {
@@ -19,6 +20,23 @@ function describeInvitation(invitation) {
     sentAt: invitation.sentAt || null,
     acceptedAt: invitation.acceptedAt || null
   };
+}
+
+// فحص خفيف للاتساق بين الدعوة والشركة والعضوية (للعرض فقط؛ الإصلاح عبر admin-maintenance).
+function integrityOf(companyId, company, invitation, companyMembers) {
+  const uid = (invitation && invitation.acceptedBy) || company.managerUid || null;
+
+  const { issues } = describeState({
+    companyId,
+    invitation: invitation || null,
+    company,
+    uid,
+    member: uid && companyMembers ? companyMembers[uid] || null : null,
+    userCompany: true,
+    hasData: true
+  }, { partial: true });
+
+  return { ok: issues.length === 0, issues };
 }
 
 module.exports = async function handler(req, res) {
@@ -63,7 +81,8 @@ module.exports = async function handler(req, res) {
               status: member.status || 'active'
             }
           : null,
-        invitation: describeInvitation(invitations[`manager_${id}`])
+        invitation: describeInvitation(invitations[`manager_${id}`]),
+        integrity: integrityOf(id, company, invitations[`manager_${id}`], members[id])
       };
     });
 
